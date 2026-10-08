@@ -4,6 +4,14 @@
 
 Next.js (App Router) + TypeScript + styled-components. All data is mocked; no database, auth or payments.
 
+## Package manager
+
+Use pnpm (version pinned in `package.json` → `packageManager`). Never use npm or yarn, and never commit a `package-lock.json` or `yarn.lock`.
+
+- `pnpm install`, `pnpm add <pkg>`, `pnpm add -D <pkg>`
+- `pnpm dev`, `pnpm build`, `pnpm lint`
+- If `pnpm install` reports ignored build scripts, decide per package in `pnpm-workspace.yaml` → `allowBuilds` (`true` to run it, `false` to skip) and leave a comment explaining why.
+
 ## Git workflow
 
 Every new task starts on a new branch created from an up-to-date `main`. Never commit directly to `main`.

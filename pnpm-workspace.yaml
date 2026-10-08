@@ -1,0 +1,4 @@
+allowBuilds:
+  # Its postinstall only re-downloads the native binary when the platform's optional
+  # @unrs/resolver-binding-* package is missing; pnpm installs that package already.
+  unrs-resolver: false

@@ -1,12 +1,12 @@
 # PIK
 
-Next.js (App Router) + TypeScript + styled-components.
+Next.js (App Router) + TypeScript + styled-components, managed with pnpm.
 
 ## Cómo correr el proyecto
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Abre http://localhost:3000.
