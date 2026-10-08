@@ -4,6 +4,10 @@
 
 Next.js (App Router) + TypeScript + styled-components. All data is mocked; no database, auth or payments.
 
+## Language
+
+Everything in this repo is written in English: code, identifiers, comments, UI copy, metadata, docs (README, CLAUDE.md), commit messages, branch names and PR titles/descriptions. Don't mix languages within the repo, even when a request or a source document is in Spanish. Translate it.
+
 ## Package manager
 
 Use pnpm (version pinned in `package.json` → `packageManager`). Never use npm or yarn, and never commit a `package-lock.json` or `yarn.lock`.
@@ -11,6 +15,20 @@ Use pnpm (version pinned in `package.json` → `packageManager`). Never use npm 
 - `pnpm install`, `pnpm add <pkg>`, `pnpm add -D <pkg>`
 - `pnpm dev`, `pnpm build`, `pnpm lint`
 - If `pnpm install` reports ignored build scripts, decide per package in `pnpm-workspace.yaml` → `allowBuilds` (`true` to run it, `false` to skip) and leave a comment explaining why.
+
+## Checks
+
+- `pnpm format` / `pnpm format:check`: Prettier
+- `pnpm lint`: ESLint (Next.js rules; formatting rules are turned off in favor of Prettier)
+- `pnpm typecheck`: generates Next.js route types, then runs `tsc --noEmit`
+- `pnpm build`: production build
+
+lefthook (`lefthook.yml`) registers git hooks on `pnpm install`:
+
+- pre-commit: Prettier and ESLint `--fix` on staged files; fixes are re-staged.
+- pre-push: branch name format, typecheck and lint.
+
+CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`: branch name (PRs only), `format:check`, `lint`, `typecheck` and `build`. Don't bypass hooks with `--no-verify`; fix the failure instead. Run the checks before opening a PR.
 
 ## Git workflow
 
