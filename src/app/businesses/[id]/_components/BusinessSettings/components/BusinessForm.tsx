@@ -8,66 +8,21 @@ import Icon from "@/components/Icon/Icon";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { BUSINESS_CATEGORIES } from "@/lib/businesses";
-import { formatPhone } from "@/lib/format";
-import type { Business, BusinessCategory } from "@/types/business";
+import type { Business, DayHours, Weekday } from "@/types/business";
+import {
+  dayErrorKey,
+  toBusinessChanges,
+  toFormValues,
+  validate,
+  type BusinessFormValues,
+} from "../businessFormValues";
+import FormCard from "./FormCard";
+import HoursEditor from "./HoursEditor";
 
-interface Values {
-  name: string;
-  category: BusinessCategory | "";
-  phone: string;
-}
-
-type Errors = Partial<Record<keyof Values, string>>;
-
-function validate(values: Values): Errors {
-  const errors: Errors = {};
-  const name = values.name.trim();
-  if (!name) errors.name = "Escribe el nombre de tu negocio.";
-  else if (name.length < 2) errors.name = "El nombre debe tener al menos 2 caracteres.";
-  else if (name.length > 60) errors.name = "El nombre puede tener hasta 60 caracteres.";
-
-  if (!values.category) errors.category = "Elige una categoría.";
-
-  const digits = values.phone.replace(/\D/g, "");
-  if (!digits) errors.phone = "Escribe un teléfono de contacto.";
-  else if (digits.length !== 10) errors.phone = "El teléfono debe tener 10 dígitos.";
-
-  return errors;
-}
-
-// One column on phones. From md: name | category, then phone in the left column.
 const Form = styled.form.attrs({ className: "business-form" })`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: ${({ theme }) => theme.space.lg};
-
-  ${({ theme }) => theme.media.md} {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: ${({ theme }) => theme.space.xl};
-  }
-
-  padding: ${({ theme }) => theme.space.xl};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.background};
-`;
-
-// Full-width first row: the "Ajustes" heading and what you can do in this form.
-const Header = styled.div.attrs({ className: "business-form__header" })`
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xs};
-`;
-
-const Heading = styled.h2.attrs({ className: "business-form__heading" })`
-  font-size: 1.375rem;
-  letter-spacing: -0.01em;
-`;
-
-const Intro = styled.p.attrs({ className: "business-form__intro" })`
-  color: ${({ theme }) => theme.colors.foreground};
-  line-height: 1.5;
+  gap: ${({ theme }) => theme.space.lg};
 `;
 
 // Full-width row under the phone for the delete action.
@@ -75,20 +30,15 @@ const DangerRow = styled.div.attrs({ className: "business-form__danger" })`
   grid-column: 1 / -1;
 `;
 
-// Full-width footer: the saved message (when shown) and the buttons.
-const Footer = styled.div.attrs({ className: "business-form__footer" })`
-  grid-column: 1 / -1;
-`;
-
 const Success = styled.p.attrs({ className: "business-form__success" })`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.space.sm};
+  margin-bottom: ${({ theme }) => theme.space.lg};
   padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
   border-radius: ${({ theme }) => theme.radii.sm};
   background: ${({ theme }) => theme.colors.success};
   color: ${({ theme }) => theme.colors.onSuccess};
-  margin-bottom: ${({ theme }) => theme.space.lg};
   font-size: 0.875rem;
   font-weight: 600;
 `;
@@ -104,32 +54,38 @@ const Actions = styled.div.attrs({ className: "business-form__actions" })`
   }
 `;
 
-// Name, category and phone. Validates on submit, then live as the person fixes each field.
-// A successful save marks the business as touched.
+type BusinessChanges = Pick<Business, "name" | "category" | "phone" | "location" | "hours">;
+
+// The business settings in two cards (general info; location and hours) with one save for
+// both. Validates on submit, then live as the person fixes each field. A successful save marks
+// the business as touched.
 export default function BusinessForm({
   business,
   onSave,
   deleteAction,
 }: {
   business: Business;
-  onSave: (id: string, changes: Pick<Business, "name" | "category" | "phone">) => void;
+  onSave: (id: string, changes: BusinessChanges) => void;
   // Rendered in its own full-width row under the phone.
   deleteAction: ReactNode;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [values, setValues] = useState<Values>({
-    name: business.name,
-    category: business.category ?? "",
-    phone: business.phone && formatPhone(business.phone),
-  });
+  const [values, setValues] = useState<BusinessFormValues>(() => toFormValues(business));
   const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
   const errors = submitted ? validate(values) : {};
 
-  const change = (field: keyof Values) => (value: string) => {
-    setValues((current) => ({ ...current, [field]: value }));
+  const update = (changes: Partial<BusinessFormValues>) => {
+    setValues((current) => ({ ...current, ...changes }));
     setSaved(false);
   };
+
+  const updateDay = (day: Weekday, dayHours: DayHours) =>
+    update({ hours: { ...values.hours, [day]: dayHours } });
+
+  const dayErrors = Object.fromEntries(
+    Object.keys(values.hours).map((day) => [day, errors[dayErrorKey(day as Weekday)]]),
+  ) as Partial<Record<Weekday, string>>;
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -141,52 +97,79 @@ export default function BusinessForm({
       );
       return;
     }
-    onSave(business.id, {
-      name: values.name.trim(),
-      category: values.category as BusinessCategory,
-      phone: values.phone.replace(/\D/g, ""),
-    });
+    onSave(business.id, toBusinessChanges(values));
     setSaved(true);
   };
 
   return (
     <Form ref={formRef} noValidate onSubmit={submit} aria-label="Información del negocio">
-      <Header>
-        <Heading>Ajustes</Heading>
-        <Intro>Edita el nombre, la categoría y el teléfono de tu negocio.</Intro>
-      </Header>
-      <TextField
-        label="Nombre del negocio"
-        name="name"
-        autoComplete="organization"
-        value={values.name}
-        onChange={(event) => change("name")(event.target.value)}
-        error={errors.name}
-      />
-      <SelectField
-        label="Categoría"
-        name="category"
-        placeholder="Elige una categoría"
-        options={BUSINESS_CATEGORIES}
-        value={values.category}
-        onChange={(event) => change("category")(event.target.value)}
-        error={errors.category}
-      />
-      <TextField
-        label="Teléfono de contacto"
-        name="phone"
-        type="tel"
-        inputMode="tel"
-        autoComplete="tel"
-        placeholder="55 1234 5678"
-        value={values.phone}
-        onChange={(event) => change("phone")(event.target.value)}
-        error={errors.phone}
-      />
+      <FormCard
+        heading="Ajustes"
+        intro="Edita el nombre, la categoría y el teléfono de tu negocio."
+      >
+        <TextField
+          label="Nombre del negocio"
+          name="name"
+          autoComplete="organization"
+          value={values.name}
+          onChange={(event) => update({ name: event.target.value })}
+          error={errors.name}
+        />
+        <SelectField
+          label="Categoría"
+          name="category"
+          placeholder="Elige una categoría"
+          options={BUSINESS_CATEGORIES}
+          value={values.category}
+          onChange={(event) =>
+            update({ category: event.target.value as BusinessFormValues["category"] })
+          }
+          error={errors.category}
+        />
+        <TextField
+          label="Teléfono de contacto"
+          name="phone"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="55 1234 5678"
+          value={values.phone}
+          onChange={(event) => update({ phone: event.target.value })}
+          error={errors.phone}
+        />
+        <DangerRow>{deleteAction}</DangerRow>
+      </FormCard>
 
-      <DangerRow>{deleteAction}</DangerRow>
+      <FormCard
+        heading="Ubicación y horario de atención"
+        intro="Indica dónde está tu negocio y en qué días y horas atiendes."
+      >
+        <TextField
+          label="Dirección"
+          name="address"
+          autoComplete="street-address"
+          placeholder="Calle, número y colonia"
+          value={values.address}
+          onChange={(event) => update({ address: event.target.value })}
+          error={errors.address}
+        />
+        <TextField
+          label="Ciudad"
+          name="city"
+          autoComplete="address-level2"
+          value={values.city}
+          onChange={(event) => update({ city: event.target.value })}
+          error={errors.city}
+        />
+        <HoursEditor
+          hours={values.hours}
+          onChange={updateDay}
+          error={errors.hours}
+          dayErrors={dayErrors}
+        />
+      </FormCard>
 
-      <Footer>
+      <div className="business-form__footer">
         <div role="status" className="business-form__status">
           {saved && (
             <Success>
@@ -201,7 +184,7 @@ export default function BusinessForm({
           </ButtonLink>
           <Button type="submit">Guardar cambios</Button>
         </Actions>
-      </Footer>
+      </div>
     </Form>
   );
 }
