@@ -3,14 +3,17 @@
 import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import styled from "styled-components";
 import Button from "@/components/Button";
+import Dialog from "@/components/Dialog";
 import ButtonLink from "@/components/ButtonLink";
 import Icon from "@/components/Icon/Icon";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
+import { useLeaveGuard } from "@/hooks/useLeaveGuard";
 import { BUSINESS_CATEGORIES } from "@/lib/businesses";
 import type { Business, DayHours, Weekday } from "@/types/business";
 import {
   dayErrorKey,
+  hasUnsavedChanges,
   toBusinessChanges,
   toFormValues,
   validate,
@@ -86,6 +89,7 @@ export default function BusinessForm({
   const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
   const errors = submitted ? validate(values) : {};
+  const leaveGuard = useLeaveGuard(hasUnsavedChanges(values, business));
 
   const update = (changes: Partial<BusinessFormValues>) => {
     setValues((current) => ({ ...current, ...changes }));
@@ -209,6 +213,24 @@ export default function BusinessForm({
           </Button>
         </Actions>
       </div>
+
+      <Dialog
+        open={leaveGuard.pendingHref !== null}
+        onClose={leaveGuard.cancelLeave}
+        title="Tienes cambios sin guardar"
+        actions={
+          <>
+            <Button $variant="secondary" $size="sm" onClick={leaveGuard.cancelLeave}>
+              Quedarme
+            </Button>
+            <Button $variant="danger" $size="sm" onClick={leaveGuard.confirmLeave}>
+              Salir
+            </Button>
+          </>
+        }
+      >
+        Si sales ahora, perderás los cambios que hiciste en este negocio.
+      </Dialog>
     </Wrapper>
   );
 }

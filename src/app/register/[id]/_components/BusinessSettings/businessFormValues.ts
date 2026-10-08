@@ -70,3 +70,12 @@ export function validate(values: BusinessFormValues): BusinessFormErrors {
 
   return errors;
 }
+
+// Whether the form differs from the saved business, comparing the values as they'd be saved
+// (so "5512345678" and "55 1234 5678" count as the same phone).
+export function hasUnsavedChanges(values: BusinessFormValues, business: Business) {
+  return (
+    JSON.stringify(toBusinessChanges(values)) !==
+    JSON.stringify(toBusinessChanges(toFormValues(business)))
+  );
+}
