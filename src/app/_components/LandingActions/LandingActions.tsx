@@ -46,8 +46,10 @@ export default function LandingActions() {
   return (
     <Section aria-labelledby="landing-actions-title">
       <Header>
-        <Title id="landing-actions-title">¿Qué quieres hacer?</Title>
-        <Subtitle>Elige cómo quieres usar PIK.</Subtitle>
+        <Title id="landing-actions-title">Esto es lo que puedes hacer en PIK</Title>
+        <Subtitle>
+          Ya sea que tengas un negocio o busques tu próxima cita, empieza por aquí.
+        </Subtitle>
       </Header>
       <Grid>
         {LANDING_ACTIONS.map((action) => (
