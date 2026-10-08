@@ -4,7 +4,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import Icon from "@/components/Icon/Icon";
 import { categoryLabel } from "@/lib/businesses";
-import { formatPhone } from "@/lib/format";
 import type { Business } from "@/types/business";
 
 // The whole card links to the business settings.
@@ -79,9 +78,7 @@ const Chevron = styled(Icon).attrs({ className: "business-card__chevron" })`
 `;
 
 export default function BusinessCard({ business }: { business: Business }) {
-  const details = [categoryLabel(business.category), business.phone && formatPhone(business.phone)]
-    .filter(Boolean)
-    .join(" · ");
+  const category = categoryLabel(business.category);
 
   return (
     <Card href={`/businesses/${business.id}`}>
@@ -93,7 +90,7 @@ export default function BusinessCard({ business }: { business: Business }) {
           <Name>{business.name}</Name>
           {!business.touched && <Pending>Sin editar</Pending>}
         </NameRow>
-        <Meta>{details || "Agrega su categoría y teléfono"}</Meta>
+        <Meta>{category ?? "Agrega su categoría y teléfono"}</Meta>
       </Body>
       <Chevron name="arrow-right" />
     </Card>

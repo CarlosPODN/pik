@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import styled from "styled-components";
 import ButtonLink from "@/components/ButtonLink";
 import EmptyState from "@/components/EmptyState";
@@ -9,12 +11,12 @@ import PageSkeleton from "@/components/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { useHydrated } from "@/hooks/useHydrated";
 import BusinessForm from "./components/BusinessForm";
+import DeleteBusinessButton from "./components/DeleteBusinessButton";
 
 const Wrapper = styled.div.attrs({ className: "business-settings" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.xl};
-  max-width: 640px;
 `;
 
 const BackLink = styled(Link).attrs({ className: "business-settings__back" })`
@@ -63,10 +65,13 @@ const Subtitle = styled.p.attrs({ className: "business-settings__subtitle" })`
 // Settings for one business. Waits for localStorage before deciding the business doesn't exist.
 export default function BusinessSettings({ id }: { id: string }) {
   const hydrated = useHydrated();
-  const { businesses, updateBusiness } = useBusinesses();
+  const router = useRouter();
+  const { businesses, updateBusiness, deleteBusiness } = useBusinesses();
+  const [deleting, setDeleting] = useState(false);
   const business = businesses.find((item) => item.id === id);
 
-  if (!hydrated) return <PageSkeleton />;
+  // Keep the skeleton up while leaving after a delete, instead of flashing "not found".
+  if (!hydrated || deleting) return <PageSkeleton />;
 
   if (!business) {
     return (
@@ -94,7 +99,21 @@ export default function BusinessSettings({ id }: { id: string }) {
         </Subtitle>
       </Header>
       {/* key: a different business starts the form from its own values */}
-      <BusinessForm key={business.id} business={business} onSave={updateBusiness} />
+      <BusinessForm
+        key={business.id}
+        business={business}
+        onSave={updateBusiness}
+        deleteAction={
+          <DeleteBusinessButton
+            businessName={business.name}
+            onDelete={() => {
+              setDeleting(true);
+              deleteBusiness(business.id);
+              router.replace("/");
+            }}
+          />
+        }
+      />
     </Wrapper>
   );
 }

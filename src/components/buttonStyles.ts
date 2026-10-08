@@ -1,6 +1,6 @@
 import { css } from "styled-components";
 
-export type ButtonVariant = "primary" | "secondary";
+export type ButtonVariant = "primary" | "secondary" | "danger";
 export type ButtonSize = "md" | "sm";
 
 export interface ButtonStyleProps {
@@ -29,25 +29,27 @@ export const buttonStyles = css<ButtonStyleProps>`
     filter 0.15s ease,
     background 0.15s ease;
 
-  ${({ $variant = "primary", theme }) =>
-    $variant === "primary"
-      ? css`
-          background: ${theme.colors.primary};
-          color: ${theme.colors.onPrimary};
+  ${({ $variant = "primary", theme }) => {
+    if ($variant === "secondary") {
+      return css`
+        border-color: ${theme.colors.border};
+        background: ${theme.colors.background};
+        color: ${theme.colors.foreground};
 
-          &:hover {
-            filter: brightness(1.1);
-          }
-        `
-      : css`
-          border-color: ${theme.colors.border};
-          background: ${theme.colors.background};
-          color: ${theme.colors.foreground};
+        &:hover {
+          background: ${theme.colors.surface};
+        }
+      `;
+    }
+    return css`
+      background: ${$variant === "danger" ? theme.colors.danger : theme.colors.primary};
+      color: ${theme.colors.onPrimary};
 
-          &:hover {
-            background: ${theme.colors.surface};
-          }
-        `}
+      &:hover {
+        filter: brightness(1.1);
+      }
+    `;
+  }}
 
   &:focus-visible {
     outline: none;

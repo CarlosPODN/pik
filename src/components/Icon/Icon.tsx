@@ -9,6 +9,7 @@ import Home from "./icons/Home";
 import Menu from "./icons/Menu";
 import Plus from "./icons/Plus";
 import Store from "./icons/Store";
+import Trash from "./icons/Trash";
 
 // Every available icon. To add one: create its file in ./icons (the shapes only,
 // drawn on a 20×20 grid) and register it here under a kebab-case name.
@@ -22,6 +23,7 @@ const ICONS = {
   menu: Menu,
   plus: Plus,
   store: Store,
+  trash: Trash,
 } as const;
 
 export type IconName = keyof typeof ICONS;

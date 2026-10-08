@@ -41,12 +41,21 @@ export function findUntouched(businesses: Business[]) {
   return last && !last.touched ? last : null;
 }
 
-// Adds a placeholder business named after its position ("Negocio 3") and returns it.
+// Next placeholder number: one past both the count and the highest "Negocio N" in use, so a
+// deletion never produces a duplicate name.
+function nextPlaceholderNumber(businesses: Business[]) {
+  const used = businesses.map((business) =>
+    Number(/^Negocio (\d+)$/.exec(business.name)?.[1] ?? 0),
+  );
+  return Math.max(businesses.length, ...used) + 1;
+}
+
+// Adds a placeholder business ("Negocio 3") and returns it.
 export function addBusiness(): Business {
   const businesses = readBusinesses();
   const business: Business = {
     id: createId(),
-    name: `Negocio ${businesses.length + 1}`,
+    name: `Negocio ${nextPlaceholderNumber(businesses)}`,
     category: null,
     phone: "",
     touched: false,
@@ -63,4 +72,8 @@ export function updateBusiness(id: string, changes: Pick<Business, "name" | "cat
       business.id === id ? { ...business, ...changes, touched: true } : business,
     ),
   );
+}
+
+export function deleteBusiness(id: string) {
+  businessesStore.write(readBusinesses().filter((business) => business.id !== id));
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
@@ -35,14 +35,33 @@ function validate(values: Values): Errors {
   return errors;
 }
 
+// One column on phones. From md: name | category, then phone in the left column.
 const Form = styled.form.attrs({ className: "business-form" })`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: ${({ theme }) => theme.space.lg};
+
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: ${({ theme }) => theme.space.xl};
+  }
+
   padding: ${({ theme }) => theme.space.xl};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
   background: ${({ theme }) => theme.colors.background};
+`;
+
+// Full-width row under the phone, with the delete button at the right.
+const DangerRow = styled.div.attrs({ className: "business-form__danger" })`
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+// Full-width footer: the saved message (when shown) and the buttons.
+const Footer = styled.div.attrs({ className: "business-form__footer" })`
+  grid-column: 1 / -1;
 `;
 
 const Success = styled.p.attrs({ className: "business-form__success" })`
@@ -53,6 +72,7 @@ const Success = styled.p.attrs({ className: "business-form__success" })`
   border-radius: ${({ theme }) => theme.radii.sm};
   background: ${({ theme }) => theme.colors.success};
   color: ${({ theme }) => theme.colors.onSuccess};
+  margin-bottom: ${({ theme }) => theme.space.lg};
   font-size: 0.875rem;
   font-weight: 600;
 `;
@@ -61,7 +81,6 @@ const Actions = styled.div.attrs({ className: "business-form__actions" })`
   display: flex;
   flex-direction: column-reverse;
   gap: ${({ theme }) => theme.space.sm};
-  margin-top: ${({ theme }) => theme.space.sm};
 
   ${({ theme }) => theme.media.md} {
     flex-direction: row;
@@ -74,9 +93,12 @@ const Actions = styled.div.attrs({ className: "business-form__actions" })`
 export default function BusinessForm({
   business,
   onSave,
+  deleteAction,
 }: {
   business: Business;
   onSave: (id: string, changes: Pick<Business, "name" | "category" | "phone">) => void;
+  // Rendered in its own row under the phone, aligned right.
+  deleteAction: ReactNode;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<Values>({
@@ -142,21 +164,24 @@ export default function BusinessForm({
         error={errors.phone}
       />
 
-      <div role="status" className="business-form__status">
-        {saved && (
-          <Success>
-            <Icon name="check" />
-            Guardamos los cambios.
-          </Success>
-        )}
-      </div>
+      <DangerRow>{deleteAction}</DangerRow>
 
-      <Actions>
-        <ButtonLink href="/" $variant="secondary">
-          Volver
-        </ButtonLink>
-        <Button type="submit">Guardar cambios</Button>
-      </Actions>
+      <Footer>
+        <div role="status" className="business-form__status">
+          {saved && (
+            <Success>
+              <Icon name="check" />
+              Guardamos los cambios.
+            </Success>
+          )}
+        </div>
+        <Actions>
+          <ButtonLink href="/" $variant="secondary">
+            Volver
+          </ButtonLink>
+          <Button type="submit">Guardar cambios</Button>
+        </Actions>
+      </Footer>
     </Form>
   );
 }

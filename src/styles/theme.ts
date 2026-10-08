@@ -63,7 +63,7 @@ export const theme = {
     pagePadding: {
       base: "20px 16px 40px",
       md: "24px",
-      lg: "36px 40px",
+      lg: "28px 40px",
     },
   },
   // Mobile-first: base styles target phones; these add wider layouts.
