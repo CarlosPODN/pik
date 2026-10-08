@@ -12,6 +12,11 @@ import { DASHBOARD_COPY } from "./dashboardCopy";
 const Wrapper = styled.div.attrs({ className: "dashboard" })`
   display: flex;
   flex-direction: column;
+  gap: ${({ theme }) => theme.space.xl};
+
+  ${({ theme }) => theme.media.md} {
+    gap: ${({ theme }) => theme.space.xxl};
+  }
 `;
 
 const Welcome = styled.section.attrs({ className: "dashboard__welcome" })`
@@ -50,21 +55,19 @@ const Description = styled.p.attrs({ className: "dashboard__description" })`
   line-height: 1.5;
 `;
 
+// Compact next to the title: 40px tall instead of the default 48px.
 const WelcomeCta = styled(ButtonLink).attrs({ className: "dashboard__cta" })`
   flex-shrink: 0;
+  min-height: 0;
+  height: 40px;
+  padding: 0 ${({ theme }) => theme.space.lg};
+  font-size: 0.9375rem;
 `;
 
 const ListSection = styled.section.attrs({ className: "dashboard__list-section" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
-`;
-
-// Separates the welcome from the appointments, in place of a visible list heading.
-const Divider = styled.hr.attrs({ className: "dashboard__divider" })`
-  margin: ${({ theme }) => `${theme.space.xxs} 0 ${theme.space.lg}`};
-  border: none;
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const List = styled.ul.attrs({ className: "dashboard__list" })`
@@ -95,9 +98,7 @@ export default function Dashboard({ role }: { role: Role }) {
         </WelcomeCta>
       </Welcome>
 
-      <Divider />
-
-      {/* No visible heading: the divider marks the section, and the label names it for screen readers */}
+      {/* No visible heading: the label names the section for screen readers */}
       <ListSection aria-label={copy.listTitle}>
         <Description>{copy.description}</Description>
         {appointments.length === 0 ? (
