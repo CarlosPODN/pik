@@ -4,6 +4,10 @@
 
 Next.js (App Router) + TypeScript + styled-components. All data is mocked; no database, auth or payments.
 
+## Language
+
+Everything in this repo is written in English: code, identifiers, comments, UI copy, metadata, docs (README, CLAUDE.md), commit messages, branch names and PR titles/descriptions. Don't mix languages within the repo, even when a request or a source document is in Spanish. Translate it.
+
 ## Package manager
 
 Use pnpm (version pinned in `package.json` → `packageManager`). Never use npm or yarn, and never commit a `package-lock.json` or `yarn.lock`.

@@ -2,24 +2,24 @@
 
 Next.js (App Router) + TypeScript + styled-components, managed with pnpm.
 
-## Cómo correr el proyecto
+## Getting started
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Abre http://localhost:3000.
+Open http://localhost:3000.
 
 ## Scripts
 
-| Comando             | Qué hace                                         |
-| ------------------- | ------------------------------------------------ |
-| `pnpm dev`          | Servidor de desarrollo                           |
-| `pnpm build`        | Build de producción                              |
-| `pnpm lint`         | ESLint                                           |
-| `pnpm typecheck`    | Genera los tipos de rutas de Next.js y corre tsc |
-| `pnpm format`       | Formatea con Prettier                            |
-| `pnpm format:check` | Verifica el formato sin modificar archivos       |
+| Command             | What it does                                 |
+| ------------------- | -------------------------------------------- |
+| `pnpm dev`          | Development server                           |
+| `pnpm build`        | Production build                             |
+| `pnpm lint`         | ESLint                                       |
+| `pnpm typecheck`    | Generates Next.js route types, then runs tsc |
+| `pnpm format`       | Formats with Prettier                        |
+| `pnpm format:check` | Checks formatting without changing files     |
 
-`pnpm install` instala los git hooks de lefthook: formato y lint antes de cada commit; nombre de rama, tipos y lint antes de cada push. CI corre las mismas validaciones en cada PR.
+`pnpm install` registers the lefthook git hooks: formatting and lint before every commit; branch name, types and lint before every push. CI runs the same checks on every PR.
