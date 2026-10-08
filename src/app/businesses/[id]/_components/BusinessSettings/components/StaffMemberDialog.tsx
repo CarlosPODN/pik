@@ -8,6 +8,7 @@ import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { roleOptions } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember, StaffRole } from "@/types/business";
+import DeleteRow from "./DeleteRow";
 
 const Fields = styled.div.attrs({ className: "staff-member-dialog__fields" })`
   display: flex;
@@ -15,32 +16,6 @@ const Fields = styled.div.attrs({ className: "staff-member-dialog__fields" })`
   gap: ${({ theme }) => theme.space.lg};
   margin-top: ${({ theme }) => theme.space.sm};
   color: ${({ theme }) => theme.colors.foreground};
-`;
-
-const RemoveButton = styled.button.attrs({
-  type: "button",
-  className: "staff-member-dialog__remove",
-})`
-  align-self: flex-start;
-  min-height: 44px; /* comfortable touch target */
-  padding: 0;
-  border: none;
-  background: none;
-  color: ${({ theme }) => theme.colors.danger};
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus-visible {
-    outline: none;
-    border-radius: ${({ theme }) => theme.radii.sm};
-    box-shadow: ${({ theme }) => theme.shadows.focusRing};
-  }
 `;
 
 interface Errors {
@@ -137,7 +112,11 @@ export default function StaffMemberDialog({
           onChange={(event) => setRole(event.target.value as StaffRole)}
           error={errors.role}
         />
-        <RemoveButton onClick={onRemove}>Eliminar empleado</RemoveButton>
+        <DeleteRow
+          label="Eliminar empleado"
+          buttonLabel={`Eliminar a ${member.name}`}
+          onClick={onRemove}
+        />
       </Fields>
     </Dialog>
   );
