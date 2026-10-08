@@ -53,15 +53,11 @@ const Title = styled.h1.attrs({ className: "dashboard__title" })`
   }
 `;
 
-// Second line of the title: the role, highlighted in a white box.
-const RoleHighlight = styled.span.attrs({ className: "dashboard__role" })`
+// The role ends the title in the accent color. inline-block keeps it in one piece when the
+// title wraps.
+const RoleAccent = styled.span.attrs({ className: "dashboard__role" })`
   display: inline-block;
-  margin-top: ${({ theme }) => theme.space.xs};
-  padding: 0 ${({ theme }) => theme.space.sm};
-  border-radius: ${({ theme }) => theme.radii.sm};
-  background: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.primary};
-  transform: rotate(-1deg);
+  color: ${({ theme }) => theme.colors.onPrimaryAccent};
 `;
 
 const Description = styled.p.attrs({ className: "dashboard__description" })`
@@ -126,9 +122,7 @@ export default function Dashboard({ role }: { role: Role }) {
       <Welcome aria-labelledby="dashboard-title">
         <WelcomeText>
           <Title id="dashboard-title">
-            {copy.title}
-            <br />
-            <RoleHighlight>{copy.roleName}</RoleHighlight>
+            {copy.title} <RoleAccent>{copy.roleName}.</RoleAccent>
           </Title>
           <Description>{copy.description}</Description>
         </WelcomeText>

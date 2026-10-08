@@ -1,7 +1,7 @@
 import type { Role } from "@/types/session";
 
 export interface DashboardCopy {
-  // Shown highlighted as the second line of the title.
+  // Ends the title in the accent color: "Te damos la bienvenida, Cliente."
   roleName: string;
   title: string;
   description: string;
