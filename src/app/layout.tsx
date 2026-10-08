@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My App",
-  description: "Next.js + TypeScript + styled-components",
+  title: "PIK",
+  description: "Reservas para negocios de belleza y bienestar",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
