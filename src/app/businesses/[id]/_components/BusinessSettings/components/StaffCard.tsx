@@ -11,6 +11,25 @@ import type { BusinessCategory, StaffMember } from "@/types/business";
 import FormCard from "./FormCard";
 import StaffMemberDialog from "./StaffMemberDialog";
 
+// Just the "+" on phones; the label shows from md.
+const AddButton = styled(Button).attrs({ className: "staff-card__add" })`
+  width: 40px;
+  padding: 0;
+
+  ${({ theme }) => theme.media.md} {
+    width: auto;
+    padding: 0 ${({ theme }) => theme.space.lg};
+  }
+`;
+
+const AddLabel = styled.span.attrs({ className: "staff-card__add-label" })`
+  display: none;
+
+  ${({ theme }) => theme.media.md} {
+    display: inline;
+  }
+`;
+
 const List = styled.ul.attrs({ className: "staff-card__list" })`
   grid-column: 1 / -1;
   display: flex;
@@ -139,10 +158,10 @@ export default function StaffCard({
       heading="Staff"
       intro="Las personas que atienden en tu negocio. Los cambios se guardan al momento."
       action={
-        <Button $size="sm" onClick={add}>
+        <AddButton $size="sm" onClick={add} aria-label="Agregar empleado">
           <Icon name="plus" />
-          Agregar empleado
-        </Button>
+          <AddLabel>Agregar empleado</AddLabel>
+        </AddButton>
       }
     >
       {staff.length === 0 ? (
