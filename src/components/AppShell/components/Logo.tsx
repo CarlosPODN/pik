@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import styled from "styled-components";
-import { bem } from "@/styles/bem";
 
-const Wordmark = styled(Link).attrs({ className: bem("logo")() })`
+const Wordmark = styled(Link).attrs({ className: "logo" })`
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;

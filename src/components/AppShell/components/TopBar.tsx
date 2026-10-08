@@ -2,14 +2,11 @@
 
 import type { Ref } from "react";
 import styled from "styled-components";
-import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
 import Icon from "@/components/Icon/Icon";
 
-const b = bem("top-bar");
-
-const Bar = styled.header.attrs({ className: b() })`
+const Bar = styled.header.attrs({ className: "top-bar" })`
   position: sticky;
   top: 0;
   z-index: 10;

@@ -2,13 +2,10 @@
 
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import styled from "styled-components";
-import { bem } from "@/styles/bem";
 import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
 
-const b = bem("app-shell");
-
-const Shell = styled.div.attrs({ className: b() })`
+const Shell = styled.div.attrs({ className: "app-shell" })`
   min-height: 100dvh;
 
   ${({ theme }) => theme.media.lg} {
@@ -16,7 +13,7 @@ const Shell = styled.div.attrs({ className: b() })`
   }
 `;
 
-const Content = styled.div.attrs({ className: b("content") })`
+const Content = styled.div.attrs({ className: "app-shell__content" })`
   flex: 1;
   min-width: 0;
 `;

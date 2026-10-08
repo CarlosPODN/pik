@@ -1,5 +1,5 @@
+import clsx from "clsx";
 import type { SVGProps } from "react";
-import { bem } from "@/styles/bem";
 import Calendar from "./icons/Calendar";
 import Close from "./icons/Close";
 import Home from "./icons/Home";
@@ -17,8 +17,6 @@ const ICONS = {
 } as const;
 
 export type IconName = keyof typeof ICONS;
-
-const b = bem("icon");
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, "children"> {
   name: IconName;
@@ -43,7 +41,7 @@ export default function Icon({ name, size = 20, label, className, ...props }: Ic
       strokeLinecap="round"
       strokeLinejoin="round"
       focusable="false"
-      className={[b(undefined, { [name]: true }), className].filter(Boolean).join(" ")}
+      className={clsx("icon", `icon--${name}`, className)}
       {...(label ? { role: "img", "aria-label": label } : { "aria-hidden": true })}
       {...props}
     >

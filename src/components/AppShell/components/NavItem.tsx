@@ -1,16 +1,14 @@
 "use client";
 
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Icon from "@/components/Icon/Icon";
 import styled, { css } from "styled-components";
-import { bem } from "@/styles/bem";
 import type { NavItemConfig } from "../navItems";
 
-const b = bem("nav-item");
-
 const ItemLink = styled(Link).attrs<{ $active: boolean }>(({ $active }) => ({
-  className: b(undefined, { active: $active }),
+  className: clsx("nav-item", { "nav-item--active": $active }),
 }))`
   display: flex;
   align-items: center;
@@ -66,8 +64,8 @@ export default function NavItem({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
     >
-      <Icon name={item.icon} className={b("icon")} />
-      <span className={b("label")}>{item.label}</span>
+      <Icon name={item.icon} className="nav-item__icon" />
+      <span className="nav-item__label">{item.label}</span>
     </ItemLink>
   );
 }

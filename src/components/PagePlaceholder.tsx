@@ -1,11 +1,8 @@
 "use client";
 
 import styled from "styled-components";
-import { bem } from "@/styles/bem";
 
-const b = bem("page-placeholder");
-
-const Wrapper = styled.main.attrs({ className: b() })`
+const Wrapper = styled.main.attrs({ className: "page-placeholder" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
@@ -16,7 +13,7 @@ const Wrapper = styled.main.attrs({ className: b() })`
   }
 `;
 
-const Title = styled.h1.attrs({ className: b("title") })`
+const Title = styled.h1.attrs({ className: "page-placeholder__title" })`
   font-size: 1.5rem;
   letter-spacing: -0.02em;
 
@@ -25,7 +22,7 @@ const Title = styled.h1.attrs({ className: b("title") })`
   }
 `;
 
-const Description = styled.p.attrs({ className: b("description") })`
+const Description = styled.p.attrs({ className: "page-placeholder__description" })`
   color: ${({ theme }) => theme.colors.muted};
   line-height: 1.5;
 `;

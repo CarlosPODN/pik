@@ -1,18 +1,16 @@
 "use client";
 
+import clsx from "clsx";
 import type { Ref } from "react";
 import styled, { css } from "styled-components";
-import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
 import Icon from "@/components/Icon/Icon";
 import { NAV_ITEMS } from "../navItems";
 
-const b = bem("sidebar");
-
 const Backdrop = styled.div.attrs<{ $open: boolean }>(({ $open }) => ({
-  className: b("backdrop", { visible: $open }),
+  className: clsx("sidebar__backdrop", { "sidebar__backdrop--visible": $open }),
 }))`
   position: fixed;
   inset: 0;
@@ -28,7 +26,7 @@ const Backdrop = styled.div.attrs<{ $open: boolean }>(({ $open }) => ({
 `;
 
 const Panel = styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({
-  className: b(undefined, { open: $open }),
+  className: clsx("sidebar", { "sidebar--open": $open }),
 }))`
   /* Mobile: off-canvas drawer. */
   position: fixed;
@@ -78,26 +76,26 @@ const Panel = styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({
   }
 `;
 
-const PanelHeader = styled.div.attrs({ className: b("header") })`
+const PanelHeader = styled.div.attrs({ className: "sidebar__header" })`
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 40px;
 `;
 
-const Divider = styled.hr.attrs({ className: b("divider") })`
+const Divider = styled.hr.attrs({ className: "sidebar__divider" })`
   border: 0;
   height: 1px;
   background: ${({ theme }) => theme.colors.border};
 `;
 
-const Nav = styled.nav.attrs({ className: b("nav") })`
+const Nav = styled.nav.attrs({ className: "sidebar__nav" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.xxs};
 `;
 
-const Footer = styled.footer.attrs({ className: b("footer") })`
+const Footer = styled.footer.attrs({ className: "sidebar__footer" })`
   margin-top: auto;
   padding-top: ${({ theme }) => theme.space.lg};
   border-top: 1px dashed ${({ theme }) => theme.colors.border};

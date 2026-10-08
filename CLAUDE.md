@@ -68,11 +68,13 @@ When the task is done, push the branch and open a pull request into `main`.
 
 ### Class names (BEM)
 
-Every styled component and every styled element also gets a BEM class name, built with the `bem()` helper from `src/styles/bem.ts`. styled-components still scopes the styles; the BEM classes make the DOM readable in DevTools and give tests stable selectors.
+Every styled component and every styled element also gets a BEM class name, written out as a plain string. styled-components still scopes the styles; the BEM classes make the DOM readable in DevTools and give tests stable selectors.
 
-- Block: the component, in kebab-case (`sidebar`, `nav-item`, `page-placeholder`). One block per component file: `const b = bem("sidebar");`.
-- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`) → `b("nav")`.
-- Modifier: a state or variant, joined with `--` and driven by props (`sidebar--open`, `nav-item--active`) → `b(undefined, { open: $open })`.
-- Attach them with `.attrs`: `styled.nav.attrs({ className: b("nav") })` for static classes; `styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({ className: b(undefined, { open: $open }) }))` for modifiers. For plain elements, pass `className={b("label")}`.
+- Block: the component, in kebab-case (`sidebar`, `nav-item`, `page-placeholder`). One block per component file.
+- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`).
+- Modifier: a state or variant, joined with `--` and driven by props (`sidebar--open`, `nav-item--active`).
+- Static classes go in `.attrs` as a plain string: `styled.nav.attrs({ className: "sidebar__nav" })`. For plain elements, pass `className="nav-item__label"`.
+- Modifiers use `clsx`: `styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({ className: clsx("sidebar", { "sidebar--open": $open }) }))`. Also use `clsx` to merge a `className` prop passed in from outside.
+- Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
 - Style with styled-components only. Never target BEM classes in CSS, and never use them to style another component; they are names, not styling hooks.
 - Don't nest elements in names (`sidebar__nav__item` is wrong). A reusable part becomes its own block (`nav-item`).
