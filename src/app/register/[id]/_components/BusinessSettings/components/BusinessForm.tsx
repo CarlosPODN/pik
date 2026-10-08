@@ -201,7 +201,7 @@ export default function BusinessForm({
           )}
         </div>
         <Actions>
-          <ButtonLink href="/" $variant="secondary">
+          <ButtonLink href="/register" $variant="secondary">
             Volver
           </ButtonLink>
           <Button type="submit" form={formId}>

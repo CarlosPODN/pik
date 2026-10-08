@@ -83,8 +83,15 @@ const Price = styled.span.attrs({ className: "appointment-card__price" })`
   font-weight: 700;
 `;
 
-// One of the client's appointments: when, where, with whom and how much.
-export default function AppointmentCard({ appointment }: { appointment: Appointment }) {
+// One appointment: when, with whom and how much. Clients see where it is; businesses see who
+// booked it.
+export default function AppointmentCard({
+  appointment,
+  perspective,
+}: {
+  appointment: Appointment;
+  perspective: "client" | "business";
+}) {
   const startsAt = new Date(appointment.startsAt);
 
   return (
@@ -96,7 +103,8 @@ export default function AppointmentCard({ appointment }: { appointment: Appointm
       <Body>
         <Service>{appointment.serviceName}</Service>
         <Meta>
-          {appointment.businessName} · con {appointment.staffName}
+          {perspective === "client" ? appointment.businessName : appointment.clientName} · con{" "}
+          {appointment.staffName}
         </Meta>
         <Footer>
           <Time>

@@ -22,7 +22,7 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
       return;
     }
     const business = addBusiness();
-    router.push(`/businesses/${business.id}`);
+    router.push(`/register/${business.id}`);
   };
 
   return (
@@ -41,7 +41,7 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
               Cerrar
             </Button>
             {untouched && (
-              <ButtonLink href={`/businesses/${untouched.id}`} $size="sm">
+              <ButtonLink href={`/register/${untouched.id}`} $size="sm">
                 Editar ahora
               </ButtonLink>
             )}

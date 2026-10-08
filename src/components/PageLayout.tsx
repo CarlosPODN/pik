@@ -3,13 +3,13 @@
 import type { ReactNode } from "react";
 import styled from "styled-components";
 
-const Wrapper = styled.div.attrs({ className: "dashboard" })`
+const Wrapper = styled.div.attrs({ className: "page-layout" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.layout.sectionGap};
 `;
 
-const Header = styled.header.attrs({ className: "dashboard__header" })`
+const Header = styled.header.attrs({ className: "page-layout__header" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
@@ -22,7 +22,7 @@ const Header = styled.header.attrs({ className: "dashboard__header" })`
   }
 `;
 
-const Title = styled.h1.attrs({ className: "dashboard__title" })`
+const Title = styled.h1.attrs({ className: "page-layout__title" })`
   font-size: 1.75rem;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -32,35 +32,35 @@ const Title = styled.h1.attrs({ className: "dashboard__title" })`
   }
 `;
 
-// The role ends the title in the accent color. inline-block keeps it in one piece when the
+// A word or two of the title in the accent color. inline-block keeps it in one piece when the
 // title wraps.
-const RoleAccent = styled.span.attrs({ className: "dashboard__role" })`
+export const TitleAccent = styled.span.attrs({ className: "page-layout__accent" })`
   display: inline-block;
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-const Section = styled.section.attrs({ className: "dashboard__section" })`
+const Section = styled.section.attrs({ className: "page-layout__section" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
 `;
 
-const Description = styled.p.attrs({ className: "dashboard__description" })`
+const Description = styled.p.attrs({ className: "page-layout__description" })`
   max-width: 52ch;
   color: ${({ theme }) => theme.colors.muted};
   line-height: 1.5;
 `;
 
-// Shared frame for both role homes: the welcome title with its action, then a described
-// section (named for screen readers by sectionLabel, with no visible heading).
-export default function DashboardLayout({
-  roleName,
+// Page frame for list pages (the role homes, the business list): the title with its action,
+// then a described section (named for screen readers by sectionLabel, with no visible heading).
+export default function PageLayout({
+  title,
   action,
   description,
   sectionLabel,
   children,
 }: {
-  roleName: string;
+  title: ReactNode;
   action: ReactNode;
   description: string;
   sectionLabel: string;
@@ -69,9 +69,7 @@ export default function DashboardLayout({
   return (
     <Wrapper>
       <Header>
-        <Title>
-          Te damos la bienvenida, <RoleAccent>{roleName}.</RoleAccent>
-        </Title>
+        <Title>{title}</Title>
         {action}
       </Header>
       <Section aria-label={sectionLabel}>

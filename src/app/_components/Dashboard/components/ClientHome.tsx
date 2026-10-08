@@ -1,20 +1,24 @@
 "use client";
 
 import ButtonLink from "@/components/ButtonLink";
+import CardGrid from "@/components/CardGrid";
 import EmptyState from "@/components/EmptyState";
 import Icon from "@/components/Icon/Icon";
+import PageLayout, { TitleAccent } from "@/components/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import AppointmentCard from "./AppointmentCard";
-import CardGrid from "./CardGrid";
-import DashboardLayout from "./DashboardLayout";
 
 // Client home: their booked appointments, soonest first.
 export default function ClientHome() {
   const { appointments } = useAppointments();
 
   return (
-    <DashboardLayout
-      roleName="Cliente"
+    <PageLayout
+      title={
+        <>
+          Te damos la bienvenida, <TitleAccent>Cliente.</TitleAccent>
+        </>
+      }
       action={
         <ButtonLink href="/book" $size="sm">
           Agendar cita
@@ -35,11 +39,11 @@ export default function ClientHome() {
         <CardGrid>
           {appointments.map((appointment) => (
             <li key={appointment.id} className="client-home__item">
-              <AppointmentCard appointment={appointment} />
+              <AppointmentCard appointment={appointment} perspective="client" />
             </li>
           ))}
         </CardGrid>
       )}
-    </DashboardLayout>
+    </PageLayout>
   );
 }

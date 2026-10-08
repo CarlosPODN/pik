@@ -76,7 +76,7 @@ function ActiveAwareNavLink(props: { item: NavItemConfig; onNavigate: () => void
 }
 
 // usePathname suspends on routes whose dynamic params are only known at request time (like
-// /businesses/[id]), which would block prerendering the whole layout. The Suspense boundary
+// /register/[id]), which would block prerendering the whole layout. The Suspense boundary
 // keeps it local: the server renders the plain link, and the active state fills in after.
 export default function NavItem(props: { item: NavItemConfig; onNavigate: () => void }) {
   return (

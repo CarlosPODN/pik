@@ -81,7 +81,7 @@ export default function BusinessCard({ business }: { business: Business }) {
   const category = categoryLabel(business.category);
 
   return (
-    <Card href={`/businesses/${business.id}`}>
+    <Card href={`/register/${business.id}`}>
       <IconBadge>
         <Icon name="store" size={24} />
       </IconBadge>

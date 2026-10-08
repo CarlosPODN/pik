@@ -1,39 +1,62 @@
 "use client";
 
+import { useMemo, useState } from "react";
+import ButtonLink from "@/components/ButtonLink";
+import CardGrid from "@/components/CardGrid";
 import EmptyState from "@/components/EmptyState";
+import Icon from "@/components/Icon/Icon";
+import PageLayout, { TitleAccent } from "@/components/PageLayout";
+import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
-import AddBusinessButton from "./AddBusinessButton";
-import BusinessCard from "./BusinessCard";
-import CardGrid from "./CardGrid";
-import DashboardLayout from "./DashboardLayout";
+import AppointmentCard from "./AppointmentCard";
 
-// Business home: the businesses they manage, each linking to its settings.
+// Business home: the upcoming appointments across all their businesses, soonest first. Managing
+// the businesses themselves happens at /register.
 export default function BusinessHome() {
+  const { appointments } = useAppointments();
   const { businesses } = useBusinesses();
+  // Read once per visit: "upcoming" means starting after the page opened.
+  const [now] = useState(() => Date.now());
+
+  const upcoming = useMemo(() => {
+    const ids = new Set(businesses.map((business) => business.id));
+    return appointments.filter(
+      (appointment) => ids.has(appointment.businessId) && Date.parse(appointment.startsAt) > now,
+    );
+  }, [appointments, businesses, now]);
 
   return (
-    <DashboardLayout
-      roleName="Negocio"
-      action={<AddBusinessButton size="sm" />}
-      description="Aquí puedes ver tus negocios y editar su información."
-      sectionLabel="Tus negocios"
+    <PageLayout
+      title={
+        <>
+          Te damos la bienvenida, <TitleAccent>Negocio.</TitleAccent>
+        </>
+      }
+      action={
+        <ButtonLink href="/register" $size="sm">
+          Mis negocios
+          <Icon name="arrow-right" />
+        </ButtonLink>
+      }
+      description="Aquí puedes ver las próximas citas en tus negocios."
+      sectionLabel="Próximas citas"
     >
-      {businesses.length === 0 ? (
+      {upcoming.length === 0 ? (
         <EmptyState
-          icon="store"
-          title="Aún no tienes negocios"
-          description="Agrega tu primer negocio y completa su información para empezar a recibir reservas."
-          action={<AddBusinessButton />}
+          icon="calendar"
+          title="Aún no tienes citas"
+          description="Cuando tus clientes reserven en tus negocios, verás aquí cada cita con su fecha, hora y staff."
+          action={<ButtonLink href="/register">Ver mis negocios</ButtonLink>}
         />
       ) : (
         <CardGrid>
-          {businesses.map((business) => (
-            <li key={business.id} className="business-home__item">
-              <BusinessCard business={business} />
+          {upcoming.map((appointment) => (
+            <li key={appointment.id} className="business-home__item">
+              <AppointmentCard appointment={appointment} perspective="business" />
             </li>
           ))}
         </CardGrid>
       )}
-    </DashboardLayout>
+    </PageLayout>
   );
 }

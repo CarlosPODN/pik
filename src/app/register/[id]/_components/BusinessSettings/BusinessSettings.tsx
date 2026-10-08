@@ -73,14 +73,14 @@ export default function BusinessSettings({ id }: { id: string }) {
         icon="store"
         title="No encontramos este negocio"
         description="Puede que se haya borrado o que el enlace esté incompleto."
-        action={<ButtonLink href="/">Volver a mis negocios</ButtonLink>}
+        action={<ButtonLink href="/register">Volver a mis negocios</ButtonLink>}
       />
     );
   }
 
   return (
     <Wrapper>
-      <BackLink href="/">
+      <BackLink href="/register">
         <Icon name="arrow-left" />
         Mis negocios
       </BackLink>
@@ -100,7 +100,7 @@ export default function BusinessSettings({ id }: { id: string }) {
             onDelete={() => {
               setDeleting(true);
               deleteBusiness(business.id);
-              router.replace("/");
+              router.replace("/register");
             }}
           />
         }
