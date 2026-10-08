@@ -115,6 +115,7 @@ export default function StaffMemberDialog({
         <DeleteRow
           label="Eliminar empleado"
           buttonLabel={`Eliminar a ${member.name}`}
+          confirmLabel="¿Eliminar empleado?"
           onClick={onRemove}
         />
       </Fields>
