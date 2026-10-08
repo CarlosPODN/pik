@@ -62,7 +62,7 @@ const Pending = styled.span.attrs({ className: "business-card__pending" })`
   padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
   border-radius: ${({ theme }) => theme.radii.pill};
   background: ${({ theme }) => theme.colors.attention};
-  color: ${({ theme }) => theme.colors.onAttention};
+  color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
   font-size: 0.75rem;
   font-weight: 600;
 `;
