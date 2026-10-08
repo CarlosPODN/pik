@@ -10,7 +10,6 @@ import {
   formatWeekday,
 } from "@/lib/format";
 import type { Appointment } from "@/types/appointment";
-import type { Role } from "@/types/session";
 
 const Card = styled.article.attrs({ className: "appointment-card" })`
   display: flex;
@@ -84,16 +83,9 @@ const Price = styled.span.attrs({ className: "appointment-card__price" })`
   font-weight: 700;
 `;
 
-// One appointment. Clients see where it is; businesses see who booked it.
-export default function AppointmentCard({
-  appointment,
-  role,
-}: {
-  appointment: Appointment;
-  role: Role;
-}) {
+// One of the client's appointments: when, where, with whom and how much.
+export default function AppointmentCard({ appointment }: { appointment: Appointment }) {
   const startsAt = new Date(appointment.startsAt);
-  const who = role === "client" ? appointment.businessName : appointment.clientName;
 
   return (
     <Card>
@@ -104,7 +96,7 @@ export default function AppointmentCard({
       <Body>
         <Service>{appointment.serviceName}</Service>
         <Meta>
-          {who} · con {appointment.staffName}
+          {appointment.businessName} · con {appointment.staffName}
         </Meta>
         <Footer>
           <Time>

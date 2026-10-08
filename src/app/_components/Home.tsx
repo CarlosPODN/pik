@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useSession } from "@/hooks/useSession";
+import PageSkeleton from "@/components/PageSkeleton";
 import Dashboard from "./Dashboard/Dashboard";
-import HomeSkeleton from "./HomeSkeleton";
 
 // Picks the home for the saved role: the public landing while logged out, the role's dashboard
 // after. The role lives in localStorage, which the server can't read, so until hydration this
@@ -13,6 +13,6 @@ export default function Home({ landing }: { landing: ReactNode }) {
   const hydrated = useHydrated();
   const { role } = useSession();
 
-  if (!hydrated) return <HomeSkeleton />;
+  if (!hydrated) return <PageSkeleton />;
   return role ? <Dashboard role={role} /> : landing;
 }

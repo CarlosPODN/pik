@@ -28,3 +28,11 @@ export function formatDuration(minutes: number) {
   const text = hours === 0 ? `${rest} min` : rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
   return text.replaceAll(" ", "\u00a0");
 }
+
+// Mexican 10-digit phone, grouped for reading: "55 1234 5678". Other lengths are shown as-is.
+export function formatPhone(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  return digits.length === 10
+    ? `${digits.slice(0, 2)} ${digits.slice(2, 6)} ${digits.slice(6)}`
+    : phone;
+}

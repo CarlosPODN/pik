@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import Icon from "@/components/Icon/Icon";
 import styled, { css } from "styled-components";
 import type { NavItemConfig } from "../navItems";
@@ -47,16 +48,15 @@ function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export default function NavItem({
+function NavLink({
   item,
+  active,
   onNavigate,
 }: {
   item: NavItemConfig;
+  active: boolean;
   onNavigate: () => void;
 }) {
-  const pathname = usePathname();
-  const active = isActive(pathname, item.href);
-
   return (
     <ItemLink
       href={item.href}
@@ -67,5 +67,21 @@ export default function NavItem({
       <Icon name={item.icon} className="nav-item__icon" />
       <span className="nav-item__label">{item.label}</span>
     </ItemLink>
+  );
+}
+
+function ActiveAwareNavLink(props: { item: NavItemConfig; onNavigate: () => void }) {
+  const pathname = usePathname();
+  return <NavLink {...props} active={isActive(pathname, props.item.href)} />;
+}
+
+// usePathname suspends on routes whose dynamic params are only known at request time (like
+// /businesses/[id]), which would block prerendering the whole layout. The Suspense boundary
+// keeps it local: the server renders the plain link, and the active state fills in after.
+export default function NavItem(props: { item: NavItemConfig; onNavigate: () => void }) {
+  return (
+    <Suspense fallback={<NavLink {...props} active={false} />}>
+      <ActiveAwareNavLink {...props} />
+    </Suspense>
   );
 }

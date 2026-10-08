@@ -46,7 +46,9 @@ src/
 - Types shared across features go in `src/types/`. Props types stay next to their component.
 - The "logged" state is the role the person picked (`client` or `business`, `src/types/session.ts`), saved in localStorage under `pik:session` by `src/lib/session.ts`. Read and change it only through `useSession()` (`src/hooks/useSession.ts`); never touch localStorage for it directly. The server renders logged out, so anything that depends on the role appears after hydration. Starting a flow from the landing saves the role; "Cambiar de perfil" in the sidebar clears it.
 - Browser-saved data uses `createLocalStore` (`src/lib/localStore.ts`) and is read with `useStoredValue` (`src/hooks/useStoredValue.ts`). The session and the booked appointments (`pik:appointments`, `useAppointments()`) both work this way. When a page must not render a wrong first guess before localStorage is read, wait for `useHydrated()` and show a loading state (as `app/_components/Home.tsx` does).
-- The home page follows the role: the landing while logged out, and a welcome plus that role's appointments once a role is picked.
+- The home page follows the role: the landing while logged out, and once a role is picked, a welcome plus the client's appointments or the business's businesses.
+- Businesses (`pik:businesses`, `useBusinesses()`, `src/lib/businesses.ts`) are added from the business home as placeholders ("Negocio 2") and edited at `/businesses/[id]`. Saving the settings once sets `touched`; while the newest business is untouched, "Agregar negocio" opens a dialog instead of adding another.
+- Dynamic routes: with Cache Components, a param that's only known at request time must be read inside `<Suspense>` (see `app/businesses/[id]/page.tsx`), and so must `usePathname()` in the layout (see `NavItem`), or prerendering fails.
 - Navigation follows the role: a nav item with `role` in `navItems.ts` only shows for that role; items without one (Inicio) always show.
 
 ## Checks

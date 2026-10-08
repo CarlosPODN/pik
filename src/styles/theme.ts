@@ -23,6 +23,7 @@ export const theme = {
     attention: palette.flama,
     onAttention: palette.black, // white on flama is ~3.2:1, too low for body text
     info: palette.sky,
+    danger: "#C62828", // validation errors; flama is too light for small text on white
     highlight: palette.bloom,
     background: palette.white,
     surface: "#F6F5FF",
