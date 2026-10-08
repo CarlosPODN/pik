@@ -76,13 +76,23 @@ function normalizeHours(value: unknown): WeeklyHours {
   return hours;
 }
 
-function isStaffMember(value: unknown): value is StaffMember {
-  return (
-    isRecord(value) &&
-    typeof value.id === "string" &&
-    typeof value.name === "string" &&
-    typeof value.role === "string"
-  );
+// Checks a stored staff member. Ones saved before `touched` existed count as edited once they
+// have a role.
+function normalizeStaffMember(value: unknown): StaffMember | null {
+  if (
+    !isRecord(value) ||
+    typeof value.id !== "string" ||
+    typeof value.name !== "string" ||
+    typeof value.role !== "string"
+  ) {
+    return null;
+  }
+  return {
+    id: value.id,
+    name: value.name,
+    role: value.role,
+    touched: typeof value.touched === "boolean" ? value.touched : value.role !== "",
+  };
 }
 
 // Checks a stored business and fills fields added after it was saved (location, hours), so
@@ -111,7 +121,9 @@ function normalizeBusiness(value: unknown): Business | null {
       city: typeof location.city === "string" ? location.city : "",
     },
     hours: normalizeHours(v.hours),
-    staff: Array.isArray(v.staff) ? v.staff.filter(isStaffMember) : [],
+    staff: Array.isArray(v.staff)
+      ? v.staff.map(normalizeStaffMember).filter((member) => member !== null)
+      : [],
     touched: v.touched,
     createdAt: v.createdAt,
   };
@@ -119,10 +131,10 @@ function normalizeBusiness(value: unknown): Business | null {
 
 const readBusinesses = () => businessesStore.parse(businessesStore.readRaw());
 
-// The newest business that hasn't been edited yet, if any. While it exists, no new business
-// can be added.
-export function findUntouched(businesses: Business[]) {
-  const last = businesses.at(-1);
+// The newest business (or staff member) that hasn't been edited yet, if any. While it exists,
+// no new one can be added.
+export function findUntouched<T extends { touched: boolean }>(items: T[]): T | null {
+  const last = items.at(-1);
   return last && !last.touched ? last : null;
 }
 
@@ -188,14 +200,16 @@ export function addStaffMember(businessId: string): StaffMember {
     id: createId(),
     name: `Empleado ${nextPlaceholderNumber(names, "Empleado")}`,
     role: "",
+    touched: false,
   };
   updateStaff(businessId, (staff) => [...staff, member]);
   return member;
 }
 
+// Saves edited values. Any save marks the staff member as touched.
 export function updateStaffMember(businessId: string, member: StaffMember) {
   updateStaff(businessId, (staff) =>
-    staff.map((current) => (current.id === member.id ? member : current)),
+    staff.map((current) => (current.id === member.id ? { ...member, touched: true } : current)),
   );
 }
 

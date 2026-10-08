@@ -3,8 +3,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "@/components/Button";
+import Dialog from "@/components/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";
+import { findUntouched } from "@/lib/businesses";
 import type { StaffMember } from "@/types/business";
 import FormCard from "./FormCard";
 import StaffMemberDialog from "./StaffMemberDialog";
@@ -52,6 +54,22 @@ const Person = styled.span.attrs({ className: "staff-card__person" })`
   min-width: 0;
 `;
 
+const NameRow = styled.span.attrs({ className: "staff-card__name-row" })`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+`;
+
+const Pending = styled.span.attrs({ className: "staff-card__pending" })`
+  padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ theme }) => theme.colors.attention};
+  color: ${({ theme }) => theme.colors.onAttention};
+  font-size: 0.75rem;
+  font-weight: 600;
+`;
+
 const Name = styled.span.attrs({ className: "staff-card__name" })`
   font-size: 0.9375rem;
   font-weight: 600;
@@ -80,6 +98,7 @@ const Empty = styled.p.attrs({ className: "staff-card__empty" })`
 
 // The business's staff. "Agregar empleado" adds a placeholder ("Empleado 2") and opens it in a
 // modal to edit its name and role; tapping a row opens the same modal. Changes save right away.
+// While the newest member is still unedited, the add button explains that instead of adding.
 export default function StaffCard({
   businessId,
   staff,
@@ -91,11 +110,21 @@ export default function StaffCard({
   // Kept after closing, so the modal closes in place (and focus returns) before it changes.
   const [editingId, setEditingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [blocked, setBlocked] = useState(false);
   const editing = staff.find((member) => member.id === editingId);
+  const untouched = findUntouched(staff);
 
   const edit = (id: string) => {
     setEditingId(id);
     setOpen(true);
+  };
+
+  const add = () => {
+    if (untouched) {
+      setBlocked(true);
+      return;
+    }
+    edit(addStaffMember(businessId).id);
   };
 
   return (
@@ -103,7 +132,7 @@ export default function StaffCard({
       heading="Staff"
       intro="Las personas que atienden en tu negocio. Los cambios se guardan al momento."
       action={
-        <Button $size="sm" onClick={() => edit(addStaffMember(businessId).id)}>
+        <Button $size="sm" onClick={add}>
           <Icon name="plus" />
           Agregar empleado
         </Button>
@@ -117,7 +146,10 @@ export default function StaffCard({
             <li key={member.id} className="staff-card__item">
               <Row onClick={() => edit(member.id)} aria-label={`Editar a ${member.name}`}>
                 <Person>
-                  <Name>{member.name}</Name>
+                  <NameRow>
+                    <Name>{member.name}</Name>
+                    {!member.touched && <Pending>Sin editar</Pending>}
+                  </NameRow>
                   <Role>{member.role || "Sin puesto"}</Role>
                 </Person>
                 <EditCue aria-hidden="true">
@@ -129,6 +161,35 @@ export default function StaffCard({
           ))}
         </List>
       )}
+
+      {/* Before the edit dialog: when "Editar ahora" swaps one for the other, this one closes
+          (returning focus to the add button) before the edit dialog opens and takes focus. */}
+      <Dialog
+        open={blocked}
+        onClose={() => setBlocked(false)}
+        title="Primero edita a tu último empleado"
+        actions={
+          <>
+            <Button $variant="secondary" $size="sm" onClick={() => setBlocked(false)}>
+              Cerrar
+            </Button>
+            {untouched && (
+              <Button
+                $size="sm"
+                onClick={() => {
+                  setBlocked(false);
+                  edit(untouched.id);
+                }}
+              >
+                Editar ahora
+              </Button>
+            )}
+          </>
+        }
+      >
+        Antes de agregar a alguien más, completa y guarda los datos de{" "}
+        <strong>{untouched?.name}</strong>.
+      </Dialog>
 
       {editing && (
         <StaffMemberDialog

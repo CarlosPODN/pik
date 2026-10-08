@@ -17,10 +17,13 @@ export interface DayHours {
 
 export type WeeklyHours = Record<Weekday, DayHours>;
 
+// Like businesses, a new staff member starts as an unedited placeholder ("Empleado 2");
+// saving it once sets touched, which unlocks adding the next one.
 export interface StaffMember {
   id: string;
   name: string;
   role: string;
+  touched: boolean;
 }
 
 // A business the person manages. New businesses start as a placeholder ("Negocio 2") with
