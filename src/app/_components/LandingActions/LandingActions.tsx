@@ -1,8 +1,10 @@
 "use client";
 
+import { useId, useState } from "react";
 import styled from "styled-components";
-import { LANDING_ACTIONS } from "./actions";
-import ActionCard from "./components/ActionCard";
+import { AUDIENCES, type Audience } from "./audiences";
+import AudienceSwitch from "./components/AudienceSwitch";
+import FlowPanel from "./components/FlowPanel";
 
 const Section = styled.section.attrs({ className: "landing-actions" })`
   display: flex;
@@ -30,19 +32,14 @@ const Subtitle = styled.p.attrs({ className: "landing-actions__subtitle" })`
   line-height: 1.5;
 `;
 
-const Grid = styled.ul.attrs({ className: "landing-actions__grid" })`
-  display: grid;
-  gap: ${({ theme }) => theme.space.lg};
-  list-style: none;
-
-  ${({ theme }) => theme.media.md} {
-    grid-template-columns: repeat(2, 1fr);
-    gap: ${({ theme }) => theme.space.xl};
-  }
-`;
-
-// Entry points to the two flows: business sign-up and appointment booking.
+// Entry point to the app: pick how you use PIK, then see that flow and start it.
 export default function LandingActions() {
+  const baseId = useId();
+  const [selectedId, setSelectedId] = useState<Audience["id"]>("clients");
+  const selected = AUDIENCES.find((audience) => audience.id === selectedId) ?? AUDIENCES[0];
+  const tabId = (id: Audience["id"]) => `${baseId}-tab-${id}`;
+  const panelId = `${baseId}-panel`;
+
   return (
     <Section aria-labelledby="landing-actions-title">
       <Header>
@@ -51,13 +48,14 @@ export default function LandingActions() {
           Ya sea que tengas un negocio o busques tu próxima cita, empieza por aquí.
         </Subtitle>
       </Header>
-      <Grid>
-        {LANDING_ACTIONS.map((action) => (
-          <li key={action.href} className="landing-actions__item">
-            <ActionCard action={action} />
-          </li>
-        ))}
-      </Grid>
+      <AudienceSwitch
+        audiences={AUDIENCES}
+        selectedId={selected.id}
+        onSelect={setSelectedId}
+        tabId={tabId}
+        panelId={panelId}
+      />
+      <FlowPanel audience={selected} id={panelId} labelledBy={tabId(selected.id)} />
     </Section>
   );
 }

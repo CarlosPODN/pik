@@ -3,7 +3,7 @@
 import Icon from "@/components/Icon/Icon";
 import styled from "styled-components";
 
-const CATEGORIES = ["Salones", "Barberías", "Spas", "Uñas"];
+const CATEGORIES = ["Salones", "Barberías", "Spas"];
 
 const HIGHLIGHTS = [
   "Reserva en minutos, desde tu celular",
