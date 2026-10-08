@@ -32,7 +32,7 @@ CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`: branch name
 
 ## Git workflow
 
-Every new task starts on a new branch created from an up-to-date `main`. Never commit directly to `main`.
+Every new task starts on a new branch created from an up-to-date `main`, and every branch is checked out in its own git worktree. Never commit directly to `main`, and don't switch branches in the main checkout. This lets several branches be open and running at the same time.
 
 Branch names use the format `<type>/<brief-task-explanation>`:
 
@@ -47,6 +47,22 @@ Branch names use the format `<type>/<brief-task-explanation>`:
 - The separator is `/`, not `:`. Git rejects `:` in branch names.
 
 Examples: `feat/business-signup-flow`, `fix/booked-slots-selectable`, `chore/add-claude-md`.
+
+### Worktrees
+
+- The main checkout (`pik/`) must always be on `main`. Never check out a feature branch there; use it only to update `main` and to create worktrees.
+- If the main checkout is found on a feature branch, move that branch into its own worktree. Make sure the working tree is clean, then switch to `main` first (a branch can only be checked out in one worktree at a time). From the folder that contains `pik/`: `git -C pik switch main && git -C pik worktree add ../pik.worktrees/feat-app-shell-layout feat/app-shell-layout`
+- Worktrees live in a sibling folder outside the repo: `../pik.worktrees/<type>-<brief-task-explanation>` (the `/` becomes `-` in the folder name).
+- Keep worktrees outside the repo. A nested worktree would be picked up by ESLint, Prettier, TypeScript and Next.js file scanning, and would need its own `.gitignore` handling.
+- A branch can only be checked out in one worktree at a time.
+
+Commands, run from the main checkout unless noted:
+
+- Create: `git fetch origin && git worktree add -b feat/business-signup-flow ../pik.worktrees/feat-business-signup-flow origin/main`
+- Set up: `cd ../pik.worktrees/feat-business-signup-flow && pnpm install`. Each worktree has its own `node_modules`; pnpm's shared store keeps this fast. lefthook hooks are shared across worktrees through the common `.git` dir.
+- Run several at once: give each dev server its own port, e.g. `pnpm dev --port 3001`.
+- List: `git worktree list`
+- Clean up after the PR is merged: `git worktree remove ../pik.worktrees/<folder>`, then `git branch -d <branch>`. `git worktree prune` clears stale entries.
 
 When the task is done, push the branch and open a pull request into `main`.
 
