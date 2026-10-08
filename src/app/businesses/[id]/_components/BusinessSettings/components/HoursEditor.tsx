@@ -6,6 +6,9 @@ import { controlStyles, FieldError } from "@/components/fieldStyles";
 import { WEEKDAYS } from "@/lib/businesses";
 import type { DayHours, Weekday, WeeklyHours } from "@/types/business";
 
+// Height of the times line and of "Cerrado", so both take the same space.
+const TIME_SLOT_HEIGHT = "44px";
+
 const Fieldset = styled.fieldset.attrs({ className: "hours-editor" })`
   grid-column: 1 / -1;
   min-width: 0;
@@ -69,6 +72,7 @@ const Times = styled.div.attrs({ className: "hours-editor__times" })`
 
 const TimeRow = styled.div.attrs({ className: "hours-editor__time-row" })`
   display: flex;
+  height: ${TIME_SLOT_HEIGHT};
   align-items: center;
   gap: ${({ theme }) => theme.space.sm};
   width: 100%;
@@ -83,6 +87,7 @@ const TimeInput = styled.input.attrs({ type: "time", className: "hours-editor__t
 }>`
   ${controlStyles}
   flex: 1;
+  height: 100%;
   min-width: 0;
   padding-inline: ${({ theme }) => theme.space.sm}; /* room for "09:00 a.m." on small phones */
 
@@ -115,8 +120,23 @@ const WeekError = styled(FieldError).attrs({ className: "hours-editor__error" })
   margin-top: ${({ theme }) => theme.space.xs};
 `;
 
-const Closed = styled.span.attrs({ className: "hours-editor__closed" })`
+// Takes the times' place, at the same fixed height, so toggling a day doesn't shift the list.
+// Phones: a dashed box on the times' line. From md: plain text on the right.
+const Closed = styled.div.attrs({ className: "hours-editor__closed" })`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 100%;
+  height: ${TIME_SLOT_HEIGHT};
+  border: 1px dashed ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.sm};
   color: ${({ theme }) => theme.colors.muted};
+
+  ${({ theme }) => theme.media.md} {
+    justify-content: flex-end;
+    flex-basis: auto;
+    border: none;
+  }
 `;
 
 // One row per weekday: a checkbox for open/closed and, when open, its opening and closing time.
