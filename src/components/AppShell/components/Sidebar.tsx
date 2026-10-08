@@ -6,7 +6,7 @@ import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
-import { CloseIcon } from "./icons";
+import { CloseIcon } from "@/components/icons";
 import { NAV_ITEMS } from "../navItems";
 
 const b = bem("sidebar");

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
-import { MenuIcon } from "./icons";
+import { MenuIcon } from "@/components/icons";
 
 const b = bem("top-bar");
 
