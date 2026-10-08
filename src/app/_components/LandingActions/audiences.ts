@@ -46,8 +46,7 @@ export const AUDIENCES: Audience[] = [
     steps: [
       { title: "Datos del negocio", description: "Nombre, categoría y teléfono." },
       { title: "Ubicación y horario", description: "Dónde estás y cuándo atiendes." },
-      { title: "Servicios", description: "Nombre, duración y precio de cada uno." },
-      { title: "Staff", description: "Quién atiende cada servicio." },
+      { title: "Staff", description: "Quién atiende y en qué puesto." },
       { title: "Confirma", description: "Revisa el resumen y publica tu negocio." },
     ],
     cta: "Comenzar registro",
