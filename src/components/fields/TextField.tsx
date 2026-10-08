@@ -2,10 +2,10 @@
 
 import { useId, type InputHTMLAttributes } from "react";
 import styled from "styled-components";
-import { controlStyles, FieldError, FieldLabel, FieldWrapper } from "./fieldStyles";
+import { fieldStyles } from "./fieldStyles";
 
-const Input = styled.input.attrs({ className: "text-field__input" })<{ $invalid: boolean }>`
-  ${controlStyles}
+const TextFieldWrapper = styled.div`
+  ${fieldStyles}
 `;
 
 export default function TextField({
@@ -17,16 +17,22 @@ export default function TextField({
   const errorId = `${id}-error`;
 
   return (
-    <FieldWrapper>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Input
+    <TextFieldWrapper className="field">
+      <label className="field__label" htmlFor={id}>
+        {label}
+      </label>
+      <input
         id={id}
-        $invalid={Boolean(error)}
+        className="field__control"
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
         {...inputProps}
       />
-      {error && <FieldError id={errorId}>{error}</FieldError>}
-    </FieldWrapper>
+      {error && (
+        <p id={errorId} className="field__error">
+          {error}
+        </p>
+      )}
+    </TextFieldWrapper>
   );
 }

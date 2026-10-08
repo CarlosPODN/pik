@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, type FormEvent, type ReactNode } from "react";
 import styled from "styled-components";
 
-const Panel = styled.dialog.attrs({ className: "dialog" })`
+const DialogWrapper = styled.dialog`
   width: min(420px, calc(100vw - 32px));
   margin: auto;
   padding: ${({ theme }) => theme.space.xl};
@@ -16,31 +16,32 @@ const Panel = styled.dialog.attrs({ className: "dialog" })`
   &::backdrop {
     background: ${({ theme }) => theme.colors.overlay};
   }
-`;
 
-const Title = styled.h2.attrs({ className: "dialog__title" })`
-  font-size: 1.125rem;
-  line-height: 1.3;
-`;
+  .dialog__title {
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
 
-const Body = styled.div.attrs({ className: "dialog__body" })`
-  margin-top: ${({ theme }) => theme.space.sm};
-  color: ${({ theme }) => theme.colors.muted};
-  line-height: 1.5;
-`;
+  .dialog__body {
+    margin-top: ${({ theme }) => theme.space.sm};
+    color: ${({ theme }) => theme.colors.muted};
+    line-height: 1.5;
+  }
 
-// Buttons split the width evenly, on every screen size. Long labels wrap instead of overflowing.
-const Actions = styled.div.attrs({ className: "dialog__actions" })`
-  display: grid;
-  grid-auto-columns: 1fr;
-  grid-auto-flow: column;
-  gap: ${({ theme }) => theme.space.sm};
-  margin-top: ${({ theme }) => theme.space.xl};
+  /* Buttons split the width evenly, on every screen size. Long labels wrap instead of
+     overflowing. */
+  .dialog__actions {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    gap: ${({ theme }) => theme.space.sm};
+    margin-top: ${({ theme }) => theme.space.xl};
 
-  & > * {
-    min-width: 0;
-    white-space: normal;
-    text-align: center;
+    & > * {
+      min-width: 0;
+      white-space: normal;
+      text-align: center;
+    }
   }
 `;
 
@@ -73,8 +74,9 @@ export default function Dialog({
   }, [open]);
 
   return (
-    <Panel
+    <DialogWrapper
       ref={ref}
+      className="dialog"
       aria-labelledby={titleId}
       onClose={onClose}
       // A click whose target is the <dialog> itself landed on the backdrop, outside the panel.
@@ -82,18 +84,20 @@ export default function Dialog({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <Title id={titleId}>{title}</Title>
+      <h2 id={titleId} className="dialog__title">
+        {title}
+      </h2>
       {onSubmit ? (
         <form noValidate onSubmit={onSubmit} className="dialog__form">
-          <Body>{children}</Body>
-          <Actions>{actions}</Actions>
+          <div className="dialog__body">{children}</div>
+          <div className="dialog__actions">{actions}</div>
         </form>
       ) : (
         <>
-          <Body>{children}</Body>
-          <Actions>{actions}</Actions>
+          <div className="dialog__body">{children}</div>
+          <div className="dialog__actions">{actions}</div>
         </>
       )}
-    </Panel>
+    </DialogWrapper>
   );
 }

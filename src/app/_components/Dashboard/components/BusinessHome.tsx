@@ -5,7 +5,7 @@ import ButtonLink from "@/components/buttons/ButtonLink";
 import CardGrid from "@/components/layout/CardGrid";
 import EmptyState from "@/components/feedback/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageLayout, { TitleAccent } from "@/components/layout/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { ROLE_LABELS } from "@/lib/session";
@@ -30,11 +30,12 @@ export default function BusinessHome() {
     <PageLayout
       title={
         <>
-          Te damos la bienvenida, <TitleAccent>{ROLE_LABELS.business}.</TitleAccent>
+          Te damos la bienvenida,{" "}
+          <span className="page-layout__accent">{ROLE_LABELS.business}.</span>
         </>
       }
       action={
-        <ButtonLink href="/register" $size="sm">
+        <ButtonLink href="/register" size="sm">
           Mis negocios
           <Icon name="arrow-right" />
         </ButtonLink>

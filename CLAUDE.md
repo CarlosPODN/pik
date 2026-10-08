@@ -122,15 +122,39 @@ When the task is done, push the branch and open a pull request into `main`.
 - Icons: always render them through `<Icon name="calendar" />` from `src/components/Icon/Icon.tsx`. Never draw an inline `<svg>` in a component. To add an icon, create `src/components/Icon/icons/<Name>.tsx` with only its shapes (20×20 grid, strokes, no `<svg>` wrapper) and register it in the `ICONS` list in `Icon.tsx` under a kebab-case name. Icons are decorative (hidden from screen readers) unless you pass a Spanish `label`.
 - A component with its own sub-components gets a folder: the entry component and its config/data at the folder root (`AppShell/AppShell.tsx`, `AppShell/navItems.ts`), and the sub-components only it uses in a nested `components/` folder (`AppShell/components/Sidebar.tsx`). Import the entry file from outside; don't import from another component's `components/` folder. If a sub-component is needed elsewhere, move it up to `src/components/`.
 
-### Class names (BEM)
+### One styled wrapper per component (BEM)
 
-Every styled component and every styled element also gets a BEM class name, written out as a plain string. styled-components still scopes the styles; the BEM classes make the DOM readable in DevTools and give tests stable selectors.
+Each component file has at most one styled component: `<ComponentName>Wrapper`, on the component's root element (`ButtonWrapper`, `SidebarWrapper`, `BusinessCardWrapper`). Everything inside it is plain HTML with BEM class names, styled from the wrapper with nested selectors. Don't declare styled components for inner parts, and don't extend other components with `styled(Component)`; give them a BEM class instead.
 
-- Block: the component, in kebab-case (`sidebar`, `nav-item`, `page-placeholder`). One block per component file.
-- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`).
-- Modifier: a state or variant, joined with `--` and driven by props (`sidebar--open`, `nav-item--active`).
-- Static classes go in `.attrs` as a plain string: `styled.nav.attrs({ className: "sidebar__nav" })`. For plain elements, pass `className="nav-item__label"`.
-- Modifiers use `clsx`: `styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({ className: clsx("sidebar", { "sidebar--open": $open }) }))`. Also use `clsx` to merge a `className` prop passed in from outside.
-- Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
-- Style with styled-components only. Never target BEM classes in CSS, and never use them to style another component; they are names, not styling hooks.
+```tsx
+const DeleteRowWrapper = styled.div`
+  display: flex;
+
+  .delete-row__label {
+    font-weight: 600;
+  }
+
+  .delete-row__action--confirm {
+    background: ${({ theme }) => theme.colors.danger};
+  }
+`;
+
+export default function DeleteRow(...) {
+  return (
+    <DeleteRowWrapper className="delete-row">
+      <p className="delete-row__label">{label}</p>
+      <button className={clsx("delete-row__action", { "delete-row__action--confirm": armed })} />
+    </DeleteRowWrapper>
+  );
+}
+```
+
+- Block: the component, in kebab-case (`sidebar`, `nav-item`, `delete-row`), set on the wrapper. One block per component file.
+- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`), as a plain `className`.
+- Modifier: a state or variant, joined with `--` (`sidebar--open`, `nav-item--active`). Build it with `clsx` and style it from the wrapper: `&.sidebar--open .sidebar__panel { ... }` for a modifier on the block, `.delete-row__action--confirm { ... }` for one on an element. Don't pass `$` props to drive styles.
+- Shared components take plain props for their variants (`<Button variant="secondary" size="sm">`) and turn them into modifier classes. They accept a `className`, merged with `clsx`, so a parent can name and position them.
+- To style a child component in a specific place, give it a BEM element class of the parent (`<ButtonLink className="flow-panel__cta">`) and style that class in the parent's wrapper. Never style another component's own classes.
+- Shared CSS between blocks lives in `css` helpers (`buttonStyles`, `fieldStyles`, `controlStyles`), not in extra styled components.
+- Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search. The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
 - Don't nest elements in names (`sidebar__nav__item` is wrong). A reusable part becomes its own block (`nav-item`).
+- A wrapper that must not affect layout (because its children belong to a parent's flex or grid) uses `display: contents`, like `SidebarWrapper`.

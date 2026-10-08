@@ -2,24 +2,24 @@
 
 import styled from "styled-components";
 
-const Wrapper = styled.div.attrs({ className: "page-placeholder" })`
+const PagePlaceholderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
-`;
 
-const Title = styled.h1.attrs({ className: "page-placeholder__title" })`
-  font-size: 1.5rem;
-  letter-spacing: -0.02em;
+  .page-placeholder__title {
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
 
-  ${({ theme }) => theme.media.md} {
-    font-size: 2rem;
+    ${({ theme }) => theme.media.md} {
+      font-size: 2rem;
+    }
   }
-`;
 
-const Description = styled.p.attrs({ className: "page-placeholder__description" })`
-  color: ${({ theme }) => theme.colors.muted};
-  line-height: 1.5;
+  .page-placeholder__description {
+    color: ${({ theme }) => theme.colors.muted};
+    line-height: 1.5;
+  }
 `;
 
 // Temporary page body for routes whose flow isn't built yet.
@@ -31,9 +31,9 @@ export default function PagePlaceholder({
   description: string;
 }) {
   return (
-    <Wrapper>
-      <Title>{title}</Title>
-      <Description>{description}</Description>
-    </Wrapper>
+    <PagePlaceholderWrapper className="page-placeholder">
+      <h1 className="page-placeholder__title">{title}</h1>
+      <p className="page-placeholder__description">{description}</p>
+    </PagePlaceholderWrapper>
   );
 }

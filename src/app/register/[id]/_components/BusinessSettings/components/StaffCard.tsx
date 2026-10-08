@@ -11,108 +11,112 @@ import type { BusinessCategory, StaffMember } from "@/types/business";
 import FormCard from "./FormCard";
 import StaffMemberDialog from "./StaffMemberDialog";
 
-// Just the "+" on phones; the label shows from md.
-const AddButton = styled(Button).attrs({ className: "staff-card__add" })`
-  width: 40px;
-  padding: 0;
+// Wraps FormCard so the staff parts below (and the add button in the card's title row) can be
+// styled from one place.
+const StaffCardWrapper = styled(FormCard)`
+  /* Just the "+" on phones; the label shows from md. */
+  .staff-card__add {
+    width: 40px;
+    padding: 0;
 
-  ${({ theme }) => theme.media.md} {
-    width: auto;
-    padding: 0 ${({ theme }) => theme.space.lg};
-  }
-`;
-
-const AddLabel = styled.span.attrs({ className: "staff-card__add-label" })`
-  display: none;
-
-  ${({ theme }) => theme.media.md} {
-    display: inline;
-  }
-`;
-
-const List = styled.ul.attrs({ className: "staff-card__list" })`
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.xs};
-  list-style: none;
-`;
-
-// Like the other settings rows: who on the left, the edit cue on the right.
-const Row = styled.button.attrs({ type: "button", className: "staff-card__row" })`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.space.lg};
-  min-height: 56px;
-  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
-  margin-inline: -${({ theme }) => theme.space.md}; /* text lines up with the card content */
-  width: calc(100% + 2 * ${({ theme }) => theme.space.md});
-  border: none;
-  border-radius: ${({ theme }) => theme.radii.sm};
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.surface};
+    ${({ theme }) => theme.media.md} {
+      width: auto;
+      padding: 0 ${({ theme }) => theme.space.lg};
+    }
   }
 
-  &:focus-visible {
-    outline: none;
-    box-shadow: ${({ theme }) => theme.shadows.focusRing};
+  .staff-card__add-label {
+    display: none;
+
+    ${({ theme }) => theme.media.md} {
+      display: inline;
+    }
   }
-`;
 
-const Person = styled.span.attrs({ className: "staff-card__person" })`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.xxs};
-  min-width: 0;
-`;
+  .staff-card__list {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.space.xs};
+    list-style: none;
+  }
 
-const NameRow = styled.span.attrs({ className: "staff-card__name-row" })`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: ${({ theme }) => theme.space.sm};
-`;
+  /* Like the other settings rows: who on the left, the edit cue on the right. */
+  .staff-card__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: ${({ theme }) => theme.space.lg};
+    min-height: 56px;
+    padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
+    margin-inline: -${({ theme }) => theme.space.md}; /* text lines up with the card content */
+    width: calc(100% + 2 * ${({ theme }) => theme.space.md});
+    border: none;
+    border-radius: ${({ theme }) => theme.radii.sm};
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
 
-const Pending = styled.span.attrs({ className: "staff-card__pending" })`
-  padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
-  border-radius: ${({ theme }) => theme.radii.pill};
-  background: ${({ theme }) => theme.colors.attention};
-  color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
-  font-size: 0.75rem;
-  font-weight: 600;
-`;
+    &:hover {
+      background: ${({ theme }) => theme.colors.surface};
+    }
 
-const Name = styled.span.attrs({ className: "staff-card__name" })`
-  font-size: 0.9375rem;
-  font-weight: 600;
-`;
+    &:focus-visible {
+      outline: none;
+      box-shadow: ${({ theme }) => theme.shadows.focusRing};
+    }
+  }
 
-const Role = styled.span.attrs({ className: "staff-card__role" })`
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: 0.8125rem;
-`;
+  .staff-card__person {
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.space.xxs};
+    min-width: 0;
+  }
 
-const EditCue = styled.span.attrs({ className: "staff-card__edit" })`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.space.xs};
-  flex-shrink: 0;
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: 0.875rem;
-  font-weight: 600;
-`;
+  .staff-card__name-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: ${({ theme }) => theme.space.sm};
+  }
 
-const Empty = styled.p.attrs({ className: "staff-card__empty" })`
-  grid-column: 1 / -1;
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: 0.875rem;
+  .staff-card__pending {
+    padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
+    border-radius: ${({ theme }) => theme.radii.pill};
+    background: ${({ theme }) => theme.colors.attention};
+    color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .staff-card__name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .staff-card__role {
+    color: ${({ theme }) => theme.colors.muted};
+    font-size: 0.8125rem;
+  }
+
+  .staff-card__edit {
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.space.xs};
+    flex-shrink: 0;
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .staff-card__empty {
+    grid-column: 1 / -1;
+    color: ${({ theme }) => theme.colors.muted};
+    font-size: 0.875rem;
+  }
 `;
 
 // The business's staff. "Agregar empleado" adds a placeholder ("Empleado 2") and opens it in a
@@ -154,38 +158,44 @@ export default function StaffCard({
   };
 
   return (
-    <FormCard
+    <StaffCardWrapper
+      className="staff-card"
       heading="Staff"
       intro="Las personas que atienden en tu negocio. Los cambios se guardan al momento."
       action={
-        <AddButton $size="sm" onClick={add} aria-label="Agregar empleado">
+        <Button className="staff-card__add" size="sm" onClick={add} aria-label="Agregar empleado">
           <Icon name="plus" />
-          <AddLabel>Agregar empleado</AddLabel>
-        </AddButton>
+          <span className="staff-card__add-label">Agregar empleado</span>
+        </Button>
       }
     >
       {staff.length === 0 ? (
-        <Empty>Aún no agregas a nadie de tu staff.</Empty>
+        <p className="staff-card__empty">Aún no agregas a nadie de tu staff.</p>
       ) : (
-        <List>
+        <ul className="staff-card__list">
           {staff.map((member) => (
             <li key={member.id} className="staff-card__item">
-              <Row onClick={() => edit(member.id)} aria-label={`Editar a ${member.name}`}>
-                <Person>
-                  <NameRow>
-                    <Name>{member.name}</Name>
-                    {!member.touched && <Pending>Sin editar</Pending>}
-                  </NameRow>
-                  <Role>{roleLabel(member.role) ?? "Sin puesto"}</Role>
-                </Person>
-                <EditCue aria-hidden="true">
+              <button
+                type="button"
+                className="staff-card__row"
+                onClick={() => edit(member.id)}
+                aria-label={`Editar a ${member.name}`}
+              >
+                <span className="staff-card__person">
+                  <span className="staff-card__name-row">
+                    <span className="staff-card__name">{member.name}</span>
+                    {!member.touched && <span className="staff-card__pending">Sin editar</span>}
+                  </span>
+                  <span className="staff-card__role">{roleLabel(member.role) ?? "Sin puesto"}</span>
+                </span>
+                <span className="staff-card__edit" aria-hidden="true">
                   Editar
                   <Icon name="arrow-right" />
-                </EditCue>
-              </Row>
+                </span>
+              </button>
             </li>
           ))}
-        </List>
+        </ul>
       )}
 
       {/* Before the edit dialog: when "Editar ahora" swaps one for the other, this one closes
@@ -196,12 +206,12 @@ export default function StaffCard({
         title="Primero edita a tu último empleado"
         actions={
           <>
-            <Button $variant="secondary" $size="sm" onClick={() => setBlocked(false)}>
+            <Button variant="secondary" size="sm" onClick={() => setBlocked(false)}>
               Cerrar
             </Button>
             {untouched && (
               <Button
-                $size="sm"
+                size="sm"
                 onClick={() => {
                   setBlocked(false);
                   edit(untouched.id);
@@ -231,6 +241,6 @@ export default function StaffCard({
           }}
         />
       )}
-    </FormCard>
+    </StaffCardWrapper>
   );
 }

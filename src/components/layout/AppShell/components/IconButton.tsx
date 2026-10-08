@@ -1,8 +1,10 @@
 "use client";
 
+import clsx from "clsx";
+import type { ComponentProps } from "react";
 import styled from "styled-components";
 
-const IconButton = styled.button.attrs({ className: "icon-button" })`
+const IconButtonWrapper = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -28,4 +30,8 @@ const IconButton = styled.button.attrs({ className: "icon-button" })`
   }
 `;
 
-export default IconButton;
+// Square icon-only button for the shell (open/close the drawer). Hidden on desktop, where the
+// sidebar is always visible. Give it an aria-label.
+export default function IconButton({ className, ...props }: ComponentProps<"button">) {
+  return <IconButtonWrapper className={clsx("icon-button", className)} {...props} />;
+}

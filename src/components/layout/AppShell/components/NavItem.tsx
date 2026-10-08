@@ -5,12 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import Icon from "@/components/Icon/Icon";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import type { NavItemConfig } from "../navItems";
 
-const ItemLink = styled(Link).attrs<{ $active: boolean }>(({ $active }) => ({
-  className: clsx("nav-item", { "nav-item--active": $active }),
-}))`
+const NavItemWrapper = styled(Link)`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.space.sm};
@@ -31,17 +29,13 @@ const ItemLink = styled(Link).attrs<{ $active: boolean }>(({ $active }) => ({
     box-shadow: ${({ theme }) => theme.shadows.focusRing};
   }
 
-  ${({ $active, theme }) =>
-    $active &&
-    css`
-      &,
-      &:hover {
-        background: ${theme.colors.primarySoft};
-        color: ${theme.colors.primary};
-        font-weight: 600;
-        box-shadow: none;
-      }
-    `}
+  &.nav-item--active,
+  &.nav-item--active:hover {
+    background: ${({ theme }) => theme.colors.primarySoft};
+    color: ${({ theme }) => theme.colors.primary};
+    font-weight: 600;
+    box-shadow: none;
+  }
 `;
 
 function isActive(pathname: string, href: string) {
@@ -58,15 +52,15 @@ function NavLink({
   onNavigate: () => void;
 }) {
   return (
-    <ItemLink
+    <NavItemWrapper
       href={item.href}
-      $active={active}
+      className={clsx("nav-item", { "nav-item--active": active })}
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
     >
       <Icon name={item.icon} className="nav-item__icon" />
       <span className="nav-item__label">{item.label}</span>
-    </ItemLink>
+    </NavItemWrapper>
   );
 }
 

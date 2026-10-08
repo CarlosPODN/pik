@@ -10,7 +10,7 @@ import { roleOptions } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember, StaffRole } from "@/types/business";
 import DeleteRow from "./DeleteRow";
 
-const Fields = styled.div.attrs({ className: "staff-member-dialog__fields" })`
+const StaffMemberDialogWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
@@ -84,16 +84,16 @@ export default function StaffMemberDialog({
       onSubmit={submit}
       actions={
         <>
-          <Button $variant="secondary" $size="sm" onClick={onClose}>
+          <Button variant="secondary" size="sm" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" $size="sm">
+          <Button type="submit" size="sm">
             Guardar
           </Button>
         </>
       }
     >
-      <Fields>
+      <StaffMemberDialogWrapper className="staff-member-dialog">
         <TextField
           label="Nombre"
           name="staff-name"
@@ -118,7 +118,7 @@ export default function StaffMemberDialog({
           confirmLabel="¿Eliminar empleado?"
           onClick={onRemove}
         />
-      </Fields>
+      </StaffMemberDialogWrapper>
     </Dialog>
   );
 }

@@ -2,10 +2,10 @@
 
 import { useId, type SelectHTMLAttributes } from "react";
 import styled from "styled-components";
-import { controlStyles, FieldError, FieldLabel, FieldWrapper } from "./fieldStyles";
+import { fieldStyles } from "./fieldStyles";
 
-const Select = styled.select.attrs({ className: "select-field__select" })<{ $invalid: boolean }>`
-  ${controlStyles}
+const SelectFieldWrapper = styled.div`
+  ${fieldStyles}
 `;
 
 export default function SelectField({
@@ -24,11 +24,13 @@ export default function SelectField({
   const errorId = `${id}-error`;
 
   return (
-    <FieldWrapper>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Select
+    <SelectFieldWrapper className="field">
+      <label className="field__label" htmlFor={id}>
+        {label}
+      </label>
+      <select
         id={id}
-        $invalid={Boolean(error)}
+        className="field__control"
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
         {...selectProps}
@@ -41,8 +43,12 @@ export default function SelectField({
             {option.label}
           </option>
         ))}
-      </Select>
-      {error && <FieldError id={errorId}>{error}</FieldError>}
-    </FieldWrapper>
+      </select>
+      {error && (
+        <p id={errorId} className="field__error">
+          {error}
+        </p>
+      )}
+    </SelectFieldWrapper>
   );
 }

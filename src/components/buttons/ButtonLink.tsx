@@ -1,12 +1,26 @@
 "use client";
 
+import clsx from "clsx";
 import Link from "next/link";
+import type { ComponentProps } from "react";
 import styled from "styled-components";
-import { buttonStyles, type ButtonStyleProps } from "./buttonStyles";
+import { buttonClassName, buttonStyles, type ButtonOptions } from "./buttonStyles";
 
-// A link styled as a pill button, for actions that navigate.
-const ButtonLink = styled(Link).attrs({ className: "button-link" })<ButtonStyleProps>`
+const ButtonLinkWrapper = styled(Link)`
   ${buttonStyles}
 `;
 
-export default ButtonLink;
+// A link that looks like a pill button, for actions that navigate.
+export default function ButtonLink({
+  variant,
+  size,
+  className,
+  ...props
+}: ButtonOptions & ComponentProps<typeof Link>) {
+  return (
+    <ButtonLinkWrapper
+      className={clsx(buttonClassName({ variant, size }), "button-link", className)}
+      {...props}
+    />
+  );
+}

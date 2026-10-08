@@ -6,7 +6,7 @@ import IconButton from "./IconButton";
 import Logo from "./Logo";
 import Icon from "@/components/Icon/Icon";
 
-const Bar = styled.header.attrs({ className: "top-bar" })`
+const TopBarWrapper = styled.header`
   position: sticky;
   top: 0;
   z-index: 10;
@@ -40,7 +40,7 @@ export default function TopBar({
   menuButtonRef: Ref<HTMLButtonElement>;
 }) {
   return (
-    <Bar>
+    <TopBarWrapper className="top-bar">
       <Logo />
       <IconButton
         ref={menuButtonRef}
@@ -52,6 +52,6 @@ export default function TopBar({
       >
         <Icon name="menu" />
       </IconButton>
-    </Bar>
+    </TopBarWrapper>
   );
 }

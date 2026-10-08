@@ -1,9 +1,10 @@
 "use client";
 
+import type { ReactNode } from "react";
 import styled from "styled-components";
 
 // One column on phones, as many 360px+ columns as fit from lg.
-const CardGrid = styled.ul.attrs({ className: "card-grid" })`
+const CardGridWrapper = styled.ul`
   display: grid;
   gap: ${({ theme }) => theme.space.md};
   list-style: none;
@@ -14,4 +15,7 @@ const CardGrid = styled.ul.attrs({ className: "card-grid" })`
   }
 `;
 
-export default CardGrid;
+// A list of cards. Children are the <li> items.
+export default function CardGrid({ children }: { children: ReactNode }) {
+  return <CardGridWrapper className="card-grid">{children}</CardGridWrapper>;
+}

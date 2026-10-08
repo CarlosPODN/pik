@@ -2,7 +2,7 @@
 
 import CardGrid from "@/components/layout/CardGrid";
 import EmptyState from "@/components/feedback/EmptyState";
-import PageLayout, { TitleAccent } from "@/components/layout/PageLayout";
+import PageLayout from "@/components/layout/PageLayout";
 import PageSkeleton from "@/components/feedback/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { useHydrated } from "@/hooks/useHydrated";
@@ -21,7 +21,7 @@ export default function BusinessList() {
     <PageLayout
       title={
         <>
-          Registra tu <TitleAccent>negocio.</TitleAccent>
+          Registra tu <span className="page-layout__accent">negocio.</span>
         </>
       }
       action={<AddBusinessButton size="sm" />}

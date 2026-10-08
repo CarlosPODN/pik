@@ -16,40 +16,40 @@ import BusinessForm from "./components/BusinessForm";
 import DeleteBusiness from "./components/DeleteBusiness";
 import StaffCard from "./components/StaffCard";
 
-const Wrapper = styled.div.attrs({ className: "business-settings" })`
+const BusinessSettingsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-`;
 
-const BackLink = styled(Link).attrs({ className: "business-settings__back" })`
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: ${({ theme }) => theme.space.xs};
-  min-height: 44px; /* comfortable touch target */
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: 0.875rem;
-  font-weight: 600;
+  .business-settings__back {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: ${({ theme }) => theme.space.xs};
+    min-height: 44px; /* comfortable touch target */
+    color: ${({ theme }) => theme.colors.muted};
+    font-size: 0.875rem;
+    font-weight: 600;
 
-  &:hover {
-    color: ${({ theme }) => theme.colors.foreground};
+    &:hover {
+      color: ${({ theme }) => theme.colors.foreground};
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-radius: ${({ theme }) => theme.radii.sm};
+      box-shadow: ${({ theme }) => theme.shadows.focusRing};
+    }
   }
 
-  &:focus-visible {
-    outline: none;
-    border-radius: ${({ theme }) => theme.radii.sm};
-    box-shadow: ${({ theme }) => theme.shadows.focusRing};
-  }
-`;
+  .business-settings__title {
+    margin-bottom: ${({ theme }) => theme.space.md};
+    font-size: 1.75rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
 
-const Title = styled.h1.attrs({ className: "business-settings__title" })`
-  margin-bottom: ${({ theme }) => theme.space.md};
-  font-size: 1.75rem;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-
-  ${({ theme }) => theme.media.md} {
-    font-size: 2.25rem;
+    ${({ theme }) => theme.media.md} {
+      font-size: 2.25rem;
+    }
   }
 `;
 
@@ -79,12 +79,12 @@ export default function BusinessSettings({ id }: { id: string }) {
   }
 
   return (
-    <Wrapper>
-      <BackLink href="/register">
+    <BusinessSettingsWrapper className="business-settings">
+      <Link className="business-settings__back" href="/register">
         <Icon name="arrow-left" />
         Mis negocios
-      </BackLink>
-      <Title>{business.name}</Title>
+      </Link>
+      <h1 className="business-settings__title">{business.name}</h1>
       {/* key: a different business starts the form from its own values */}
       <BusinessForm
         key={business.id}
@@ -105,6 +105,6 @@ export default function BusinessSettings({ id }: { id: string }) {
           />
         }
       />
-    </Wrapper>
+    </BusinessSettingsWrapper>
   );
 }

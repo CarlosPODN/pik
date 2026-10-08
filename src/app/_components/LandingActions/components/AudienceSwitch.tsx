@@ -2,10 +2,10 @@
 
 import clsx from "clsx";
 import { useRef, type KeyboardEvent } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import type { Audience } from "../audiences";
 
-const TabList = styled.div.attrs({ className: "audience-switch" })`
+const AudienceSwitchWrapper = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space.xs};
   padding: ${({ theme }) => theme.space.xs};
@@ -16,48 +16,42 @@ const TabList = styled.div.attrs({ className: "audience-switch" })`
   ${({ theme }) => theme.media.md} {
     align-self: flex-start;
   }
-`;
 
-const Tab = styled.button.attrs<{ $selected: boolean }>(({ $selected }) => ({
-  className: clsx("audience-switch__tab", { "audience-switch__tab--selected": $selected }),
-}))`
-  flex: 1;
-  min-height: 44px; /* comfortable touch target */
-  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.lg}`};
-  border: none;
-  border-radius: ${({ theme }) => theme.radii.pill};
-  background: transparent;
-  color: ${({ theme }) => theme.colors.muted};
-  font: inherit;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease;
+  .audience-switch__tab {
+    flex: 1;
+    min-height: 44px; /* comfortable touch target */
+    padding: ${({ theme }) => `${theme.space.sm} ${theme.space.lg}`};
+    border: none;
+    border-radius: ${({ theme }) => theme.radii.pill};
+    background: transparent;
+    color: ${({ theme }) => theme.colors.muted};
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
 
-  &:hover {
-    color: ${({ theme }) => theme.colors.foreground};
+    &:hover {
+      color: ${({ theme }) => theme.colors.foreground};
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: ${({ theme }) => theme.shadows.focusRing};
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
-  &:focus-visible {
-    outline: none;
-    box-shadow: ${({ theme }) => theme.shadows.focusRing};
-  }
-
-  ${({ $selected, theme }) =>
-    $selected &&
-    css`
-      &,
-      &:hover {
-        background: ${theme.colors.primary};
-        color: ${theme.colors.onPrimary};
-      }
-    `}
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
+  .audience-switch__tab--selected,
+  .audience-switch__tab--selected:hover {
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.onPrimary};
   }
 `;
 
@@ -94,11 +88,16 @@ export default function AudienceSwitch({
   };
 
   return (
-    <TabList role="tablist" aria-label="¿Cómo quieres usar PIK?" onKeyDown={onKeyDown}>
+    <AudienceSwitchWrapper
+      className="audience-switch"
+      role="tablist"
+      aria-label="¿Cómo quieres usar PIK?"
+      onKeyDown={onKeyDown}
+    >
       {audiences.map((audience, index) => {
         const selected = audience.id === selectedId;
         return (
-          <Tab
+          <button
             key={audience.id}
             ref={(element) => {
               tabsRef.current[index] = element;
@@ -109,13 +108,15 @@ export default function AudienceSwitch({
             aria-selected={selected}
             aria-controls={panelId}
             tabIndex={selected ? 0 : -1}
-            $selected={selected}
+            className={clsx("audience-switch__tab", {
+              "audience-switch__tab--selected": selected,
+            })}
             onClick={() => onSelect(audience.id)}
           >
             {audience.tabLabel}
-          </Tab>
+          </button>
         );
       })}
-    </TabList>
+    </AudienceSwitchWrapper>
   );
 }

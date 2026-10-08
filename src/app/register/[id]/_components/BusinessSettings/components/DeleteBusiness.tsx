@@ -42,10 +42,10 @@ export default function DeleteBusiness({
         title={`¿Eliminar ${businessName}?`}
         actions={
           <>
-            <Button $variant="secondary" $size="sm" onClick={close}>
+            <Button variant="secondary" size="sm" onClick={close}>
               Cancelar
             </Button>
-            <Button $variant="danger" $size="sm" onClick={onDelete}>
+            <Button variant="danger" size="sm" onClick={onDelete}>
               Eliminar
             </Button>
           </>
@@ -59,7 +59,7 @@ export default function DeleteBusiness({
         onClose={close}
         title="No puedes eliminar este negocio"
         actions={
-          <Button $size="sm" onClick={close}>
+          <Button size="sm" onClick={close}>
             Entendido
           </Button>
         }

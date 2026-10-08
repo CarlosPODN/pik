@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useSession } from "@/hooks/useSession";
 import { ROLE_LABELS } from "@/lib/session";
 
-const Card = styled.div.attrs({ className: "session-card" })`
+const SessionCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
@@ -13,39 +13,39 @@ const Card = styled.div.attrs({ className: "session-card" })`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
   background: ${({ theme }) => theme.colors.background};
-`;
 
-const Label = styled.p.attrs({ className: "session-card__label" })`
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: 0.75rem;
-`;
-
-const RoleName = styled.strong.attrs({ className: "session-card__role" })`
-  display: block;
-  color: ${({ theme }) => theme.colors.foreground};
-  font-size: 0.875rem;
-`;
-
-const SwitchButton = styled.button.attrs({ className: "session-card__switch" })`
-  align-self: flex-start;
-  min-height: 32px;
-  padding: ${({ theme }) => `${theme.space.xs} ${theme.space.md}`};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.pill};
-  background: transparent;
-  color: ${({ theme }) => theme.colors.primary};
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.primarySoft};
+  .session-card__label {
+    color: ${({ theme }) => theme.colors.muted};
+    font-size: 0.75rem;
   }
 
-  &:focus-visible {
-    outline: none;
-    box-shadow: ${({ theme }) => theme.shadows.focusRing};
+  .session-card__role {
+    display: block;
+    color: ${({ theme }) => theme.colors.foreground};
+    font-size: 0.875rem;
+  }
+
+  .session-card__switch {
+    align-self: flex-start;
+    min-height: 32px;
+    padding: ${({ theme }) => `${theme.space.xs} ${theme.space.md}`};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radii.pill};
+    background: transparent;
+    color: ${({ theme }) => theme.colors.primary};
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background: ${({ theme }) => theme.colors.primarySoft};
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: ${({ theme }) => theme.shadows.focusRing};
+    }
   }
 `;
 
@@ -64,14 +64,14 @@ export default function SessionCard({ onNavigate }: { onNavigate: () => void }) 
   };
 
   return (
-    <Card>
-      <Label>
+    <SessionCardWrapper className="session-card">
+      <p className="session-card__label">
         Usas PIK como
-        <RoleName>{ROLE_LABELS[role]}</RoleName>
-      </Label>
-      <SwitchButton type="button" onClick={switchProfile}>
+        <strong className="session-card__role">{ROLE_LABELS[role]}</strong>
+      </p>
+      <button type="button" className="session-card__switch" onClick={switchProfile}>
         Cambiar de perfil
-      </SwitchButton>
-    </Card>
+      </button>
+    </SessionCardWrapper>
   );
 }

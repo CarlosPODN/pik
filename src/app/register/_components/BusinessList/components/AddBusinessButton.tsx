@@ -27,7 +27,7 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
 
   return (
     <>
-      <Button $size={size} onClick={add}>
+      <Button size={size} onClick={add}>
         <Icon name="plus" />
         Agregar negocio
       </Button>
@@ -37,11 +37,11 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
         title="Primero edita tu último negocio"
         actions={
           <>
-            <Button $variant="secondary" $size="sm" onClick={() => setBlocked(false)}>
+            <Button variant="secondary" size="sm" onClick={() => setBlocked(false)}>
               Cerrar
             </Button>
             {untouched && (
-              <ButtonLink href={`/register/${untouched.id}`} $size="sm">
+              <ButtonLink href={`/register/${untouched.id}`} size="sm">
                 Editar ahora
               </ButtonLink>
             )}

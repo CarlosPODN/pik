@@ -1,15 +1,28 @@
 "use client";
 
+import clsx from "clsx";
+import type { ButtonHTMLAttributes } from "react";
 import styled from "styled-components";
-import { buttonStyles, type ButtonStyleProps } from "./buttonStyles";
+import { buttonClassName, buttonStyles, type ButtonOptions } from "./buttonStyles";
 
-// A pill button for actions that don't navigate. Defaults to type="button" so it never submits
-// a form by accident; pass type="submit" when it should.
-const Button = styled.button.attrs<ButtonStyleProps>(({ type }) => ({
-  className: "button",
-  type: type ?? "button",
-}))<ButtonStyleProps>`
+const ButtonWrapper = styled.button`
   ${buttonStyles}
 `;
 
-export default Button;
+// A pill button for actions that don't navigate. Defaults to type="button" so it never submits
+// a form by accident; pass type="submit" when it should.
+export default function Button({
+  variant,
+  size,
+  type = "button",
+  className,
+  ...props
+}: ButtonOptions & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <ButtonWrapper
+      type={type}
+      className={clsx(buttonClassName({ variant, size }), className)}
+      {...props}
+    />
+  );
+}

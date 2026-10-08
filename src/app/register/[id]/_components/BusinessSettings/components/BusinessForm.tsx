@@ -24,44 +24,44 @@ import HoursEditor from "./HoursEditor";
 
 // The form holds the first two cards. The staff card sits between it and the footer but outside
 // it (its modal has its own form, and forms can't nest), so the buttons use form={formId}.
-const Wrapper = styled.div.attrs({ className: "business-form" })`
+const BusinessFormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
-`;
 
-const Form = styled.form.attrs({ className: "business-form__form" })`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.lg};
-`;
+  .business-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.space.lg};
+  }
 
-// Full-width row under the phone for the delete action.
-const DangerRow = styled.div.attrs({ className: "business-form__danger" })`
-  grid-column: 1 / -1;
-`;
+  /* Full-width row under the phone for the delete action. */
+  .business-form__danger {
+    grid-column: 1 / -1;
+  }
 
-const Success = styled.p.attrs({ className: "business-form__success" })`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.space.sm};
-  margin-bottom: ${({ theme }) => theme.space.lg};
-  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
-  border-radius: ${({ theme }) => theme.radii.sm};
-  background: ${({ theme }) => theme.colors.success};
-  color: ${({ theme }) => theme.colors.onSuccess};
-  font-size: 0.875rem;
-  font-weight: 600;
-`;
+  .business-form__success {
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.space.sm};
+    margin-bottom: ${({ theme }) => theme.space.lg};
+    padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
+    border-radius: ${({ theme }) => theme.radii.sm};
+    background: ${({ theme }) => theme.colors.success};
+    color: ${({ theme }) => theme.colors.onSuccess};
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
 
-const Actions = styled.div.attrs({ className: "business-form__actions" })`
-  display: flex;
-  flex-direction: column-reverse;
-  gap: ${({ theme }) => theme.space.sm};
+  .business-form__actions {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: ${({ theme }) => theme.space.sm};
 
-  ${({ theme }) => theme.media.md} {
-    flex-direction: row;
-    justify-content: flex-end;
+    ${({ theme }) => theme.media.md} {
+      flex-direction: row;
+      justify-content: flex-end;
+    }
   }
 `;
 
@@ -118,8 +118,9 @@ export default function BusinessForm({
   };
 
   return (
-    <Wrapper>
-      <Form
+    <BusinessFormWrapper className="business-form">
+      <form
+        className="business-form__form"
         id={formId}
         ref={formRef}
         noValidate
@@ -160,7 +161,7 @@ export default function BusinessForm({
             onChange={(event) => update({ phone: event.target.value })}
             error={errors.phone}
           />
-          <DangerRow>{deleteAction}</DangerRow>
+          <div className="business-form__danger">{deleteAction}</div>
         </FormCard>
 
         <FormCard
@@ -191,27 +192,27 @@ export default function BusinessForm({
             dayErrors={dayErrors}
           />
         </FormCard>
-      </Form>
+      </form>
 
       {staffSection}
 
       <div className="business-form__footer">
         <div role="status" className="business-form__status">
           {saved && (
-            <Success>
+            <p className="business-form__success">
               <Icon name="check" />
               Guardamos los cambios.
-            </Success>
+            </p>
           )}
         </div>
-        <Actions>
-          <ButtonLink href="/register" $variant="secondary">
+        <div className="business-form__actions">
+          <ButtonLink href="/register" variant="secondary">
             Volver
           </ButtonLink>
           <Button type="submit" form={formId}>
             Guardar cambios
           </Button>
-        </Actions>
+        </div>
       </div>
 
       <Dialog
@@ -220,10 +221,10 @@ export default function BusinessForm({
         title="Tienes cambios sin guardar"
         actions={
           <>
-            <Button $variant="secondary" $size="sm" onClick={leaveGuard.cancelLeave}>
+            <Button variant="secondary" size="sm" onClick={leaveGuard.cancelLeave}>
               Quedarme
             </Button>
-            <Button $variant="danger" $size="sm" onClick={leaveGuard.confirmLeave}>
+            <Button variant="danger" size="sm" onClick={leaveGuard.confirmLeave}>
               Salir
             </Button>
           </>
@@ -231,6 +232,6 @@ export default function BusinessForm({
       >
         Si sales ahora, perderás los cambios que hiciste en este negocio.
       </Dialog>
-    </Wrapper>
+    </BusinessFormWrapper>
   );
 }
