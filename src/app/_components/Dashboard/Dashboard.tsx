@@ -12,11 +12,6 @@ import { DASHBOARD_COPY } from "./dashboardCopy";
 const Wrapper = styled.div.attrs({ className: "dashboard" })`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xl};
-
-  ${({ theme }) => theme.media.md} {
-    gap: ${({ theme }) => theme.space.xxl};
-  }
 `;
 
 const Welcome = styled.section.attrs({ className: "dashboard__welcome" })`
@@ -73,6 +68,7 @@ const ListSection = styled.section.attrs({ className: "dashboard__list-section" 
 
 // Separates the welcome from the appointments, in place of a visible list heading.
 const Divider = styled.hr.attrs({ className: "dashboard__divider" })`
+  margin: ${({ theme }) => `${theme.space.xxs} 0 ${theme.space.lg}`};
   border: none;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
