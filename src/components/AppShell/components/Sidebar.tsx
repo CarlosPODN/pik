@@ -7,7 +7,7 @@ import IconButton from "./IconButton";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
 import { CloseIcon } from "./icons";
-import { NAV_ITEMS } from "./navItems";
+import { NAV_ITEMS } from "../navItems";
 
 const b = bem("sidebar");
 

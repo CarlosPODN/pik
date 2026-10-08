@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import { CalendarIcon, HomeIcon, StoreIcon } from "./icons";
+import { CalendarIcon, HomeIcon, StoreIcon } from "./components/icons";
 
 export interface NavItemConfig {
   label: string;

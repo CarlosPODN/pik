@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styled, { css } from "styled-components";
 import { bem } from "@/styles/bem";
-import type { NavItemConfig } from "./navItems";
+import type { NavItemConfig } from "../navItems";
 
 const b = bem("nav-item");
 

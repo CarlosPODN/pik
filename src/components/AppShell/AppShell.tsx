@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import styled from "styled-components";
 import { bem } from "@/styles/bem";
-import Sidebar from "./Sidebar";
-import TopBar from "./TopBar";
+import Sidebar from "./components/Sidebar";
+import TopBar from "./components/TopBar";
 
 const b = bem("app-shell");
 
