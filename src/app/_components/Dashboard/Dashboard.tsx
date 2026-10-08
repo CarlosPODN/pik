@@ -22,18 +22,13 @@ const Wrapper = styled.div.attrs({ className: "dashboard" })`
 const Welcome = styled.section.attrs({ className: "dashboard__welcome" })`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.md};
-  padding: ${({ theme }) => `${theme.space.xl} ${theme.space.lg}`};
-  border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.onPrimary};
+  gap: ${({ theme }) => theme.space.lg};
 
   ${({ theme }) => theme.media.md} {
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     gap: ${({ theme }) => theme.space.xl};
-    padding: ${({ theme }) => theme.space.xxl};
   }
 `;
 
@@ -57,20 +52,17 @@ const Title = styled.h1.attrs({ className: "dashboard__title" })`
 // title wraps.
 const RoleAccent = styled.span.attrs({ className: "dashboard__role" })`
   display: inline-block;
-  color: ${({ theme }) => theme.colors.onPrimaryAccent};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const Description = styled.p.attrs({ className: "dashboard__description" })`
   max-width: 52ch;
-  color: ${({ theme }) => theme.colors.onPrimaryMuted};
+  color: ${({ theme }) => theme.colors.muted};
   line-height: 1.5;
 `;
 
-// White pill on the primary banner.
 const WelcomeCta = styled(ButtonLink).attrs({ className: "dashboard__cta" })`
   flex-shrink: 0;
-  background: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const ListSection = styled.section.attrs({ className: "dashboard__list-section" })`

@@ -17,7 +17,6 @@ export const theme = {
     primary: palette.nova,
     onPrimary: palette.white,
     onPrimaryMuted: "rgba(255, 255, 255, 0.85)", // secondary text on primary surfaces
-    onPrimaryAccent: palette.mint, // accent text on primary surfaces; ~3:1, so large text only
     onPrimarySubtle: "rgba(255, 255, 255, 0.16)", // chips and dividers on primary surfaces
     success: palette.mint,
     onSuccess: palette.carbon, // white on mint fails contrast
