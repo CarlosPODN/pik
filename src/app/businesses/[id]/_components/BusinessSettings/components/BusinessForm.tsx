@@ -52,6 +52,13 @@ const Form = styled.form.attrs({ className: "business-form" })`
   background: ${({ theme }) => theme.colors.background};
 `;
 
+// Full-width first row: what this form is.
+const Intro = styled.p.attrs({ className: "business-form__intro" })`
+  grid-column: 1 / -1;
+  color: ${({ theme }) => theme.colors.muted};
+  line-height: 1.5;
+`;
+
 // Full-width row under the phone for the delete action.
 const DangerRow = styled.div.attrs({ className: "business-form__danger" })`
   grid-column: 1 / -1;
@@ -133,6 +140,7 @@ export default function BusinessForm({
 
   return (
     <Form ref={formRef} noValidate onSubmit={submit} aria-label="Información del negocio">
+      <Intro>Esta es la información de tu negocio.</Intro>
       <TextField
         label="Nombre del negocio"
         name="name"

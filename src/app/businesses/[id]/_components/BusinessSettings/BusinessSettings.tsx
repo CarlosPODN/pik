@@ -42,14 +42,8 @@ const BackLink = styled(Link).attrs({ className: "business-settings__back" })`
   }
 `;
 
-const Header = styled.header.attrs({ className: "business-settings__header" })`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.xs};
-  margin-top: -${({ theme }) => theme.space.md}; /* sit closer to the back link */
-`;
-
 const Title = styled.h1.attrs({ className: "business-settings__title" })`
+  margin-top: -${({ theme }) => theme.space.md}; /* sit closer to the back link */
   font-size: 1.75rem;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -57,11 +51,6 @@ const Title = styled.h1.attrs({ className: "business-settings__title" })`
   ${({ theme }) => theme.media.md} {
     font-size: 2.25rem;
   }
-`;
-
-const Subtitle = styled.p.attrs({ className: "business-settings__subtitle" })`
-  color: ${({ theme }) => theme.colors.muted};
-  line-height: 1.5;
 `;
 
 // Settings for one business. Waits for localStorage before deciding the business doesn't exist.
@@ -95,14 +84,7 @@ export default function BusinessSettings({ id }: { id: string }) {
         <Icon name="arrow-left" />
         Mis negocios
       </BackLink>
-      <Header>
-        <Title>{business.name}</Title>
-        <Subtitle>
-          {business.touched
-            ? "Actualiza la información de tu negocio."
-            : "Completa la información de tu negocio para poder agregar otro."}
-        </Subtitle>
-      </Header>
+      <Title>{business.name}</Title>
       {/* key: a different business starts the form from its own values */}
       <BusinessForm
         key={business.id}
