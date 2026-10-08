@@ -3,8 +3,8 @@
 import clsx from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { buttonClassName, type ButtonOptions } from "./Button";
-import { ButtonWrapper } from "./Button.styles";
+import { buttonClassName, type ButtonOptions } from "./Button/Button";
+import { ButtonWrapper } from "./Button/Button.styles";
 
 // A link that looks like a pill button, for actions that navigate. It renders Button's styled
 // wrapper as a Next.js <Link> (styled-components' `as`), so both share one set of styles.

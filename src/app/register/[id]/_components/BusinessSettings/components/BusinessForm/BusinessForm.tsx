@@ -1,8 +1,8 @@
 "use client";
 
 import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
-import Button from "@/components/buttons/Button";
-import Dialog from "@/components/modals/Dialog";
+import Button from "@/components/buttons/Button/Button";
+import Dialog from "@/components/modals/Dialog/Dialog";
 import ButtonLink from "@/components/buttons/ButtonLink";
 import Icon from "@/components/Icon/Icon";
 import SelectField from "@/components/fields/SelectField";
@@ -17,9 +17,9 @@ import {
   toFormValues,
   validate,
   type BusinessFormValues,
-} from "../businessFormValues";
-import FormCard from "./FormCard";
-import HoursEditor from "./HoursEditor";
+} from "../../businessFormValues";
+import FormCard from "../FormCard/FormCard";
+import HoursEditor from "../HoursEditor/HoursEditor";
 import { BusinessFormWrapper } from "./BusinessForm.styles";
 
 type BusinessChanges = Pick<Business, "name" | "category" | "phone" | "location" | "hours">;

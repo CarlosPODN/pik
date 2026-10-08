@@ -2,7 +2,7 @@
 
 import ButtonLink from "@/components/buttons/ButtonLink";
 import Icon from "@/components/Icon/Icon";
-import type { Audience } from "../audiences";
+import type { Audience } from "../../audiences";
 import { FlowPanelWrapper } from "./FlowPanel.styles";
 
 // The selected audience's flow: what it's for, its steps and the button that starts it.

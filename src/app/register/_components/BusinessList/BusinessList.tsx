@@ -1,13 +1,13 @@
 "use client";
 
-import CardGrid from "@/components/layout/CardGrid";
-import EmptyState from "@/components/feedback/EmptyState";
-import PageLayout from "@/components/layout/PageLayout";
-import PageSkeleton from "@/components/feedback/PageSkeleton";
+import CardGrid from "@/components/layout/CardGrid/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
+import PageLayout from "@/components/layout/PageLayout/PageLayout";
+import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { useHydrated } from "@/hooks/useHydrated";
 import AddBusinessButton from "./components/AddBusinessButton";
-import BusinessCard from "./components/BusinessCard";
+import BusinessCard from "./components/BusinessCard/BusinessCard";
 
 // The businesses the person manages, each linking to its settings at /register/[id]. Waits for
 // localStorage so it never flashes the empty state before the list.

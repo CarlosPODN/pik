@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/components/buttons/Button";
-import Dialog from "@/components/modals/Dialog";
-import DeleteRow from "./DeleteRow";
+import Button from "@/components/buttons/Button/Button";
+import Dialog from "@/components/modals/Dialog/Dialog";
+import DeleteRow from "./DeleteRow/DeleteRow";
 
 const pendingText = (count: number) =>
   count === 1 ? "1 cita pendiente" : `${count} citas pendientes`;

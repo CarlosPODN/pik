@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import Button from "@/components/buttons/Button";
-import Dialog from "@/components/modals/Dialog";
+import Button from "@/components/buttons/Button/Button";
+import Dialog from "@/components/modals/Dialog/Dialog";
 import SelectField from "@/components/fields/SelectField";
 import TextField from "@/components/fields/TextField";
 import { roleOptions } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember, StaffRole } from "@/types/business";
-import DeleteRow from "./DeleteRow";
+import DeleteRow from "../DeleteRow/DeleteRow";
 import { StaffMemberDialogWrapper } from "./StaffMemberDialog.styles";
 
 interface Errors {

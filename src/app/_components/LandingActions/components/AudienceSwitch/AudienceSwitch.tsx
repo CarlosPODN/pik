@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { useRef, type KeyboardEvent } from "react";
-import type { Audience } from "../audiences";
+import type { Audience } from "../../audiences";
 import { AudienceSwitchWrapper } from "./AudienceSwitch.styles";
 
 // Tabs that switch between the client and business views (WAI-ARIA tabs pattern: arrow keys,

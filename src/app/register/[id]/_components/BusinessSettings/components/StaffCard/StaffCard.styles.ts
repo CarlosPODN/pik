@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "styled-components";
-import FormCard from "./FormCard";
+import FormCard from "../FormCard/FormCard";
 
 // Wraps FormCard so the staff parts below (and the add button in the card's title row) can be
 // styled from one place.

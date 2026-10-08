@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import Icon from "@/components/Icon/Icon";
-import type { NavItemConfig } from "../navItems";
+import type { NavItemConfig } from "../../navItems";
 import { NavItemWrapper } from "./NavItem.styles";
 
 function isActive(pathname: string, href: string) {

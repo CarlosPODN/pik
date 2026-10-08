@@ -1,8 +1,8 @@
 "use client";
 
 import type { Ref } from "react";
-import IconButton from "./IconButton";
-import Logo from "./Logo";
+import IconButton from "../IconButton/IconButton";
+import Logo from "../Logo/Logo";
 import Icon from "@/components/Icon/Icon";
 import { TopBarWrapper } from "./TopBar.styles";
 

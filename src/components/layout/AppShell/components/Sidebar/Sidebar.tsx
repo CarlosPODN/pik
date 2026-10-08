@@ -2,13 +2,13 @@
 
 import clsx from "clsx";
 import type { Ref } from "react";
-import IconButton from "./IconButton";
-import Logo from "./Logo";
-import NavItem from "./NavItem";
-import SessionCard from "./SessionCard";
+import IconButton from "../IconButton/IconButton";
+import Logo from "../Logo/Logo";
+import NavItem from "../NavItem/NavItem";
+import SessionCard from "../SessionCard/SessionCard";
 import Icon from "@/components/Icon/Icon";
 import { useSession } from "@/hooks/useSession";
-import { NAV_ITEMS } from "../navItems";
+import { NAV_ITEMS } from "../../navItems";
 import { SidebarWrapper } from "./Sidebar.styles";
 
 export default function Sidebar({

@@ -3,8 +3,8 @@
 import { useId, useState } from "react";
 import { useSession } from "@/hooks/useSession";
 import { AUDIENCES, type Audience } from "./audiences";
-import AudienceSwitch from "./components/AudienceSwitch";
-import FlowPanel from "./components/FlowPanel";
+import AudienceSwitch from "./components/AudienceSwitch/AudienceSwitch";
+import FlowPanel from "./components/FlowPanel/FlowPanel";
 import { LandingActionsWrapper } from "./LandingActions.styles";
 
 // Entry point to the app: pick how you use PIK, then see that flow and start it.

@@ -1,13 +1,13 @@
 "use client";
 
 import ButtonLink from "@/components/buttons/ButtonLink";
-import CardGrid from "@/components/layout/CardGrid";
-import EmptyState from "@/components/feedback/EmptyState";
+import CardGrid from "@/components/layout/CardGrid/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageLayout from "@/components/layout/PageLayout";
+import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { ROLE_LABELS } from "@/lib/session";
-import AppointmentCard from "./AppointmentCard";
+import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
 // Client home: their booked appointments, soonest first.
 export default function ClientHome() {

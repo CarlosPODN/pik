@@ -4,16 +4,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ButtonLink from "@/components/buttons/ButtonLink";
-import EmptyState from "@/components/feedback/EmptyState";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageSkeleton from "@/components/feedback/PageSkeleton";
+import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
-import BusinessForm from "./components/BusinessForm";
+import BusinessForm from "./components/BusinessForm/BusinessForm";
 import DeleteBusiness from "./components/DeleteBusiness";
-import StaffCard from "./components/StaffCard";
+import StaffCard from "./components/StaffCard/StaffCard";
 import { BusinessSettingsWrapper } from "./BusinessSettings.styles";
 
 // Settings for one business. Waits for localStorage before deciding the business doesn't exist.

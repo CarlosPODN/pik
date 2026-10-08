@@ -2,14 +2,14 @@
 
 import { useMemo, useState } from "react";
 import ButtonLink from "@/components/buttons/ButtonLink";
-import CardGrid from "@/components/layout/CardGrid";
-import EmptyState from "@/components/feedback/EmptyState";
+import CardGrid from "@/components/layout/CardGrid/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageLayout from "@/components/layout/PageLayout";
+import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { ROLE_LABELS } from "@/lib/session";
-import AppointmentCard from "./AppointmentCard";
+import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
 // Business home: the upcoming appointments across all their businesses, soonest first. Managing
 // the businesses themselves happens at /register.

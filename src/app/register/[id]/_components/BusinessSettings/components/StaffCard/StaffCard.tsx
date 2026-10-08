@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/components/buttons/Button";
-import Dialog from "@/components/modals/Dialog";
+import Button from "@/components/buttons/Button/Button";
+import Dialog from "@/components/modals/Dialog/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { findUntouched, roleLabel } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember } from "@/types/business";
-import StaffMemberDialog from "./StaffMemberDialog";
+import StaffMemberDialog from "../StaffMemberDialog/StaffMemberDialog";
 import { StaffCardWrapper } from "./StaffCard.styles";
 
 // The business's staff. "Agregar empleado" adds a placeholder ("Empleado 2") and opens it in a
