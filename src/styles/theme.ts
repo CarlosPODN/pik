@@ -24,6 +24,8 @@ export const theme = {
     highlight: palette.bloom,
     background: palette.white,
     surface: "#F6F5FF",
+    primarySoft: "#ECE8FF", // nova tint for selected/hovered navigation
+    overlay: "rgba(45, 45, 45, 0.6)", // carbon at 60%, behind the mobile drawer
     foreground: palette.carbon,
     muted: "#6B6B6B",
     border: "#E4E2F0",
@@ -36,6 +38,29 @@ export const theme = {
     sm: "6px",
     md: "12px",
     pill: "999px",
+  },
+  space: {
+    xxs: "2px",
+    xs: "4px",
+    sm: "8px",
+    md: "12px",
+    lg: "16px",
+    xl: "24px",
+    xxl: "32px",
+  },
+  shadows: {
+    navItem: "0 1px 0 0 rgba(45, 45, 45, 0.08), 0 0 0 1px rgba(45, 45, 45, 0.03)",
+    focusRing: `0 0 0 2px ${palette.white}, 0 0 0 4px ${palette.nova}`,
+  },
+  layout: {
+    topBarHeight: "56px",
+    sidebarWidth: "264px",
+    drawerWidth: "min(320px, 85vw)",
+  },
+  // Mobile-first: base styles target phones; these add wider layouts.
+  media: {
+    md: "@media (min-width: 768px)",
+    lg: "@media (min-width: 1024px)",
   },
 } as const;
 
