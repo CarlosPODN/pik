@@ -12,24 +12,26 @@ const LandingActionsWrapper = styled.section`
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
 
-  .landing-actions__header {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xs};
-  }
-
-  .landing-actions__title {
-    font-size: 1.375rem;
-    letter-spacing: -0.01em;
-
-    ${({ theme }) => theme.media.md} {
-      font-size: 1.75rem;
+  .landing-actions {
+    &__header {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xs};
     }
-  }
 
-  .landing-actions__subtitle {
-    color: ${({ theme }) => theme.colors.muted};
-    line-height: 1.5;
+    &__title {
+      font-size: 1.375rem;
+      letter-spacing: -0.01em;
+
+      ${({ theme }) => theme.media.md} {
+        font-size: 1.75rem;
+      }
+    }
+
+    &__subtitle {
+      color: ${({ theme }) => theme.colors.muted};
+      line-height: 1.5;
+    }
   }
 `;
 

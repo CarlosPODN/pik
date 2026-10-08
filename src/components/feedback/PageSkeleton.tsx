@@ -12,23 +12,25 @@ const PageSkeletonWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.space.xl};
 
-  .page-skeleton__block {
-    height: 160px;
-    border-radius: ${({ theme }) => theme.radii.md};
-    background: ${({ theme }) => theme.colors.surface};
-    animation: ${pulse} 1.4s ease-in-out infinite;
+  .page-skeleton {
+    &__block {
+      height: 160px;
+      border-radius: ${({ theme }) => theme.radii.md};
+      background: ${({ theme }) => theme.colors.surface};
+      animation: ${pulse} 1.4s ease-in-out infinite;
 
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
     }
-  }
 
-  .page-skeleton__block--header {
-    height: 220px;
-  }
+    &__block--header {
+      height: 220px;
+    }
 
-  .page-skeleton__block--line {
-    height: 40px;
+    &__block--line {
+      height: 40px;
+    }
   }
 `;
 

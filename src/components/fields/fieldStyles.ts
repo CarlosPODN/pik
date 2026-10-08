@@ -37,16 +37,18 @@ export const fieldStyles = css`
   flex-direction: column;
   gap: ${({ theme }) => theme.space.xs};
 
-  .field__label {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
+  .field {
+    &__label {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
 
-  .field__control {
-    ${controlStyles}
-  }
+    &__control {
+      ${controlStyles}
+    }
 
-  .field__error {
-    ${errorTextStyles}
+    &__error {
+      ${errorTextStyles}
+    }
   }
 `;

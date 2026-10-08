@@ -8,46 +8,48 @@ const PageLayoutWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.layout.sectionGap};
 
-  .page-layout__header {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.lg};
+  .page-layout {
+    &__header {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.lg};
 
-    ${({ theme }) => theme.media.md} {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: ${({ theme }) => theme.space.xl};
+      ${({ theme }) => theme.media.md} {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${({ theme }) => theme.space.xl};
+      }
     }
-  }
 
-  .page-layout__title {
-    font-size: 1.75rem;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    &__title {
+      font-size: 1.75rem;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
 
-    ${({ theme }) => theme.media.md} {
-      font-size: 2.25rem;
+      ${({ theme }) => theme.media.md} {
+        font-size: 2.25rem;
+      }
     }
-  }
 
-  /* A word or two of the title in the accent color. inline-block keeps it in one piece when
-     the title wraps. */
-  .page-layout__accent {
-    display: inline-block;
-    color: ${({ theme }) => theme.colors.primary};
-  }
+    /* A word or two of the title in the accent color. inline-block keeps it in one piece when
+       the title wraps. */
+    &__accent {
+      display: inline-block;
+      color: ${({ theme }) => theme.colors.primary};
+    }
 
-  .page-layout__section {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.lg};
-  }
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.lg};
+    }
 
-  .page-layout__description {
-    max-width: 52ch;
-    color: ${({ theme }) => theme.colors.muted};
-    line-height: 1.5;
+    &__description {
+      max-width: 52ch;
+      color: ${({ theme }) => theme.colors.muted};
+      line-height: 1.5;
+    }
   }
 `;
 

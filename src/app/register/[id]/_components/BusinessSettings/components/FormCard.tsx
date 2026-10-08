@@ -21,30 +21,32 @@ const FormCardWrapper = styled.section`
     column-gap: ${({ theme }) => theme.space.xl};
   }
 
-  .form-card__header {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xs};
-  }
+  .form-card {
+    &__header {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xs};
+    }
 
-  /* Heading and description on the left, the card's action (if any) at the end of the row. */
-  .form-card__title-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: ${({ theme }) => theme.space.md};
-  }
+    /* Heading and description on the left, the card's action (if any) at the end of the row. */
+    &__title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: ${({ theme }) => theme.space.md};
+    }
 
-  .form-card__heading {
-    font-size: 1.375rem;
-    letter-spacing: -0.01em;
-  }
+    &__heading {
+      font-size: 1.375rem;
+      letter-spacing: -0.01em;
+    }
 
-  .form-card__intro {
-    color: ${({ theme }) => theme.colors.foreground};
-    line-height: 1.5;
+    &__intro {
+      color: ${({ theme }) => theme.colors.foreground};
+      line-height: 1.5;
+    }
   }
 `;
 

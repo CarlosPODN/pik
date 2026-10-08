@@ -124,18 +124,20 @@ When the task is done, push the branch and open a pull request into `main`.
 
 ### One styled wrapper per component (BEM)
 
-Each component file has at most one styled component: `<ComponentName>Wrapper`, on the component's root element (`ButtonWrapper`, `SidebarWrapper`, `BusinessCardWrapper`). Everything inside it is plain HTML with BEM class names, styled from the wrapper with nested selectors. Don't declare styled components for inner parts, and don't extend other components with `styled(Component)`; give them a BEM class instead.
+Each component file has at most one styled component: `<ComponentName>Wrapper`, on the component's root element (`ButtonWrapper`, `SidebarWrapper`, `BusinessCardWrapper`). Everything inside it is plain HTML with BEM class names, styled from the wrapper with nested selectors. Group the element rules under the block's class and write them with `&__element` / `&__element--modifier`, as in Sass. Inside a styled component a bare `&` is the generated class (`.sc-x1y2`), so `&__label` only produces `.delete-row__label` from inside `.delete-row { }`; the rules end up as `.sc-x1y2 .delete-row__label`. Don't declare styled components for inner parts, and don't extend other components with `styled(Component)`; give them a BEM class instead.
 
 ```tsx
 const DeleteRowWrapper = styled.div`
   display: flex;
 
-  .delete-row__label {
-    font-weight: 600;
-  }
+  .delete-row {
+    &__label {
+      font-weight: 600;
+    }
 
-  .delete-row__action--confirm {
-    background: ${({ theme }) => theme.colors.danger};
+    &__action--confirm {
+      background: ${({ theme }) => theme.colors.danger};
+    }
   }
 `;
 
@@ -151,7 +153,7 @@ export default function DeleteRow(...) {
 
 - Block: the component, in kebab-case (`sidebar`, `nav-item`, `delete-row`), set on the wrapper. One block per component file.
 - Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`), as a plain `className`.
-- Modifier: a state or variant, joined with `--` (`sidebar--open`, `nav-item--active`). Build it with `clsx` and style it from the wrapper: `&.sidebar--open .sidebar__panel { ... }` for a modifier on the block, `.delete-row__action--confirm { ... }` for one on an element. Don't pass `$` props to drive styles.
+- Modifier: a state or variant, joined with `--` (`sidebar--open`, `nav-item--active`). Build it with `clsx` and style it from the wrapper: `&.sidebar--open .sidebar__panel { ... }` (at the wrapper's top level) for a modifier on the block, `&__action--confirm { ... }` (inside `.delete-row { }`) for one on an element. Don't pass `$` props to drive styles.
 - Shared components take plain props for their variants (`<Button variant="secondary" size="sm">`) and turn them into modifier classes. They accept a `className`, merged with `clsx`, so a parent can name and position them.
 - To style a child component in a specific place, give it a BEM element class of the parent (`<ButtonLink className="flow-panel__cta">`) and style that class in the parent's wrapper. Never style another component's own classes.
 - Shared CSS between blocks lives in `css` helpers (`buttonStyles`, `fieldStyles`, `controlStyles`), not in extra styled components.

@@ -10,67 +10,69 @@ const DeleteRowWrapper = styled.div`
   justify-content: space-between;
   gap: ${({ theme }) => theme.space.lg};
 
-  .delete-row__text {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xxs};
-    min-width: 0;
-  }
-
-  .delete-row__label {
-    font-size: 0.9375rem;
-    font-weight: 600;
-  }
-
-  .delete-row__hint {
-    color: ${({ theme }) => theme.colors.muted};
-    font-size: 0.8125rem;
-    line-height: 1.4;
-  }
-
-  .delete-row__buttons {
-    display: flex;
-    gap: ${({ theme }) => theme.space.sm};
-    flex-shrink: 0;
-  }
-
-  /* Square icon buttons. Trash and cancel are outlined; confirm is filled red. */
-  .delete-row__action {
-    display: grid;
-    place-items: center;
-    width: 44px; /* comfortable touch target */
-    height: 44px;
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    border-radius: ${({ theme }) => theme.radii.md};
-    background: ${({ theme }) => theme.colors.background};
-    color: ${({ theme }) => theme.colors.foreground};
-    cursor: pointer;
-
-    &:hover {
-      border-color: ${({ theme }) => theme.colors.foreground};
+  .delete-row {
+    &__text {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xxs};
+      min-width: 0;
     }
 
-    &:focus-visible {
-      outline: none;
-      box-shadow: ${({ theme }) => theme.shadows.focusRing};
+    &__label {
+      font-size: 0.9375rem;
+      font-weight: 600;
     }
-  }
 
-  .delete-row__action--trash {
-    color: ${({ theme }) => theme.colors.danger};
+    &__hint {
+      color: ${({ theme }) => theme.colors.muted};
+      font-size: 0.8125rem;
+      line-height: 1.4;
+    }
 
-    &:hover {
+    &__buttons {
+      display: flex;
+      gap: ${({ theme }) => theme.space.sm};
+      flex-shrink: 0;
+    }
+
+    /* Square icon buttons. Trash and cancel are outlined; confirm is filled red. */
+    &__action {
+      display: grid;
+      place-items: center;
+      width: 44px; /* comfortable touch target */
+      height: 44px;
+      border: 1px solid ${({ theme }) => theme.colors.border};
+      border-radius: ${({ theme }) => theme.radii.md};
+      background: ${({ theme }) => theme.colors.background};
+      color: ${({ theme }) => theme.colors.foreground};
+      cursor: pointer;
+
+      &:hover {
+        border-color: ${({ theme }) => theme.colors.foreground};
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: ${({ theme }) => theme.shadows.focusRing};
+      }
+    }
+
+    &__action--trash {
+      color: ${({ theme }) => theme.colors.danger};
+
+      &:hover {
+        border-color: ${({ theme }) => theme.colors.danger};
+      }
+    }
+
+    &__action--confirm {
       border-color: ${({ theme }) => theme.colors.danger};
-    }
-  }
+      background: ${({ theme }) => theme.colors.danger};
+      color: ${({ theme }) => theme.colors.onPrimary};
 
-  .delete-row__action--confirm {
-    border-color: ${({ theme }) => theme.colors.danger};
-    background: ${({ theme }) => theme.colors.danger};
-    color: ${({ theme }) => theme.colors.onPrimary};
-
-    &:hover {
-      border-color: ${({ theme }) => theme.colors.danger};
+      &:hover {
+        border-color: ${({ theme }) => theme.colors.danger};
+      }
     }
   }
 `;

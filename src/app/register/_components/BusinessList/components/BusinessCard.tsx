@@ -27,53 +27,55 @@ const BusinessCardWrapper = styled(Link)`
     box-shadow: ${({ theme }) => theme.shadows.focusRing};
   }
 
-  .business-card__icon {
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: ${({ theme }) => theme.radii.md};
-    background: ${({ theme }) => theme.colors.primarySoft};
-    color: ${({ theme }) => theme.colors.primary};
-  }
+  .business-card {
+    &__icon {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: ${({ theme }) => theme.radii.md};
+      background: ${({ theme }) => theme.colors.primarySoft};
+      color: ${({ theme }) => theme.colors.primary};
+    }
 
-  .business-card__body {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xxs};
-    flex: 1;
-    min-width: 0;
-  }
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xxs};
+      flex: 1;
+      min-width: 0;
+    }
 
-  .business-card__name-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: ${({ theme }) => theme.space.sm};
-  }
+    &__name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: ${({ theme }) => theme.space.sm};
+    }
 
-  .business-card__name {
-    font-size: 1rem;
-  }
+    &__name {
+      font-size: 1rem;
+    }
 
-  .business-card__pending {
-    padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
-    border-radius: ${({ theme }) => theme.radii.pill};
-    background: ${({ theme }) => theme.colors.attention};
-    color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
+    &__pending {
+      padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
+      border-radius: ${({ theme }) => theme.radii.pill};
+      background: ${({ theme }) => theme.colors.attention};
+      color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
 
-  .business-card__meta {
-    color: ${({ theme }) => theme.colors.muted};
-    font-size: 0.875rem;
-  }
+    &__meta {
+      color: ${({ theme }) => theme.colors.muted};
+      font-size: 0.875rem;
+    }
 
-  .business-card__chevron {
-    flex-shrink: 0;
-    color: ${({ theme }) => theme.colors.muted};
+    &__chevron {
+      flex-shrink: 0;
+      color: ${({ theme }) => theme.colors.muted};
+    }
   }
 `;
 

@@ -14,108 +14,110 @@ import StaffMemberDialog from "./StaffMemberDialog";
 // Wraps FormCard so the staff parts below (and the add button in the card's title row) can be
 // styled from one place.
 const StaffCardWrapper = styled(FormCard)`
-  /* Just the "+" on phones; the label shows from md. */
-  .staff-card__add {
-    width: 40px;
-    padding: 0;
+  .staff-card {
+    /* Just the "+" on phones; the label shows from md. */
+    &__add {
+      width: 40px;
+      padding: 0;
 
-    ${({ theme }) => theme.media.md} {
-      width: auto;
-      padding: 0 ${({ theme }) => theme.space.lg};
-    }
-  }
-
-  .staff-card__add-label {
-    display: none;
-
-    ${({ theme }) => theme.media.md} {
-      display: inline;
-    }
-  }
-
-  .staff-card__list {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xs};
-    list-style: none;
-  }
-
-  /* Like the other settings rows: who on the left, the edit cue on the right. */
-  .staff-card__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: ${({ theme }) => theme.space.lg};
-    min-height: 56px;
-    padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
-    margin-inline: -${({ theme }) => theme.space.md}; /* text lines up with the card content */
-    width: calc(100% + 2 * ${({ theme }) => theme.space.md});
-    border: none;
-    border-radius: ${({ theme }) => theme.radii.sm};
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-
-    &:hover {
-      background: ${({ theme }) => theme.colors.surface};
+      ${({ theme }) => theme.media.md} {
+        width: auto;
+        padding: 0 ${({ theme }) => theme.space.lg};
+      }
     }
 
-    &:focus-visible {
-      outline: none;
-      box-shadow: ${({ theme }) => theme.shadows.focusRing};
+    &__add-label {
+      display: none;
+
+      ${({ theme }) => theme.media.md} {
+        display: inline;
+      }
     }
-  }
 
-  .staff-card__person {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xxs};
-    min-width: 0;
-  }
+    &__list {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xs};
+      list-style: none;
+    }
 
-  .staff-card__name-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: ${({ theme }) => theme.space.sm};
-  }
+    /* Like the other settings rows: who on the left, the edit cue on the right. */
+    &__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: ${({ theme }) => theme.space.lg};
+      min-height: 56px;
+      padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
+      margin-inline: -${({ theme }) => theme.space.md}; /* text lines up with the card content */
+      width: calc(100% + 2 * ${({ theme }) => theme.space.md});
+      border: none;
+      border-radius: ${({ theme }) => theme.radii.sm};
+      background: none;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
 
-  .staff-card__pending {
-    padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
-    border-radius: ${({ theme }) => theme.radii.pill};
-    background: ${({ theme }) => theme.colors.attention};
-    color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
+      &:hover {
+        background: ${({ theme }) => theme.colors.surface};
+      }
 
-  .staff-card__name {
-    font-size: 0.9375rem;
-    font-weight: 600;
-  }
+      &:focus-visible {
+        outline: none;
+        box-shadow: ${({ theme }) => theme.shadows.focusRing};
+      }
+    }
 
-  .staff-card__role {
-    color: ${({ theme }) => theme.colors.muted};
-    font-size: 0.8125rem;
-  }
+    &__person {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xxs};
+      min-width: 0;
+    }
 
-  .staff-card__edit {
-    display: flex;
-    align-items: center;
-    gap: ${({ theme }) => theme.space.xs};
-    flex-shrink: 0;
-    color: ${({ theme }) => theme.colors.primary};
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
+    &__name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: ${({ theme }) => theme.space.sm};
+    }
 
-  .staff-card__empty {
-    grid-column: 1 / -1;
-    color: ${({ theme }) => theme.colors.muted};
-    font-size: 0.875rem;
+    &__pending {
+      padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
+      border-radius: ${({ theme }) => theme.radii.pill};
+      background: ${({ theme }) => theme.colors.attention};
+      color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    &__name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    &__role {
+      color: ${({ theme }) => theme.colors.muted};
+      font-size: 0.8125rem;
+    }
+
+    &__edit {
+      display: flex;
+      align-items: center;
+      gap: ${({ theme }) => theme.space.xs};
+      flex-shrink: 0;
+      color: ${({ theme }) => theme.colors.primary};
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    &__empty {
+      grid-column: 1 / -1;
+      color: ${({ theme }) => theme.colors.muted};
+      font-size: 0.875rem;
+    }
   }
 `;
 

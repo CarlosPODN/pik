@@ -20,66 +20,68 @@ const AppointmentCardWrapper = styled.article`
   border-radius: ${({ theme }) => theme.radii.md};
   background: ${({ theme }) => theme.colors.background};
 
-  .appointment-card__date {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 56px;
-    height: 64px;
-    border-radius: ${({ theme }) => theme.radii.md};
-    background: ${({ theme }) => theme.colors.primarySoft};
-    color: ${({ theme }) => theme.colors.primary};
-  }
+  .appointment-card {
+    &__date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 56px;
+      height: 64px;
+      border-radius: ${({ theme }) => theme.radii.md};
+      background: ${({ theme }) => theme.colors.primarySoft};
+      color: ${({ theme }) => theme.colors.primary};
+    }
 
-  .appointment-card__day {
-    font-size: 1.375rem;
-    font-weight: 800;
-    line-height: 1;
-  }
+    &__day {
+      font-size: 1.375rem;
+      font-weight: 800;
+      line-height: 1;
+    }
 
-  .appointment-card__month {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  .appointment-card__body {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space.xs};
-    flex: 1;
-    min-width: 0;
-  }
-
-  .appointment-card__service {
-    font-size: 1rem;
-  }
-
-  .appointment-card__meta {
-    color: ${({ theme }) => theme.colors.muted};
-    font-size: 0.875rem;
-  }
-
-  .appointment-card__footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: ${({ theme }) => theme.space.sm};
-    margin-top: ${({ theme }) => theme.space.xs};
-    font-size: 0.875rem;
-  }
-
-  .appointment-card__time {
-    &::first-letter {
+    &__month {
+      font-size: 0.75rem;
+      font-weight: 600;
       text-transform: uppercase;
     }
-  }
 
-  .appointment-card__price {
-    font-weight: 700;
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.xs};
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__service {
+      font-size: 1rem;
+    }
+
+    &__meta {
+      color: ${({ theme }) => theme.colors.muted};
+      font-size: 0.875rem;
+    }
+
+    &__footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: ${({ theme }) => theme.space.sm};
+      margin-top: ${({ theme }) => theme.space.xs};
+      font-size: 0.875rem;
+    }
+
+    &__time {
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+
+    &__price {
+      font-weight: 700;
+    }
   }
 `;
 
