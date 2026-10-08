@@ -6,10 +6,14 @@ const Wrapper = styled.main.attrs({ className: "page-placeholder" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
-  padding: ${({ theme }) => `${theme.space.xl} ${theme.space.lg}`};
+  padding: ${({ theme }) => theme.layout.pagePadding.base};
 
   ${({ theme }) => theme.media.md} {
-    padding: ${({ theme }) => theme.space.xxl};
+    padding: ${({ theme }) => theme.layout.pagePadding.md};
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: ${({ theme }) => theme.layout.pagePadding.lg};
   }
 `;
 

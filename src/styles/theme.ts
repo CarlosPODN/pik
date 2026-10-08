@@ -58,6 +58,12 @@ export const theme = {
     topBarHeight: "56px",
     sidebarWidth: "264px",
     drawerWidth: "min(320px, 85vw)",
+    // Padding around each page's content, per breakpoint.
+    pagePadding: {
+      base: "20px 16px 40px",
+      md: "24px",
+      lg: "36px 40px",
+    },
   },
   // Mobile-first: base styles target phones; these add wider layouts.
   media: {
