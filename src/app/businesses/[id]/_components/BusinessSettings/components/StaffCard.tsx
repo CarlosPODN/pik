@@ -6,8 +6,8 @@ import Button from "@/components/Button";
 import Dialog from "@/components/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";
-import { findUntouched } from "@/lib/businesses";
-import type { StaffMember } from "@/types/business";
+import { findUntouched, roleLabel } from "@/lib/businesses";
+import type { BusinessCategory, StaffMember } from "@/types/business";
 import FormCard from "./FormCard";
 import StaffMemberDialog from "./StaffMemberDialog";
 
@@ -65,7 +65,7 @@ const Pending = styled.span.attrs({ className: "staff-card__pending" })`
   padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
   border-radius: ${({ theme }) => theme.radii.pill};
   background: ${({ theme }) => theme.colors.attention};
-  color: ${({ theme }) => theme.colors.onAttention};
+  color: ${({ theme }) => theme.palette.white}; /* by design choice; ~3.2:1 on flama */
   font-size: 0.75rem;
   font-weight: 600;
 `;
@@ -101,15 +101,21 @@ const Empty = styled.p.attrs({ className: "staff-card__empty" })`
 // While the newest member is still unedited, the add button explains that instead of adding.
 export default function StaffCard({
   businessId,
+  category,
   staff,
 }: {
   businessId: string;
+  // The saved business category, which sets the role options.
+  category: BusinessCategory | null;
   staff: StaffMember[];
 }) {
   const { addStaffMember, updateStaffMember, removeStaffMember } = useBusinesses();
   // Kept after closing, so the modal closes in place (and focus returns) before it changes.
   const [editingId, setEditingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  // Bumped on every open, so the modal always starts from the saved values (the role options
+  // may have changed since it was last open, e.g. after a category change).
+  const [openCount, setOpenCount] = useState(0);
   const [blocked, setBlocked] = useState(false);
   const editing = staff.find((member) => member.id === editingId);
   const untouched = findUntouched(staff);
@@ -117,6 +123,7 @@ export default function StaffCard({
   const edit = (id: string) => {
     setEditingId(id);
     setOpen(true);
+    setOpenCount((count) => count + 1);
   };
 
   const add = () => {
@@ -150,7 +157,7 @@ export default function StaffCard({
                     <Name>{member.name}</Name>
                     {!member.touched && <Pending>Sin editar</Pending>}
                   </NameRow>
-                  <Role>{member.role || "Sin puesto"}</Role>
+                  <Role>{roleLabel(member.role) ?? "Sin puesto"}</Role>
                 </Person>
                 <EditCue aria-hidden="true">
                   Editar
@@ -193,8 +200,9 @@ export default function StaffCard({
 
       {editing && (
         <StaffMemberDialog
-          key={editing.id}
+          key={`${editing.id}-${openCount}`}
           member={editing}
+          category={category}
           open={open}
           onClose={() => setOpen(false)}
           onSave={(member) => updateStaffMember(businessId, member)}

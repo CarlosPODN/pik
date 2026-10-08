@@ -17,12 +17,23 @@ export interface DayHours {
 
 export type WeeklyHours = Record<Weekday, DayHours>;
 
+export type StaffRole =
+  | "stylist"
+  | "colorist"
+  | "manicurist"
+  | "makeupArtist"
+  | "barber"
+  | "massageTherapist"
+  | "esthetician"
+  | "receptionist";
+
 // Like businesses, a new staff member starts as an unedited placeholder ("Empleado 2");
 // saving it once sets touched, which unlocks adding the next one.
 export interface StaffMember {
   id: string;
   name: string;
-  role: string;
+  // null until picked; the options depend on the business category.
+  role: StaffRole | null;
   touched: boolean;
 }
 

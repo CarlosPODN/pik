@@ -3,6 +3,7 @@ import type {
   BusinessCategory,
   DayHours,
   StaffMember,
+  StaffRole,
   Weekday,
   WeeklyHours,
 } from "@/types/business";
@@ -14,6 +15,33 @@ export const BUSINESS_CATEGORIES: { value: BusinessCategory; label: string }[] =
   { value: "barbershop", label: "Barbería" },
   { value: "spa", label: "Spa" },
 ];
+
+export const STAFF_ROLES: Record<StaffRole, string> = {
+  stylist: "Estilista",
+  colorist: "Colorista",
+  manicurist: "Manicurista",
+  makeupArtist: "Maquillista",
+  barber: "Barbero",
+  massageTherapist: "Masajista",
+  esthetician: "Esteticista",
+  receptionist: "Recepción",
+};
+
+// The roles a staff member can have in each kind of business.
+const ROLES_BY_CATEGORY: Record<BusinessCategory, StaffRole[]> = {
+  salon: ["stylist", "colorist", "manicurist", "makeupArtist", "receptionist"],
+  barbershop: ["barber", "receptionist"],
+  spa: ["massageTherapist", "esthetician", "manicurist", "receptionist"],
+};
+
+export function roleOptions(category: BusinessCategory | null) {
+  return (category ? ROLES_BY_CATEGORY[category] : []).map((role) => ({
+    value: role,
+    label: STAFF_ROLES[role],
+  }));
+}
+
+export const roleLabel = (role: StaffRole | null) => (role ? STAFF_ROLES[role] : null);
 
 export function categoryLabel(category: BusinessCategory | null) {
   return BUSINESS_CATEGORIES.find((option) => option.value === category)?.label ?? null;
@@ -76,22 +104,29 @@ function normalizeHours(value: unknown): WeeklyHours {
   return hours;
 }
 
+// Reads a stored role: a role key, or free text from before roles were a fixed list ("Estilista"),
+// matched to its key. Anything else becomes null, to be picked again.
+function parseRole(value: unknown): StaffRole | null {
+  if (typeof value !== "string") return null;
+  if (value in STAFF_ROLES) return value as StaffRole;
+  const entry = Object.entries(STAFF_ROLES).find(
+    ([, label]) => label.toLowerCase() === value.trim().toLowerCase(),
+  );
+  return entry ? (entry[0] as StaffRole) : null;
+}
+
 // Checks a stored staff member. Ones saved before `touched` existed count as edited once they
 // have a role.
 function normalizeStaffMember(value: unknown): StaffMember | null {
-  if (
-    !isRecord(value) ||
-    typeof value.id !== "string" ||
-    typeof value.name !== "string" ||
-    typeof value.role !== "string"
-  ) {
+  if (!isRecord(value) || typeof value.id !== "string" || typeof value.name !== "string") {
     return null;
   }
+  const role = parseRole(value.role);
   return {
     id: value.id,
     name: value.name,
-    role: value.role,
-    touched: typeof value.touched === "boolean" ? value.touched : value.role !== "",
+    role,
+    touched: typeof value.touched === "boolean" ? value.touched : role !== null,
   };
 }
 
@@ -199,7 +234,7 @@ export function addStaffMember(businessId: string): StaffMember {
   const member: StaffMember = {
     id: createId(),
     name: `Empleado ${nextPlaceholderNumber(names, "Empleado")}`,
-    role: "",
+    role: null,
     touched: false,
   };
   updateStaff(businessId, (staff) => [...staff, member]);

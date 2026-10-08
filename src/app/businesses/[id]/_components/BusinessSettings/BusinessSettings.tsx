@@ -90,7 +90,9 @@ export default function BusinessSettings({ id }: { id: string }) {
         key={business.id}
         business={business}
         onSave={updateBusiness}
-        staffSection={<StaffCard businessId={business.id} staff={business.staff} />}
+        staffSection={
+          <StaffCard businessId={business.id} category={business.category} staff={business.staff} />
+        }
         deleteAction={
           <DeleteBusiness
             businessName={business.name}
