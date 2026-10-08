@@ -1,10 +1,12 @@
-import PagePlaceholder from "@/components/PagePlaceholder";
+import LandingActions from "./_components/LandingActions/LandingActions";
+import LandingHero from "./_components/LandingHero";
+import LandingPage from "./_components/LandingPage";
 
 export default function Home() {
   return (
-    <PagePlaceholder
-      title="Te damos la bienvenida a PIK"
-      description="Reservas y pagos para salones, barberías, spas y estudios de uñas."
-    />
+    <LandingPage>
+      <LandingHero />
+      <LandingActions />
+    </LandingPage>
   );
 }

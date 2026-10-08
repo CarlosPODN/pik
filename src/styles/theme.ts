@@ -16,6 +16,8 @@ export const theme = {
     // Violet, green and orange carry the brand; blue and dark tones are the structural base.
     primary: palette.nova,
     onPrimary: palette.white,
+    onPrimaryMuted: "rgba(255, 255, 255, 0.85)", // secondary text on primary surfaces
+    onPrimarySubtle: "rgba(255, 255, 255, 0.16)", // chips and dividers on primary surfaces
     success: palette.mint,
     onSuccess: palette.carbon, // white on mint fails contrast
     attention: palette.flama,
