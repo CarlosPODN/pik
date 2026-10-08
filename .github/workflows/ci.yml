@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4 # version comes from package.json → packageManager
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Branch name
+        if: github.event_name == 'pull_request'
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          if ! echo "$BRANCH" | grep -Eq '^(feat|fix|chore|refactor|style|docs)/[a-z0-9]+(-[a-z0-9]+)*$'; then
+            echo "::error::Branch '$BRANCH' must match <type>/<brief-task-explanation> (see CLAUDE.md)."
+            exit 1
+          fi
+
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm build

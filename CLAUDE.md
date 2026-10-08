@@ -12,6 +12,20 @@ Use pnpm (version pinned in `package.json` → `packageManager`). Never use npm 
 - `pnpm dev`, `pnpm build`, `pnpm lint`
 - If `pnpm install` reports ignored build scripts, decide per package in `pnpm-workspace.yaml` → `allowBuilds` (`true` to run it, `false` to skip) and leave a comment explaining why.
 
+## Checks
+
+- `pnpm format` / `pnpm format:check`: Prettier
+- `pnpm lint`: ESLint (Next.js rules; formatting rules are turned off in favor of Prettier)
+- `pnpm typecheck`: generates Next.js route types, then runs `tsc --noEmit`
+- `pnpm build`: production build
+
+lefthook (`lefthook.yml`) registers git hooks on `pnpm install`:
+
+- pre-commit: Prettier and ESLint `--fix` on staged files; fixes are re-staged.
+- pre-push: branch name format, typecheck and lint.
+
+CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`: branch name (PRs only), `format:check`, `lint`, `typecheck` and `build`. Don't bypass hooks with `--no-verify`; fix the failure instead. Run the checks before opening a PR.
+
 ## Git workflow
 
 Every new task starts on a new branch created from an up-to-date `main`. Never commit directly to `main`.

@@ -1,0 +1,32 @@
+# Git hooks. Installed automatically by `pnpm install`.
+# The same checks run in CI (.github/workflows/ci.yml), so skipping a hook doesn't skip validation.
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: prettier
+      glob: "*.{js,mjs,cjs,ts,tsx,json,md,yml,yaml,css}"
+      run: pnpm exec prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+    - name: eslint
+      glob: "*.{js,mjs,cjs,ts,tsx}"
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: branch-name
+      # <type>/<brief-task-explanation>, see CLAUDE.md → Git workflow.
+      run: |
+        branch=$(git rev-parse --abbrev-ref HEAD)
+        if [ "$branch" = "main" ]; then exit 0; fi
+        if ! echo "$branch" | grep -Eq '^(feat|fix|chore|refactor|style|docs)/[a-z0-9]+(-[a-z0-9]+)*$'; then
+          echo "Branch '$branch' must match <type>/<brief-task-explanation>, e.g. feat/business-signup-flow."
+          echo "Allowed types: feat, fix, chore, refactor, style, docs. See CLAUDE.md."
+          exit 1
+        fi
+    - name: typecheck
+      run: pnpm typecheck
+    - name: lint
+      run: pnpm lint
