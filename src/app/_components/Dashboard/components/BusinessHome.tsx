@@ -8,6 +8,7 @@ import Icon from "@/components/Icon/Icon";
 import PageLayout, { TitleAccent } from "@/components/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
+import { ROLE_LABELS } from "@/lib/session";
 import AppointmentCard from "./AppointmentCard";
 
 // Business home: the upcoming appointments across all their businesses, soonest first. Managing
@@ -29,7 +30,7 @@ export default function BusinessHome() {
     <PageLayout
       title={
         <>
-          Te damos la bienvenida, <TitleAccent>Negocio.</TitleAccent>
+          Te damos la bienvenida, <TitleAccent>{ROLE_LABELS.business}.</TitleAccent>
         </>
       }
       action={

@@ -3,12 +3,7 @@
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { useSession } from "@/hooks/useSession";
-import type { Role } from "@/types/session";
-
-const ROLE_LABELS: Record<Role, string> = {
-  client: "Cliente",
-  business: "Negocio",
-};
+import { ROLE_LABELS } from "@/lib/session";
 
 const Card = styled.div.attrs({ className: "session-card" })`
   display: flex;

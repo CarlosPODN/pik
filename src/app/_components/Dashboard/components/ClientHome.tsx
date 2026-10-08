@@ -6,6 +6,7 @@ import EmptyState from "@/components/EmptyState";
 import Icon from "@/components/Icon/Icon";
 import PageLayout, { TitleAccent } from "@/components/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
+import { ROLE_LABELS } from "@/lib/session";
 import AppointmentCard from "./AppointmentCard";
 
 // Client home: their booked appointments, soonest first.
@@ -16,7 +17,7 @@ export default function ClientHome() {
     <PageLayout
       title={
         <>
-          Te damos la bienvenida, <TitleAccent>Cliente.</TitleAccent>
+          Te damos la bienvenida, <TitleAccent>{ROLE_LABELS.client}.</TitleAccent>
         </>
       }
       action={

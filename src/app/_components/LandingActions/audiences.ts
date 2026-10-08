@@ -39,7 +39,7 @@ export const AUDIENCES: Audience[] = [
   },
   {
     id: "business",
-    tabLabel: "PIK para negocios",
+    tabLabel: "PIK para profesionales",
     icon: "store",
     title: "Registra tu negocio",
     description: "Da de alta tu salón, barbería o spa y empieza a recibir reservas.",
