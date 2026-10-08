@@ -6,11 +6,7 @@ import styled from "styled-components";
 const Wrapper = styled.div.attrs({ className: "dashboard" })`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xl};
-
-  ${({ theme }) => theme.media.md} {
-    gap: ${({ theme }) => theme.space.xxl};
-  }
+  gap: ${({ theme }) => theme.layout.sectionGap};
 `;
 
 const Header = styled.header.attrs({ className: "dashboard__header" })`

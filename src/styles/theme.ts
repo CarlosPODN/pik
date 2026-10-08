@@ -59,6 +59,8 @@ export const theme = {
     topBarHeight: "56px",
     sidebarWidth: "264px",
     drawerWidth: "min(320px, 85vw)",
+    // Gap between the main sections of the home page (landing and dashboards).
+    sectionGap: "18px",
     // Padding around each page's content, per breakpoint.
     pagePadding: {
       base: "20px 16px 40px",

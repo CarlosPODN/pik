@@ -6,11 +6,7 @@ import styled from "styled-components";
 const LandingPage = styled.div.attrs({ className: "landing-page" })`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xl};
-
-  ${({ theme }) => theme.media.md} {
-    gap: ${({ theme }) => theme.space.xxl};
-  }
+  gap: ${({ theme }) => theme.layout.sectionGap};
 `;
 
 export default LandingPage;
