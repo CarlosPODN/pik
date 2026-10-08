@@ -18,7 +18,6 @@ import DeleteBusiness from "./components/DeleteBusiness";
 const Wrapper = styled.div.attrs({ className: "business-settings" })`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xl};
 `;
 
 const BackLink = styled(Link).attrs({ className: "business-settings__back" })`
@@ -43,7 +42,7 @@ const BackLink = styled(Link).attrs({ className: "business-settings__back" })`
 `;
 
 const Title = styled.h1.attrs({ className: "business-settings__title" })`
-  margin-top: -${({ theme }) => theme.space.md}; /* sit closer to the back link */
+  margin-bottom: ${({ theme }) => theme.space.md};
   font-size: 1.75rem;
   line-height: 1.15;
   letter-spacing: -0.02em;

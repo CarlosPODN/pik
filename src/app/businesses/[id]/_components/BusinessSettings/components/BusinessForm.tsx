@@ -52,9 +52,20 @@ const Form = styled.form.attrs({ className: "business-form" })`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-// Full-width first row: what you can do in this form.
-const Intro = styled.p.attrs({ className: "business-form__intro" })`
+// Full-width first row: the "Ajustes" heading and what you can do in this form.
+const Header = styled.div.attrs({ className: "business-form__header" })`
   grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.xs};
+`;
+
+const Heading = styled.h2.attrs({ className: "business-form__heading" })`
+  font-size: 1.375rem;
+  letter-spacing: -0.01em;
+`;
+
+const Intro = styled.p.attrs({ className: "business-form__intro" })`
   color: ${({ theme }) => theme.colors.foreground};
   line-height: 1.5;
 `;
@@ -140,7 +151,10 @@ export default function BusinessForm({
 
   return (
     <Form ref={formRef} noValidate onSubmit={submit} aria-label="Información del negocio">
-      <Intro>Edita el nombre, la categoría y el teléfono de tu negocio.</Intro>
+      <Header>
+        <Heading>Ajustes</Heading>
+        <Intro>Edita el nombre, la categoría y el teléfono de tu negocio.</Intro>
+      </Header>
       <TextField
         label="Nombre del negocio"
         name="name"
