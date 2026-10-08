@@ -27,12 +27,6 @@ const Welcome = styled.section.attrs({ className: "dashboard__welcome" })`
   }
 `;
 
-const WelcomeText = styled.div.attrs({ className: "dashboard__welcome-text" })`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.sm};
-`;
-
 const Title = styled.h1.attrs({ className: "dashboard__title" })`
   font-size: 1.75rem;
   line-height: 1.15;
@@ -92,12 +86,9 @@ export default function Dashboard({ role }: { role: Role }) {
   return (
     <Wrapper>
       <Welcome aria-labelledby="dashboard-title">
-        <WelcomeText>
-          <Title id="dashboard-title">
-            {copy.title} <RoleAccent>{copy.roleName}.</RoleAccent>
-          </Title>
-          <Description>{copy.description}</Description>
-        </WelcomeText>
+        <Title id="dashboard-title">
+          {copy.title} <RoleAccent>{copy.roleName}.</RoleAccent>
+        </Title>
         <WelcomeCta href={copy.cta.href}>
           {copy.cta.label}
           <Icon name="arrow-right" />
@@ -108,6 +99,7 @@ export default function Dashboard({ role }: { role: Role }) {
 
       {/* No visible heading: the divider marks the section, and the label names it for screen readers */}
       <ListSection aria-label={copy.listTitle}>
+        <Description>{copy.description}</Description>
         {appointments.length === 0 ? (
           <EmptyState
             icon="calendar"
