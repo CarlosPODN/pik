@@ -6,7 +6,10 @@ Next.js (App Router) + TypeScript + styled-components. All data is mocked; no da
 
 ## Language
 
-Everything in this repo is written in English: code, identifiers, comments, UI copy, metadata, docs (README, CLAUDE.md), commit messages, branch names and PR titles/descriptions. Don't mix languages within the repo, even when a request or a source document is in Spanish. Translate it.
+- **English** for everything developers read: code, identifiers, route folder names, comments, docs (README, CLAUDE.md), commit messages, branch names and PR titles/descriptions.
+- **Spanish** for everything users see or hear: UI text, buttons, labels, validation and empty/error/success messages, `aria-label`s, `alt` text, page titles and metadata. The root layout sets `<html lang="es">`.
+- Write UI copy in neutral Latin American Spanish and address the user as "tú".
+- Don't mix languages within each group. Translate English UI copy into Spanish, and Spanish requests or source documents into English for code and docs.
 
 ## Package manager
 
@@ -73,4 +76,21 @@ When the task is done, push the branch and open a pull request into `main`.
 - Prefer the semantic `theme.colors.*` roles. Use `theme.palette.*` (the raw PIK brand colors) only when no role fits, and add a new role to the theme if the need repeats.
 - Text on `success` (mint) or `attention` (flama) must use `onSuccess` / `onAttention`. White on those colors fails contrast.
 - styled-components only works in Client Components: files that define styled components need `"use client"`. Keep pages and layouts as Server Components where possible and render styled client components from them.
-- Design mobile-first: base styles target phones, and wider layouts are added with `min-width` media queries.
+- Design mobile-first: base styles target phones, and wider layouts are added with `theme.media.md` / `theme.media.lg` (`min-width` queries). Do responsive switches in CSS, not with JS media-query hooks, so server-rendered HTML is right on every screen size.
+- Use `theme.space`, `theme.radii`, `theme.shadows` and `theme.layout` for spacing, corners, shadows and shell sizes instead of raw values.
+- The app shell (top bar, sidebar/drawer, nav) lives in `src/components/AppShell/`; add navigation entries in `navItems.ts`.
+- Icons: always render them through `<Icon name="calendar" />` from `src/components/Icon/Icon.tsx`. Never draw an inline `<svg>` in a component. To add an icon, create `src/components/Icon/icons/<Name>.tsx` with only its shapes (20×20 grid, strokes, no `<svg>` wrapper) and register it in the `ICONS` list in `Icon.tsx` under a kebab-case name. Icons are decorative (hidden from screen readers) unless you pass a Spanish `label`.
+- A component with its own sub-components gets a folder: the entry component and its config/data at the folder root (`AppShell/AppShell.tsx`, `AppShell/navItems.ts`), and the sub-components only it uses in a nested `components/` folder (`AppShell/components/Sidebar.tsx`). Import the entry file from outside; don't import from another component's `components/` folder. If a sub-component is needed elsewhere, move it up to `src/components/`.
+
+### Class names (BEM)
+
+Every styled component and every styled element also gets a BEM class name, written out as a plain string. styled-components still scopes the styles; the BEM classes make the DOM readable in DevTools and give tests stable selectors.
+
+- Block: the component, in kebab-case (`sidebar`, `nav-item`, `page-placeholder`). One block per component file.
+- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`).
+- Modifier: a state or variant, joined with `--` and driven by props (`sidebar--open`, `nav-item--active`).
+- Static classes go in `.attrs` as a plain string: `styled.nav.attrs({ className: "sidebar__nav" })`. For plain elements, pass `className="nav-item__label"`.
+- Modifiers use `clsx`: `styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({ className: clsx("sidebar", { "sidebar--open": $open }) }))`. Also use `clsx` to merge a `className` prop passed in from outside.
+- Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
+- Style with styled-components only. Never target BEM classes in CSS, and never use them to style another component; they are names, not styling hooks.
+- Don't nest elements in names (`sidebar__nav__item` is wrong). A reusable part becomes its own block (`nav-item`).

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import AppShell from "@/components/AppShell/AppShell";
 import Providers from "@/components/Providers";
 
 const geistSans = Geist({
@@ -14,14 +15,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PIK",
-  description: "Bookings for beauty and wellness businesses",
+  description: "Reservas y pagos para negocios de belleza y bienestar",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppShell>{children}</AppShell>
+        </Providers>
       </body>
     </html>
   );
