@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import styled from "styled-components";
+import { useSession } from "@/hooks/useSession";
 import { AUDIENCES, type Audience } from "./audiences";
 import AudienceSwitch from "./components/AudienceSwitch";
 import FlowPanel from "./components/FlowPanel";
@@ -35,7 +36,10 @@ const Subtitle = styled.p.attrs({ className: "landing-actions__subtitle" })`
 // Entry point to the app: pick how you use PIK, then see that flow and start it.
 export default function LandingActions() {
   const baseId = useId();
-  const [selectedId, setSelectedId] = useState<Audience["id"]>("clients");
+  const { role, startSession } = useSession();
+  // The tab the person clicked; until then, the role they picked before, or clients.
+  const [pickedId, setPickedId] = useState<Audience["id"] | null>(null);
+  const selectedId = pickedId ?? role ?? "client";
   const selected = AUDIENCES.find((audience) => audience.id === selectedId) ?? AUDIENCES[0];
   const tabId = (id: Audience["id"]) => `${baseId}-tab-${id}`;
   const panelId = `${baseId}-panel`;
@@ -51,11 +55,16 @@ export default function LandingActions() {
       <AudienceSwitch
         audiences={AUDIENCES}
         selectedId={selected.id}
-        onSelect={setSelectedId}
+        onSelect={setPickedId}
         tabId={tabId}
         panelId={panelId}
       />
-      <FlowPanel audience={selected} id={panelId} labelledBy={tabId(selected.id)} />
+      <FlowPanel
+        audience={selected}
+        id={panelId}
+        labelledBy={tabId(selected.id)}
+        onStart={() => startSession(selected.id)}
+      />
     </Section>
   );
 }

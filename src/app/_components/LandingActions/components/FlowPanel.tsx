@@ -170,10 +170,13 @@ export default function FlowPanel({
   audience,
   id,
   labelledBy,
+  onStart,
 }: {
   audience: Audience;
   id: string;
   labelledBy: string;
+  // Starting a flow is what picks the role: it saves the session before navigating.
+  onStart: () => void;
 }) {
   return (
     <Panel role="tabpanel" id={id} aria-labelledby={labelledBy}>
@@ -194,7 +197,7 @@ export default function FlowPanel({
           </Step>
         ))}
       </Steps>
-      <Cta href={audience.href}>
+      <Cta href={audience.href} onClick={onStart}>
         {audience.cta}
         <Icon name="arrow-right" />
       </Cta>

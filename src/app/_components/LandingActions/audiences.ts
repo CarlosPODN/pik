@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/Icon/Icon";
+import type { Role } from "@/types/session";
 
 export interface FlowStep {
   title: string;
@@ -6,7 +7,7 @@ export interface FlowStep {
 }
 
 export interface Audience {
-  id: "clients" | "businesses";
+  id: Role;
   tabLabel: string;
   icon: IconName;
   title: string;
@@ -20,7 +21,7 @@ export interface Audience {
 // most of PIK's users.
 export const AUDIENCES: Audience[] = [
   {
-    id: "clients",
+    id: "client",
     tabLabel: "PIK para clientes",
     icon: "calendar",
     title: "Agenda tu próxima cita",
@@ -37,7 +38,7 @@ export const AUDIENCES: Audience[] = [
     href: "/book",
   },
   {
-    id: "businesses",
+    id: "business",
     tabLabel: "PIK para negocios",
     icon: "store",
     title: "Registra tu negocio",

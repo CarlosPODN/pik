@@ -6,7 +6,9 @@ import styled, { css } from "styled-components";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
+import SessionCard from "./SessionCard";
 import Icon from "@/components/Icon/Icon";
+import { useSession } from "@/hooks/useSession";
 import { NAV_ITEMS } from "../navItems";
 
 const Backdrop = styled.div.attrs<{ $open: boolean }>(({ $open }) => ({
@@ -96,7 +98,13 @@ const Nav = styled.nav.attrs({ className: "sidebar__nav" })`
 `;
 
 const Footer = styled.footer.attrs({ className: "sidebar__footer" })`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.lg};
   margin-top: auto;
+`;
+
+const Copyright = styled.p.attrs({ className: "sidebar__copyright" })`
   padding-top: ${({ theme }) => theme.space.lg};
   border-top: 1px dashed ${({ theme }) => theme.colors.border};
   color: ${({ theme }) => theme.colors.muted};
@@ -114,6 +122,10 @@ export default function Sidebar({
   onClose: () => void;
   closeButtonRef: Ref<HTMLButtonElement>;
 }) {
+  const { role } = useSession();
+  // Logged out, only the items without a role show (Inicio); after picking a role, its items too.
+  const navItems = NAV_ITEMS.filter((item) => !item.role || item.role === role);
+
   return (
     <>
       <Backdrop $open={open} onClick={onClose} aria-hidden="true" />
@@ -128,12 +140,15 @@ export default function Sidebar({
         <Divider />
 
         <Nav>
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <NavItem key={item.href} item={item} onNavigate={onClose} />
           ))}
         </Nav>
 
-        <Footer>© 2026 PIK</Footer>
+        <Footer>
+          <SessionCard onNavigate={onClose} />
+          <Copyright>© 2026 PIK</Copyright>
+        </Footer>
       </Panel>
     </>
   );
