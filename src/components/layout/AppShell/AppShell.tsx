@@ -1,37 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
-import styled from "styled-components";
 import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
-
-const AppShellWrapper = styled.div`
-  min-height: 100dvh;
-
-  ${({ theme }) => theme.media.lg} {
-    display: flex;
-  }
-  .app-shell {
-    /* The page frame for every route: the window scrolls vertically, and anything wider than the
-       content area is clipped here. clip (unlike hidden) doesn't create a scroll container, so
-       the sticky top bar and sidebar keep working. Pages render only their content, no <main>
-       or padding. */
-    &__content {
-      flex: 1;
-      min-width: 0; /* lets the flex item shrink below its content's width */
-      overflow-x: clip;
-      padding: ${({ theme }) => theme.layout.pagePadding.base};
-
-      ${({ theme }) => theme.media.md} {
-        padding: ${({ theme }) => theme.layout.pagePadding.md};
-      }
-
-      ${({ theme }) => theme.media.lg} {
-        padding: ${({ theme }) => theme.layout.pagePadding.lg};
-      }
-    }
-  }
-`;
+import { AppShellWrapper } from "./AppShell.styles";
 
 // Mobile: sticky top bar + off-canvas drawer. Desktop (lg): static sidebar.
 // The breakpoint switch is pure CSS, so the server-rendered HTML is correct on every screen size.

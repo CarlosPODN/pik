@@ -29,8 +29,8 @@ src/
 │   │   └── _components/    Components used only by this route (private folder, ignored by the router)
 │   └── api/                Route Handlers that return mock data
 ├── components/             Shared UI used by more than one route, grouped by kind:
-│   ├── buttons/            Button, ButtonLink and their shared styles
-│   ├── fields/             Form controls: TextField, SelectField and their shared styles
+│   ├── buttons/            Button, ButtonLink (both use Button.styles.ts)
+│   ├── fields/             Form controls: TextField, SelectField (both use Field.styles.ts)
 │   ├── modals/             Dialog
 │   ├── layout/             AppShell, PageLayout, CardGrid, PagePlaceholder
 │   ├── feedback/           Empty, loading and status states: EmptyState, PageSkeleton
@@ -124,10 +124,11 @@ When the task is done, push the branch and open a pull request into `main`.
 
 ### One styled wrapper per component (BEM)
 
-Each component file has at most one styled component: `<ComponentName>Wrapper`, on the component's root element (`ButtonWrapper`, `SidebarWrapper`, `BusinessCardWrapper`). Everything inside it is plain HTML with BEM class names, styled from the wrapper with nested selectors. Group the element rules under the block's class and write them with `&__element` / `&__element--modifier`, as in Sass. Inside a styled component a bare `&` is the generated class (`.sc-x1y2`), so `&__label` only produces `.delete-row__label` from inside `.delete-row { }`; the rules end up as `.sc-x1y2 .delete-row__label`. Don't declare styled components for inner parts, and don't extend other components with `styled(Component)`; give them a BEM class instead.
+Each component has at most one styled component: `<ComponentName>Wrapper`, on the component's root element (`ButtonWrapper`, `SidebarWrapper`, `BusinessCardWrapper`). It lives in a `<ComponentName>.styles.ts` file next to the component (`DeleteRow.tsx` + `DeleteRow.styles.ts`), with `"use client"`, and the component imports it; the component file keeps only markup and logic. Everything inside it is plain HTML with BEM class names, styled from the wrapper with nested selectors. Group the element rules under the block's class and write them with `&__element` / `&__element--modifier`, as in Sass. Inside a styled component a bare `&` is the generated class (`.sc-x1y2`), so `&__label` only produces `.delete-row__label` from inside `.delete-row { }`; the rules end up as `.sc-x1y2 .delete-row__label`. Don't declare styled components for inner parts, and don't extend other components with `styled(Component)`; give them a BEM class instead.
 
 ```tsx
-const DeleteRowWrapper = styled.div`
+// DeleteRow.styles.ts
+export const DeleteRowWrapper = styled.div`
   display: flex;
 
   .delete-row {
@@ -140,6 +141,9 @@ const DeleteRowWrapper = styled.div`
     }
   }
 `;
+
+// DeleteRow.tsx
+import { DeleteRowWrapper } from "./DeleteRow.styles";
 
 export default function DeleteRow(...) {
   return (
@@ -156,7 +160,7 @@ export default function DeleteRow(...) {
 - Modifier: a state or variant, joined with `--` (`sidebar--open`, `nav-item--active`). Build it with `clsx` and style it from the wrapper: `&.sidebar--open .sidebar__panel { ... }` (at the wrapper's top level) for a modifier on the block, `&__action--confirm { ... }` (inside `.delete-row { }`) for one on an element. Don't pass `$` props to drive styles.
 - Shared components take plain props for their variants (`<Button variant="secondary" size="sm">`) and turn them into modifier classes. They accept a `className`, merged with `clsx`, so a parent can name and position them.
 - To style a child component in a specific place, give it a BEM element class of the parent (`<ButtonLink className="flow-panel__cta">`) and style that class in the parent's wrapper. Never style another component's own classes.
-- Shared CSS between blocks lives in `css` helpers (`buttonStyles`, `fieldStyles`, `controlStyles`), not in extra styled components.
+- Components that share a look share the wrapper instead of a `css` helper: `TextField` and `SelectField` both use `FieldWrapper` from `Field.styles.ts`, and `ButtonLink` renders `ButtonWrapper` as a Next.js link with styled-components' `as` prop (`<ButtonWrapper as={Link}>`). Use a `css` fragment only when a look is reused outside its block, like `controlStyles` for the opening-hours time inputs.
 - Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search. The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
 - Don't nest elements in names (`sidebar__nav__item` is wrong). A reusable part becomes its own block (`nav-item`).
 - A wrapper that must not affect layout (because its children belong to a parent's flex or grid) uses `display: contents`, like `SidebarWrapper`.

@@ -1,27 +1,11 @@
-import clsx from "clsx";
-import { css } from "styled-components";
+"use client";
 
-export type ButtonVariant = "primary" | "secondary" | "danger";
-export type ButtonSize = "md" | "sm";
+import styled from "styled-components";
 
-export interface ButtonOptions {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-}
-
-// BEM classes for the "button" block, shared by Button and ButtonLink (a link that looks like a
-// button carries the same block). Primary and md are the defaults, so they have no modifier.
-export function buttonClassName({ variant = "primary", size = "md" }: ButtonOptions) {
-  return clsx("button", {
-    "button--secondary": variant === "secondary",
-    "button--danger": variant === "danger",
-    "button--sm": size === "sm",
-  });
-}
-
-// Pill styles for the "button" block. md is 48px tall (default, primary actions); sm is 40px,
-// for buttons next to a title or in a dialog.
-export const buttonStyles = css`
+// Pill styles for the "button" block, used by Button and (rendered as a link) ButtonLink. md is
+// 48px tall (default, primary actions); button--sm is 40px, for buttons next to a title or in a
+// dialog.
+export const ButtonWrapper = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;

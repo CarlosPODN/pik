@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/buttons/Button";
 import ButtonLink from "@/components/buttons/ButtonLink";
-import type { ButtonSize } from "@/components/buttons/buttonStyles";
+import type { ButtonSize } from "@/components/buttons/Button";
 import Dialog from "@/components/modals/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";

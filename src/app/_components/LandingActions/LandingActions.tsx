@@ -1,39 +1,11 @@
 "use client";
 
 import { useId, useState } from "react";
-import styled from "styled-components";
 import { useSession } from "@/hooks/useSession";
 import { AUDIENCES, type Audience } from "./audiences";
 import AudienceSwitch from "./components/AudienceSwitch";
 import FlowPanel from "./components/FlowPanel";
-
-const LandingActionsWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.lg};
-
-  .landing-actions {
-    &__header {
-      display: flex;
-      flex-direction: column;
-      gap: ${({ theme }) => theme.space.xs};
-    }
-
-    &__title {
-      font-size: 1.375rem;
-      letter-spacing: -0.01em;
-
-      ${({ theme }) => theme.media.md} {
-        font-size: 1.75rem;
-      }
-    }
-
-    &__subtitle {
-      color: ${({ theme }) => theme.colors.muted};
-      line-height: 1.5;
-    }
-  }
-`;
+import { LandingActionsWrapper } from "./LandingActions.styles";
 
 // Entry point to the app: pick how you use PIK, then see that flow and start it.
 export default function LandingActions() {

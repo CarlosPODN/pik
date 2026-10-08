@@ -1,12 +1,7 @@
 "use client";
 
 import { useId, type InputHTMLAttributes } from "react";
-import styled from "styled-components";
-import { fieldStyles } from "./fieldStyles";
-
-const TextFieldWrapper = styled.div`
-  ${fieldStyles}
-`;
+import { FieldWrapper } from "./Field.styles";
 
 export default function TextField({
   label,
@@ -17,7 +12,7 @@ export default function TextField({
   const errorId = `${id}-error`;
 
   return (
-    <TextFieldWrapper className="field">
+    <FieldWrapper className="field">
       <label className="field__label" htmlFor={id}>
         {label}
       </label>
@@ -33,6 +28,6 @@ export default function TextField({
           {error}
         </p>
       )}
-    </TextFieldWrapper>
+    </FieldWrapper>
   );
 }

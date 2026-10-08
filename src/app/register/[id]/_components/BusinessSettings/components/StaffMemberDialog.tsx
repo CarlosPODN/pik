@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import styled from "styled-components";
 import Button from "@/components/buttons/Button";
 import Dialog from "@/components/modals/Dialog";
 import SelectField from "@/components/fields/SelectField";
@@ -9,14 +8,7 @@ import TextField from "@/components/fields/TextField";
 import { roleOptions } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember, StaffRole } from "@/types/business";
 import DeleteRow from "./DeleteRow";
-
-const StaffMemberDialogWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.lg};
-  margin-top: ${({ theme }) => theme.space.sm};
-  color: ${({ theme }) => theme.colors.foreground};
-`;
+import { StaffMemberDialogWrapper } from "./StaffMemberDialog.styles";
 
 interface Errors {
   name?: string;

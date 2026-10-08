@@ -1,6 +1,9 @@
-import { css } from "styled-components";
+"use client";
 
-// The look of a form control (input, select). Invalid controls are marked with
+import styled, { css } from "styled-components";
+
+// The look of a form control (input, select). Also used outside a field, by the opening-hours
+// time inputs, so it stays a css fragment. Invalid controls are marked with
 // aria-invalid="true", which also tells screen readers.
 export const controlStyles = css`
   width: 100%;
@@ -32,7 +35,7 @@ export const errorTextStyles = css`
 
 // The "field" block shared by TextField and SelectField: a label above, the control, then an
 // error. Elements: field__label, field__control, field__error.
-export const fieldStyles = css`
+export const FieldWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.xs};

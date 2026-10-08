@@ -3,22 +3,21 @@
 import clsx from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import styled from "styled-components";
-import { buttonClassName, buttonStyles, type ButtonOptions } from "./buttonStyles";
+import { buttonClassName, type ButtonOptions } from "./Button";
+import { ButtonWrapper } from "./Button.styles";
 
-const ButtonLinkWrapper = styled(Link)`
-  ${buttonStyles}
-`;
-
-// A link that looks like a pill button, for actions that navigate.
+// A link that looks like a pill button, for actions that navigate. It renders Button's styled
+// wrapper as a Next.js <Link> (styled-components' `as`), so both share one set of styles.
+// Link's own legacy `as` prop is left out; it would clash with styled-components' `as`.
 export default function ButtonLink({
   variant,
   size,
   className,
   ...props
-}: ButtonOptions & ComponentProps<typeof Link>) {
+}: ButtonOptions & Omit<ComponentProps<typeof Link>, "as">) {
   return (
-    <ButtonLinkWrapper
+    <ButtonWrapper
+      as={Link}
       className={clsx(buttonClassName({ variant, size }), "button-link", className)}
       {...props}
     />

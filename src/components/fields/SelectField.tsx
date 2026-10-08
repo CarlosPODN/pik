@@ -1,12 +1,7 @@
 "use client";
 
 import { useId, type SelectHTMLAttributes } from "react";
-import styled from "styled-components";
-import { fieldStyles } from "./fieldStyles";
-
-const SelectFieldWrapper = styled.div`
-  ${fieldStyles}
-`;
+import { FieldWrapper } from "./Field.styles";
 
 export default function SelectField({
   label,
@@ -24,7 +19,7 @@ export default function SelectField({
   const errorId = `${id}-error`;
 
   return (
-    <SelectFieldWrapper className="field">
+    <FieldWrapper className="field">
       <label className="field__label" htmlFor={id}>
         {label}
       </label>
@@ -49,6 +44,6 @@ export default function SelectField({
           {error}
         </p>
       )}
-    </SelectFieldWrapper>
+    </FieldWrapper>
   );
 }
