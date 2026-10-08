@@ -52,10 +52,10 @@ const Form = styled.form.attrs({ className: "business-form" })`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-// Full-width first row: what this form is.
+// Full-width first row: what you can do in this form.
 const Intro = styled.p.attrs({ className: "business-form__intro" })`
   grid-column: 1 / -1;
-  color: ${({ theme }) => theme.colors.muted};
+  color: ${({ theme }) => theme.colors.foreground};
   line-height: 1.5;
 `;
 
@@ -140,7 +140,7 @@ export default function BusinessForm({
 
   return (
     <Form ref={formRef} noValidate onSubmit={submit} aria-label="Información del negocio">
-      <Intro>Esta es la información de tu negocio.</Intro>
+      <Intro>Edita el nombre, la categoría y el teléfono de tu negocio.</Intro>
       <TextField
         label="Nombre del negocio"
         name="name"
