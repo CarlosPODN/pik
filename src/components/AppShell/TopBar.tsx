@@ -45,7 +45,7 @@ export default function TopBar({
       <IconButton
         ref={menuButtonRef}
         type="button"
-        aria-label="Open menu"
+        aria-label="Abrir menú"
         aria-controls={drawerId}
         aria-expanded={drawerOpen}
         onClick={onOpenDrawer}

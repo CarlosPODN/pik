@@ -112,10 +112,10 @@ export default function Sidebar({
   return (
     <>
       <Backdrop $open={open} onClick={onClose} aria-hidden="true" />
-      <Panel id={id} $open={open} aria-label="Main navigation">
+      <Panel id={id} $open={open} aria-label="Navegación principal">
         <PanelHeader>
           <Logo onClick={onClose} />
-          <IconButton ref={closeButtonRef} type="button" aria-label="Close menu" onClick={onClose}>
+          <IconButton ref={closeButtonRef} type="button" aria-label="Cerrar menú" onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </PanelHeader>

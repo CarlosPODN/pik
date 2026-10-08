@@ -8,7 +8,7 @@ export interface NavItemConfig {
 }
 
 export const NAV_ITEMS: NavItemConfig[] = [
-  { label: "Home", href: "/", icon: HomeIcon },
-  { label: "Register your business", href: "/register", icon: StoreIcon },
-  { label: "Book an appointment", href: "/book", icon: CalendarIcon },
+  { label: "Inicio", href: "/", icon: HomeIcon },
+  { label: "Registra tu negocio", href: "/register", icon: StoreIcon },
+  { label: "Agenda una cita", href: "/book", icon: CalendarIcon },
 ];

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import PagePlaceholder from "@/components/PagePlaceholder";
 
-export const metadata: Metadata = { title: "Register your business · PIK" };
+export const metadata: Metadata = { title: "Registra tu negocio · PIK" };
 
 export default function RegisterPage() {
   return (
     <PagePlaceholder
-      title="Register your business"
-      description="Set up your business, location, hours, services and staff."
+      title="Registra tu negocio"
+      description="Configura tu negocio, ubicación, horario, servicios y equipo."
     />
   );
 }

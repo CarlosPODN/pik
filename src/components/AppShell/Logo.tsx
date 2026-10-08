@@ -19,7 +19,7 @@ const Wordmark = styled(Link)`
 // Text wordmark until there is an official PIK logo asset.
 export default function Logo({ onClick }: { onClick?: () => void }) {
   return (
-    <Wordmark href="/" aria-label="PIK home" onClick={onClick}>
+    <Wordmark href="/" aria-label="PIK, ir al inicio" onClick={onClick}>
       PIK
     </Wordmark>
   );

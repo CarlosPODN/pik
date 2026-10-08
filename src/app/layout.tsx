@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PIK",
-  description: "Bookings for beauty and wellness businesses",
+  description: "Reservas y pagos para negocios de belleza y bienestar",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <Providers>
           <AppShell>{children}</AppShell>
