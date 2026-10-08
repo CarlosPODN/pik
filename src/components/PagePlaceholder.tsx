@@ -1,8 +1,11 @@
 "use client";
 
 import styled from "styled-components";
+import { bem } from "@/styles/bem";
 
-const Wrapper = styled.main`
+const b = bem("page-placeholder");
+
+const Wrapper = styled.main.attrs({ className: b() })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
@@ -13,7 +16,7 @@ const Wrapper = styled.main`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: b("title") })`
   font-size: 1.5rem;
   letter-spacing: -0.02em;
 
@@ -22,7 +25,7 @@ const Title = styled.h1`
   }
 `;
 
-const Description = styled.p`
+const Description = styled.p.attrs({ className: b("description") })`
   color: ${({ theme }) => theme.colors.muted};
   line-height: 1.5;
 `;

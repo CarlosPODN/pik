@@ -2,13 +2,18 @@
 
 import type { Ref } from "react";
 import styled, { css } from "styled-components";
+import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
 import { CloseIcon } from "./icons";
 import { NAV_ITEMS } from "./navItems";
 
-const Backdrop = styled.div<{ $open: boolean }>`
+const b = bem("sidebar");
+
+const Backdrop = styled.div.attrs<{ $open: boolean }>(({ $open }) => ({
+  className: b("backdrop", { visible: $open }),
+}))`
   position: fixed;
   inset: 0;
   z-index: 20;
@@ -22,7 +27,9 @@ const Backdrop = styled.div<{ $open: boolean }>`
   }
 `;
 
-const Panel = styled.aside<{ $open: boolean }>`
+const Panel = styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({
+  className: b(undefined, { open: $open }),
+}))`
   /* Mobile: off-canvas drawer. */
   position: fixed;
   inset: 0 auto 0 0;
@@ -71,26 +78,26 @@ const Panel = styled.aside<{ $open: boolean }>`
   }
 `;
 
-const PanelHeader = styled.div`
+const PanelHeader = styled.div.attrs({ className: b("header") })`
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 40px;
 `;
 
-const Divider = styled.hr`
+const Divider = styled.hr.attrs({ className: b("divider") })`
   border: 0;
   height: 1px;
   background: ${({ theme }) => theme.colors.border};
 `;
 
-const Nav = styled.nav`
+const Nav = styled.nav.attrs({ className: b("nav") })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.xxs};
 `;
 
-const Footer = styled.footer`
+const Footer = styled.footer.attrs({ className: b("footer") })`
   margin-top: auto;
   padding-top: ${({ theme }) => theme.space.lg};
   border-top: 1px dashed ${({ theme }) => theme.colors.border};

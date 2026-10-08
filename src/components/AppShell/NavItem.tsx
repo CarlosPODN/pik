@@ -3,9 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styled, { css } from "styled-components";
+import { bem } from "@/styles/bem";
 import type { NavItemConfig } from "./navItems";
 
-const ItemLink = styled(Link)<{ $active: boolean }>`
+const b = bem("nav-item");
+
+const ItemLink = styled(Link).attrs<{ $active: boolean }>(({ $active }) => ({
+  className: b(undefined, { active: $active }),
+}))`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.space.sm};
@@ -61,8 +66,8 @@ export default function NavItem({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
     >
-      <Icon />
-      <span>{item.label}</span>
+      <Icon className={b("icon")} />
+      <span className={b("label")}>{item.label}</span>
     </ItemLink>
   );
 }

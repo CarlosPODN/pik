@@ -1,8 +1,9 @@
 "use client";
 
 import styled from "styled-components";
+import { bem } from "@/styles/bem";
 
-const IconButton = styled.button`
+const IconButton = styled.button.attrs({ className: bem("icon-button")() })`
   display: inline-flex;
   align-items: center;
   justify-content: center;

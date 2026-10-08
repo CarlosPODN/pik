@@ -63,3 +63,14 @@ When the task is done, push the branch and open a pull request into `main`.
 - Design mobile-first: base styles target phones, and wider layouts are added with `theme.media.md` / `theme.media.lg` (`min-width` queries). Do responsive switches in CSS, not with JS media-query hooks, so server-rendered HTML is right on every screen size.
 - Use `theme.space`, `theme.radii`, `theme.shadows` and `theme.layout` for spacing, corners, shadows and shell sizes instead of raw values.
 - The app shell (top bar, sidebar/drawer, nav) lives in `src/components/AppShell/`; add navigation entries in `navItems.ts`.
+
+### Class names (BEM)
+
+Every styled component and every styled element also gets a BEM class name, built with the `bem()` helper from `src/styles/bem.ts`. styled-components still scopes the styles; the BEM classes make the DOM readable in DevTools and give tests stable selectors.
+
+- Block: the component, in kebab-case (`sidebar`, `nav-item`, `page-placeholder`). One block per component file: `const b = bem("sidebar");`.
+- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`) → `b("nav")`.
+- Modifier: a state or variant, joined with `--` and driven by props (`sidebar--open`, `nav-item--active`) → `b(undefined, { open: $open })`.
+- Attach them with `.attrs`: `styled.nav.attrs({ className: b("nav") })` for static classes; `styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({ className: b(undefined, { open: $open }) }))` for modifiers. For plain elements, pass `className={b("label")}`.
+- Style with styled-components only. Never target BEM classes in CSS, and never use them to style another component; they are names, not styling hooks.
+- Don't nest elements in names (`sidebar__nav__item` is wrong). A reusable part becomes its own block (`nav-item`).
