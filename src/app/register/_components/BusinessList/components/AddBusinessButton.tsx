@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Button from "@/components/Button";
-import ButtonLink from "@/components/ButtonLink";
-import type { ButtonSize } from "@/components/buttonStyles";
-import Dialog from "@/components/Dialog";
+import Button from "@/components/buttons/Button";
+import ButtonLink from "@/components/buttons/ButtonLink";
+import type { ButtonSize } from "@/components/buttons/buttonStyles";
+import Dialog from "@/components/modals/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";
 

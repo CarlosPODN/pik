@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/components/Button";
-import Dialog from "@/components/Dialog";
+import Button from "@/components/buttons/Button";
+import Dialog from "@/components/modals/Dialog";
 import DeleteRow from "./DeleteRow";
 
 const pendingText = (count: number) =>

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import styled from "styled-components";
-import Button from "@/components/Button";
-import Dialog from "@/components/Dialog";
+import Button from "@/components/buttons/Button";
+import Dialog from "@/components/modals/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { findUntouched, roleLabel } from "@/lib/businesses";

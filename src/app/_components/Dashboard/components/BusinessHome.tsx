@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ButtonLink from "@/components/ButtonLink";
-import CardGrid from "@/components/CardGrid";
-import EmptyState from "@/components/EmptyState";
+import ButtonLink from "@/components/buttons/ButtonLink";
+import CardGrid from "@/components/layout/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageLayout, { TitleAccent } from "@/components/PageLayout";
+import PageLayout, { TitleAccent } from "@/components/layout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { ROLE_LABELS } from "@/lib/session";

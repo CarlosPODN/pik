@@ -1,9 +1,9 @@
 "use client";
 
-import CardGrid from "@/components/CardGrid";
-import EmptyState from "@/components/EmptyState";
-import PageLayout, { TitleAccent } from "@/components/PageLayout";
-import PageSkeleton from "@/components/PageSkeleton";
+import CardGrid from "@/components/layout/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState";
+import PageLayout, { TitleAccent } from "@/components/layout/PageLayout";
+import PageSkeleton from "@/components/feedback/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { useHydrated } from "@/hooks/useHydrated";
 import AddBusinessButton from "./components/AddBusinessButton";

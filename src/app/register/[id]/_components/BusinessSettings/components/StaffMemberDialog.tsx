@@ -2,10 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import styled from "styled-components";
-import Button from "@/components/Button";
-import Dialog from "@/components/Dialog";
-import SelectField from "@/components/SelectField";
-import TextField from "@/components/TextField";
+import Button from "@/components/buttons/Button";
+import Dialog from "@/components/modals/Dialog";
+import SelectField from "@/components/fields/SelectField";
+import TextField from "@/components/fields/TextField";
 import { roleOptions } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember, StaffRole } from "@/types/business";
 import DeleteRow from "./DeleteRow";

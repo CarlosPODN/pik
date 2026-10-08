@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useSession } from "@/hooks/useSession";
-import PageSkeleton from "@/components/PageSkeleton";
+import PageSkeleton from "@/components/feedback/PageSkeleton";
 import Dashboard from "./Dashboard/Dashboard";
 
 // Picks the home for the saved role: the public landing while logged out, the role's dashboard

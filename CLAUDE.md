@@ -28,17 +28,24 @@ src/
 │   │   ├── page.tsx
 │   │   └── _components/    Components used only by this route (private folder, ignored by the router)
 │   └── api/                Route Handlers that return mock data
-├── components/             Shared UI used by more than one route (icons, buttons, inputs, stepper, AppShell)
+├── components/             Shared UI used by more than one route, grouped by kind:
+│   ├── buttons/            Button, ButtonLink and their shared styles
+│   ├── fields/             Form controls: TextField, SelectField and their shared styles
+│   ├── modals/             Dialog
+│   ├── layout/             AppShell, PageLayout, CardGrid, PagePlaceholder
+│   ├── feedback/           Empty, loading and status states: EmptyState, PageSkeleton
+│   └── Icon/               Icon and its icons/
 ├── hooks/                  Shared client hooks
 ├── lib/
 │   └── data/               Data access: the only code that reads src/mocks
 ├── mocks/                  Mock data as typed TypeScript modules
-├── types/                  Domain types (Business, Service, StaffMember, Appointment, ...)
+├── types/                  Domain types (Business, StaffMember, Appointment, Session, ...)
 └── styles/                 Theme and global styles
 ```
 
-- `src/app/` holds routing files only. A component used by a single route goes in that route's `_components/` folder (e.g. `app/register/_components/ServicesStep.tsx`). Folders starting with `_` are private: Next.js never turns them into routes.
-- Move a component up to `src/components/` as soon as a second route needs it. Never import from another route's `_components/`.
+- `src/app/` holds routing files only. A component used by a single route goes in that route's `_components/` folder (e.g. `app/register/_components/BusinessList/BusinessList.tsx`). Folders starting with `_` are private: Next.js never turns them into routes.
+- Move a component up to `src/components/<group>/` as soon as a second route needs it, in the group that matches what it is (a new kind of component gets a new group). Never import from another route's `_components/`.
+- App-wide providers (styled-components registry, `ThemeProvider`, global styles) live in `src/app/_components/Providers.tsx`, used only by the root layout.
 - A component with its own sub-components gets a folder, as described under Styling (`AppShell/AppShell.tsx` + `AppShell/components/`).
 - Pages and layouts are Server Components. They load data through `src/lib/data/` and pass it as props to client components.
 - Mock data lives in `src/mocks/` and is typed with `src/types/`. Only `src/lib/data/` imports from `src/mocks/`, so replacing the mocks with a real API later changes one folder.
@@ -103,14 +110,14 @@ When the task is done, push the branch and open a pull request into `main`.
 
 ## Styling
 
-- Colors, fonts and radii live in the theme at `src/styles/theme.ts`, provided app-wide by `ThemeProvider` in `src/components/Providers.tsx`.
+- Colors, fonts and radii live in the theme at `src/styles/theme.ts`, provided app-wide by `ThemeProvider` in `src/app/_components/Providers.tsx`.
 - Always read colors from the theme in styled components (`${({ theme }) => theme.colors.primary}`). Don't hardcode hex values in components.
 - Prefer the semantic `theme.colors.*` roles. Use `theme.palette.*` (the raw PIK brand colors) only when no role fits, and add a new role to the theme if the need repeats.
 - Text on `success` (mint) or `attention` (flama) must use `onSuccess` / `onAttention`. White on those colors fails contrast. Exception, by request: the "Sin editar" tags use white text on flama.
 - styled-components only works in Client Components: files that define styled components need `"use client"`. Keep pages and layouts as Server Components where possible and render styled client components from them.
 - Design mobile-first: base styles target phones, and wider layouts are added with `theme.media.md` / `theme.media.lg` (`min-width` queries). Do responsive switches in CSS, not with JS media-query hooks, so server-rendered HTML is right on every screen size.
 - Use `theme.space`, `theme.radii`, `theme.shadows` and `theme.layout` for spacing, corners, shadows and shell sizes instead of raw values.
-- The app shell (top bar, sidebar/drawer, nav) lives in `src/components/AppShell/`; add navigation entries in `navItems.ts`.
+- The app shell (top bar, sidebar/drawer, nav) lives in `src/components/layout/AppShell/`; add navigation entries in `navItems.ts`.
 - The shell's content area is the page frame for every route: it renders the `<main>` landmark, the page padding (`theme.layout.pagePadding`) and the overflow rules. The window scrolls vertically; horizontal overflow is clipped with `overflow-x: clip`. Pages render only their content: no `<main>`, no outer padding, no `overflow` or `100vw`/`100vh` sizing. Give scrollable widgets (tables, carousels) their own `overflow-x: auto`, and use `min-width: 0` on flex/grid children that hold long content.
 - Icons: always render them through `<Icon name="calendar" />` from `src/components/Icon/Icon.tsx`. Never draw an inline `<svg>` in a component. To add an icon, create `src/components/Icon/icons/<Name>.tsx` with only its shapes (20×20 grid, strokes, no `<svg>` wrapper) and register it in the `ICONS` list in `Icon.tsx` under a kebab-case name. Icons are decorative (hidden from screen readers) unless you pass a Spanish `label`.
 - A component with its own sub-components gets a folder: the entry component and its config/data at the folder root (`AppShell/AppShell.tsx`, `AppShell/navItems.ts`), and the sub-components only it uses in a nested `components/` folder (`AppShell/components/Sidebar.tsx`). Import the entry file from outside; don't import from another component's `components/` folder. If a sub-component is needed elsewhere, move it up to `src/components/`.

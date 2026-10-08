@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import styled from "styled-components";
-import { controlStyles, FieldError } from "@/components/fieldStyles";
+import { controlStyles, FieldError } from "@/components/fields/fieldStyles";
 import { WEEKDAYS } from "@/lib/businesses";
 import type { DayHours, Weekday, WeeklyHours } from "@/types/business";
 

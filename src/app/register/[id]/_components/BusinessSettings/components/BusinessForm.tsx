@@ -2,12 +2,12 @@
 
 import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import styled from "styled-components";
-import Button from "@/components/Button";
-import Dialog from "@/components/Dialog";
-import ButtonLink from "@/components/ButtonLink";
+import Button from "@/components/buttons/Button";
+import Dialog from "@/components/modals/Dialog";
+import ButtonLink from "@/components/buttons/ButtonLink";
 import Icon from "@/components/Icon/Icon";
-import SelectField from "@/components/SelectField";
-import TextField from "@/components/TextField";
+import SelectField from "@/components/fields/SelectField";
+import TextField from "@/components/fields/TextField";
 import { useLeaveGuard } from "@/hooks/useLeaveGuard";
 import { BUSINESS_CATEGORIES } from "@/lib/businesses";
 import type { Business, DayHours, Weekday } from "@/types/business";

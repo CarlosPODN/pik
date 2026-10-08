@@ -1,6 +1,6 @@
 "use client";
 
-import ButtonLink from "@/components/ButtonLink";
+import ButtonLink from "@/components/buttons/ButtonLink";
 import Icon from "@/components/Icon/Icon";
 import styled from "styled-components";
 import type { Audience } from "../audiences";
