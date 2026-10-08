@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
-import { MenuIcon } from "@/components/icons";
+import Icon from "@/components/Icon/Icon";
 
 const b = bem("top-bar");
 
@@ -53,7 +53,7 @@ export default function TopBar({
         aria-expanded={drawerOpen}
         onClick={onOpenDrawer}
       >
-        <MenuIcon />
+        <Icon name="menu" />
       </IconButton>
     </Bar>
   );

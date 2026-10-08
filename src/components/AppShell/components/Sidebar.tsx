@@ -6,7 +6,7 @@ import { bem } from "@/styles/bem";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
-import { CloseIcon } from "@/components/icons";
+import Icon from "@/components/Icon/Icon";
 import { NAV_ITEMS } from "../navItems";
 
 const b = bem("sidebar");
@@ -123,7 +123,7 @@ export default function Sidebar({
         <PanelHeader>
           <Logo onClick={onClose} />
           <IconButton ref={closeButtonRef} type="button" aria-label="Cerrar menú" onClick={onClose}>
-            <CloseIcon />
+            <Icon name="close" />
           </IconButton>
         </PanelHeader>
 

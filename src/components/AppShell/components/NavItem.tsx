@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Icon from "@/components/Icon/Icon";
 import styled, { css } from "styled-components";
 import { bem } from "@/styles/bem";
 import type { NavItemConfig } from "../navItems";
@@ -57,7 +58,6 @@ export default function NavItem({
 }) {
   const pathname = usePathname();
   const active = isActive(pathname, item.href);
-  const Icon = item.icon;
 
   return (
     <ItemLink
@@ -66,7 +66,7 @@ export default function NavItem({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
     >
-      <Icon className={b("icon")} />
+      <Icon name={item.icon} className={b("icon")} />
       <span className={b("label")}>{item.label}</span>
     </ItemLink>
   );
