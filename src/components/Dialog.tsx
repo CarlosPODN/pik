@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type FormEvent, type ReactNode } from "react";
 import styled from "styled-components";
 
 const Panel = styled.dialog.attrs({ className: "dialog" })`
@@ -52,12 +52,15 @@ export default function Dialog({
   title,
   children,
   actions,
+  onSubmit,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
   actions: ReactNode;
+  // Makes the body and actions a form: Enter submits, and a type="submit" action calls this.
+  onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -80,8 +83,17 @@ export default function Dialog({
       }}
     >
       <Title id={titleId}>{title}</Title>
-      <Body>{children}</Body>
-      <Actions>{actions}</Actions>
+      {onSubmit ? (
+        <form noValidate onSubmit={onSubmit} className="dialog__form">
+          <Body>{children}</Body>
+          <Actions>{actions}</Actions>
+        </form>
+      ) : (
+        <>
+          <Body>{children}</Body>
+          <Actions>{actions}</Actions>
+        </>
+      )}
     </Panel>
   );
 }

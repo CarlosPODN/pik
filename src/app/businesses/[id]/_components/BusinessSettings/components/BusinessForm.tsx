@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
@@ -19,7 +19,15 @@ import {
 import FormCard from "./FormCard";
 import HoursEditor from "./HoursEditor";
 
-const Form = styled.form.attrs({ className: "business-form" })`
+// The form holds the first two cards. The staff card sits between it and the footer but outside
+// it (its modal has its own form, and forms can't nest), so the buttons use form={formId}.
+const Wrapper = styled.div.attrs({ className: "business-form" })`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.lg};
+`;
+
+const Form = styled.form.attrs({ className: "business-form__form" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.lg};
@@ -63,12 +71,16 @@ export default function BusinessForm({
   business,
   onSave,
   deleteAction,
+  staffSection,
 }: {
   business: Business;
   onSave: (id: string, changes: BusinessChanges) => void;
   // Rendered in its own full-width row under the phone.
   deleteAction: ReactNode;
+  // Rendered after the form's cards, above the save buttons; it saves on its own.
+  staffSection: ReactNode;
 }) {
+  const formId = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<BusinessFormValues>(() => toFormValues(business));
   const [submitted, setSubmitted] = useState(false);
@@ -102,72 +114,82 @@ export default function BusinessForm({
   };
 
   return (
-    <Form ref={formRef} noValidate onSubmit={submit} aria-label="Información del negocio">
-      <FormCard
-        heading="Ajustes"
-        intro="Edita el nombre, la categoría y el teléfono de tu negocio."
+    <Wrapper>
+      <Form
+        id={formId}
+        ref={formRef}
+        noValidate
+        onSubmit={submit}
+        aria-label="Información del negocio"
       >
-        <TextField
-          label="Nombre del negocio"
-          name="name"
-          autoComplete="organization"
-          value={values.name}
-          onChange={(event) => update({ name: event.target.value })}
-          error={errors.name}
-        />
-        <SelectField
-          label="Categoría"
-          name="category"
-          placeholder="Elige una categoría"
-          options={BUSINESS_CATEGORIES}
-          value={values.category}
-          onChange={(event) =>
-            update({ category: event.target.value as BusinessFormValues["category"] })
-          }
-          error={errors.category}
-        />
-        <TextField
-          label="Teléfono de contacto"
-          name="phone"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          placeholder="55 1234 5678"
-          value={values.phone}
-          onChange={(event) => update({ phone: event.target.value })}
-          error={errors.phone}
-        />
-        <DangerRow>{deleteAction}</DangerRow>
-      </FormCard>
+        <FormCard
+          heading="Ajustes"
+          intro="Edita el nombre, la categoría y el teléfono de tu negocio."
+        >
+          <TextField
+            label="Nombre del negocio"
+            name="name"
+            autoComplete="organization"
+            value={values.name}
+            onChange={(event) => update({ name: event.target.value })}
+            error={errors.name}
+          />
+          <SelectField
+            label="Categoría"
+            name="category"
+            placeholder="Elige una categoría"
+            options={BUSINESS_CATEGORIES}
+            value={values.category}
+            onChange={(event) =>
+              update({ category: event.target.value as BusinessFormValues["category"] })
+            }
+            error={errors.category}
+          />
+          <TextField
+            label="Teléfono de contacto"
+            name="phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="55 1234 5678"
+            value={values.phone}
+            onChange={(event) => update({ phone: event.target.value })}
+            error={errors.phone}
+          />
+          <DangerRow>{deleteAction}</DangerRow>
+        </FormCard>
 
-      <FormCard
-        heading="Ubicación y horario de atención"
-        intro="Indica dónde está tu negocio y en qué días y horas atiendes."
-      >
-        <TextField
-          label="Dirección"
-          name="address"
-          autoComplete="street-address"
-          placeholder="Calle, número y colonia"
-          value={values.address}
-          onChange={(event) => update({ address: event.target.value })}
-          error={errors.address}
-        />
-        <TextField
-          label="Ciudad"
-          name="city"
-          autoComplete="address-level2"
-          value={values.city}
-          onChange={(event) => update({ city: event.target.value })}
-          error={errors.city}
-        />
-        <HoursEditor
-          hours={values.hours}
-          onChange={updateDay}
-          error={errors.hours}
-          dayErrors={dayErrors}
-        />
-      </FormCard>
+        <FormCard
+          heading="Ubicación y horario de atención"
+          intro="Indica dónde está tu negocio y en qué días y horas atiendes."
+        >
+          <TextField
+            label="Dirección"
+            name="address"
+            autoComplete="street-address"
+            placeholder="Calle, número y colonia"
+            value={values.address}
+            onChange={(event) => update({ address: event.target.value })}
+            error={errors.address}
+          />
+          <TextField
+            label="Ciudad"
+            name="city"
+            autoComplete="address-level2"
+            value={values.city}
+            onChange={(event) => update({ city: event.target.value })}
+            error={errors.city}
+          />
+          <HoursEditor
+            hours={values.hours}
+            onChange={updateDay}
+            error={errors.hours}
+            dayErrors={dayErrors}
+          />
+        </FormCard>
+      </Form>
+
+      {staffSection}
 
       <div className="business-form__footer">
         <div role="status" className="business-form__status">
@@ -182,9 +204,11 @@ export default function BusinessForm({
           <ButtonLink href="/" $variant="secondary">
             Volver
           </ButtonLink>
-          <Button type="submit">Guardar cambios</Button>
+          <Button type="submit" form={formId}>
+            Guardar cambios
+          </Button>
         </Actions>
       </div>
-    </Form>
+    </Wrapper>
   );
 }

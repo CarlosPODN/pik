@@ -14,6 +14,7 @@ import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
 import BusinessForm from "./components/BusinessForm";
 import DeleteBusiness from "./components/DeleteBusiness";
+import StaffCard from "./components/StaffCard";
 
 const Wrapper = styled.div.attrs({ className: "business-settings" })`
   display: flex;
@@ -89,6 +90,7 @@ export default function BusinessSettings({ id }: { id: string }) {
         key={business.id}
         business={business}
         onSave={updateBusiness}
+        staffSection={<StaffCard businessId={business.id} staff={business.staff} />}
         deleteAction={
           <DeleteBusiness
             businessName={business.name}

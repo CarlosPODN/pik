@@ -1,4 +1,11 @@
-import type { Business, BusinessCategory, DayHours, Weekday, WeeklyHours } from "@/types/business";
+import type {
+  Business,
+  BusinessCategory,
+  DayHours,
+  StaffMember,
+  Weekday,
+  WeeklyHours,
+} from "@/types/business";
 import { createId } from "./id";
 import { createLocalStore } from "./localStore";
 
@@ -69,6 +76,15 @@ function normalizeHours(value: unknown): WeeklyHours {
   return hours;
 }
 
+function isStaffMember(value: unknown): value is StaffMember {
+  return (
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.name === "string" &&
+    typeof value.role === "string"
+  );
+}
+
 // Checks a stored business and fills fields added after it was saved (location, hours), so
 // older data keeps working. Returns null when the core fields are missing or wrong.
 function normalizeBusiness(value: unknown): Business | null {
@@ -95,6 +111,7 @@ function normalizeBusiness(value: unknown): Business | null {
       city: typeof location.city === "string" ? location.city : "",
     },
     hours: normalizeHours(v.hours),
+    staff: Array.isArray(v.staff) ? v.staff.filter(isStaffMember) : [],
     touched: v.touched,
     createdAt: v.createdAt,
   };
@@ -109,13 +126,12 @@ export function findUntouched(businesses: Business[]) {
   return last && !last.touched ? last : null;
 }
 
-// Next placeholder number: one past both the count and the highest "Negocio N" in use, so a
-// deletion never produces a duplicate name.
-function nextPlaceholderNumber(businesses: Business[]) {
-  const used = businesses.map((business) =>
-    Number(/^Negocio (\d+)$/.exec(business.name)?.[1] ?? 0),
-  );
-  return Math.max(businesses.length, ...used) + 1;
+// Next placeholder number for names like "Negocio N" or "Empleado N": one past both the count
+// and the highest number in use, so a deletion never produces a duplicate name.
+function nextPlaceholderNumber(names: string[], prefix: string) {
+  const pattern = new RegExp(`^${prefix} (\\d+)$`);
+  const used = names.map((name) => Number(pattern.exec(name)?.[1] ?? 0));
+  return Math.max(names.length, ...used) + 1;
 }
 
 // Adds a placeholder business ("Negocio 3") and returns it.
@@ -123,11 +139,15 @@ export function addBusiness(): Business {
   const businesses = readBusinesses();
   const business: Business = {
     id: createId(),
-    name: `Negocio ${nextPlaceholderNumber(businesses)}`,
+    name: `Negocio ${nextPlaceholderNumber(
+      businesses.map((item) => item.name),
+      "Negocio",
+    )}`,
     category: null,
     phone: "",
     location: { address: "", city: "" },
     hours: defaultHours(),
+    staff: [],
     touched: false,
     createdAt: new Date().toISOString(),
   };
@@ -136,7 +156,10 @@ export function addBusiness(): Business {
 }
 
 // Saves edited settings. Any save marks the business as touched.
-export function updateBusiness(id: string, changes: Pick<Business, "name" | "category" | "phone">) {
+export function updateBusiness(
+  id: string,
+  changes: Pick<Business, "name" | "category" | "phone" | "location" | "hours">,
+) {
   businessesStore.write(
     readBusinesses().map((business) =>
       business.id === id ? { ...business, ...changes, touched: true } : business,
@@ -146,4 +169,36 @@ export function updateBusiness(id: string, changes: Pick<Business, "name" | "cat
 
 export function deleteBusiness(id: string) {
   businessesStore.write(readBusinesses().filter((business) => business.id !== id));
+}
+
+// Staff changes save right away and don't affect `touched`: staff is optional for a business.
+function updateStaff(businessId: string, update: (staff: StaffMember[]) => StaffMember[]) {
+  businessesStore.write(
+    readBusinesses().map((business) =>
+      business.id === businessId ? { ...business, staff: update(business.staff) } : business,
+    ),
+  );
+}
+
+// Adds a placeholder staff member ("Empleado 2") to the business and returns it.
+export function addStaffMember(businessId: string): StaffMember {
+  const business = readBusinesses().find((item) => item.id === businessId);
+  const names = business?.staff.map((member) => member.name) ?? [];
+  const member: StaffMember = {
+    id: createId(),
+    name: `Empleado ${nextPlaceholderNumber(names, "Empleado")}`,
+    role: "",
+  };
+  updateStaff(businessId, (staff) => [...staff, member]);
+  return member;
+}
+
+export function updateStaffMember(businessId: string, member: StaffMember) {
+  updateStaff(businessId, (staff) =>
+    staff.map((current) => (current.id === member.id ? member : current)),
+  );
+}
+
+export function removeStaffMember(businessId: string, memberId: string) {
+  updateStaff(businessId, (staff) => staff.filter((member) => member.id !== memberId));
 }

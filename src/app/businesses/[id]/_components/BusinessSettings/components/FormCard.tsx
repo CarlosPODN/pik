@@ -28,6 +28,15 @@ const Header = styled.div.attrs({ className: "form-card__header" })`
   gap: ${({ theme }) => theme.space.xs};
 `;
 
+// Heading and description on the left, the card's action (if any) at the end of the row.
+const TitleRow = styled.div.attrs({ className: "form-card__title-row" })`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.space.md};
+`;
+
 const Heading = styled.h2.attrs({ className: "form-card__heading" })`
   font-size: 1.375rem;
   letter-spacing: -0.01em;
@@ -41,16 +50,21 @@ const Intro = styled.p.attrs({ className: "form-card__intro" })`
 export default function FormCard({
   heading,
   intro,
+  action,
   children,
 }: {
   heading: string;
   intro: string;
+  action?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <Card>
       <Header>
-        <Heading>{heading}</Heading>
+        <TitleRow>
+          <Heading>{heading}</Heading>
+          {action}
+        </TitleRow>
         <Intro>{intro}</Intro>
       </Header>
       {children}

@@ -17,6 +17,12 @@ export interface DayHours {
 
 export type WeeklyHours = Record<Weekday, DayHours>;
 
+export interface StaffMember {
+  id: string;
+  name: string;
+  role: string;
+}
+
 // A business the person manages. New businesses start as a placeholder ("Negocio 2") with
 // touched = false; saving its settings once sets touched, which unlocks adding the next one.
 export interface Business {
@@ -26,6 +32,7 @@ export interface Business {
   phone: string;
   location: BusinessLocation;
   hours: WeeklyHours;
+  staff: StaffMember[];
   touched: boolean;
   createdAt: string;
 }
