@@ -29,15 +29,18 @@ const Body = styled.div.attrs({ className: "dialog__body" })`
   line-height: 1.5;
 `;
 
+// Buttons split the width evenly, on every screen size. Long labels wrap instead of overflowing.
 const Actions = styled.div.attrs({ className: "dialog__actions" })`
-  display: flex;
-  flex-direction: column-reverse;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
   gap: ${({ theme }) => theme.space.sm};
   margin-top: ${({ theme }) => theme.space.xl};
 
-  ${({ theme }) => theme.media.md} {
-    flex-direction: row;
-    justify-content: flex-end;
+  & > * {
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
   }
 `;
 

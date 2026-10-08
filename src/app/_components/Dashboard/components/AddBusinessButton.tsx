@@ -42,7 +42,7 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
             </Button>
             {untouched && (
               <ButtonLink href={`/businesses/${untouched.id}`} $size="sm">
-                Editar {untouched.name}
+                Editar ahora
               </ButtonLink>
             )}
           </>
