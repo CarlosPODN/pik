@@ -71,26 +71,10 @@ const ListSection = styled.section.attrs({ className: "dashboard__list-section" 
   gap: ${({ theme }) => theme.space.lg};
 `;
 
-const ListHeader = styled.div.attrs({ className: "dashboard__list-header" })`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.space.sm};
-`;
-
-const ListTitle = styled.h2.attrs({ className: "dashboard__list-title" })`
-  font-size: 1.375rem;
-  letter-spacing: -0.01em;
-`;
-
-const Count = styled.span.attrs({ className: "dashboard__count" })`
-  min-width: 24px;
-  padding: ${({ theme }) => `${theme.space.xxs} ${theme.space.sm}`};
-  border-radius: ${({ theme }) => theme.radii.pill};
-  background: ${({ theme }) => theme.colors.primarySoft};
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: 0.8125rem;
-  font-weight: 700;
-  text-align: center;
+// Separates the welcome from the appointments, in place of a visible list heading.
+const Divider = styled.hr.attrs({ className: "dashboard__divider" })`
+  border: none;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const List = styled.ul.attrs({ className: "dashboard__list" })`
@@ -124,13 +108,10 @@ export default function Dashboard({ role }: { role: Role }) {
         </WelcomeCta>
       </Welcome>
 
-      <ListSection aria-labelledby="dashboard-list-title">
-        <ListHeader>
-          <ListTitle id="dashboard-list-title">{copy.listTitle}</ListTitle>
-          {appointments.length > 0 && (
-            <Count aria-label={`${appointments.length} citas`}>{appointments.length}</Count>
-          )}
-        </ListHeader>
+      <Divider />
+
+      {/* No visible heading: the divider marks the section, and the label names it for screen readers */}
+      <ListSection aria-label={copy.listTitle}>
         {appointments.length === 0 ? (
           <EmptyState
             icon="calendar"

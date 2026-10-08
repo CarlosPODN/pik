@@ -5,6 +5,7 @@ export interface DashboardCopy {
   roleName: string;
   title: string;
   description: string;
+  // Accessible name of the appointments section (not shown on screen).
   listTitle: string;
   cta: { label: string; href: string };
   empty: { title: string; description: string; action: string };
