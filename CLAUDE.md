@@ -31,7 +31,7 @@ src/
 │   └── data/               Data access: the only code that reads src/mocks
 ├── mocks/                  Mock data as typed TypeScript modules
 ├── types/                  Domain types (Business, Service, StaffMember, Appointment, ...)
-└── styles/                 Theme, global styles, bem() helper
+└── styles/                 Theme and global styles
 ```
 
 - `src/app/` holds routing files only. A component used by a single route goes in that route's `_components/` folder (e.g. `app/register/_components/ServicesStep.tsx`). Folders starting with `_` are private: Next.js never turns them into routes.
