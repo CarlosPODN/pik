@@ -16,6 +16,32 @@ Use pnpm (version pinned in `package.json` → `packageManager`). Never use npm 
 - `pnpm dev`, `pnpm build`, `pnpm lint`
 - If `pnpm install` reports ignored build scripts, decide per package in `pnpm-workspace.yaml` → `allowBuilds` (`true` to run it, `false` to skip) and leave a comment explaining why.
 
+## Project structure
+
+```
+src/
+├── app/                    Routes only: page.tsx, layout.tsx, loading.tsx, error.tsx, not-found.tsx
+│   ├── <route>/
+│   │   ├── page.tsx
+│   │   └── _components/    Components used only by this route (private folder, ignored by the router)
+│   └── api/                Route Handlers that return mock data
+├── components/             Shared UI used by more than one route (icons, buttons, inputs, stepper, AppShell)
+├── hooks/                  Shared client hooks
+├── lib/
+│   └── data/               Data access: the only code that reads src/mocks
+├── mocks/                  Mock data as typed TypeScript modules
+├── types/                  Domain types (Business, Service, StaffMember, Appointment, ...)
+└── styles/                 Theme, global styles, bem() helper
+```
+
+- `src/app/` holds routing files only. A component used by a single route goes in that route's `_components/` folder (e.g. `app/register/_components/ServicesStep.tsx`). Folders starting with `_` are private: Next.js never turns them into routes.
+- Move a component up to `src/components/` as soon as a second route needs it. Never import from another route's `_components/`.
+- A component with its own sub-components gets a folder, as described under Styling (`AppShell/AppShell.tsx` + `AppShell/components/`).
+- Pages and layouts are Server Components. They load data through `src/lib/data/` and pass it as props to client components.
+- Mock data lives in `src/mocks/` and is typed with `src/types/`. Only `src/lib/data/` imports from `src/mocks/`, so replacing the mocks with a real API later changes one folder.
+- Use Route Handlers (`src/app/api/.../route.ts`) when the client has to fetch or send data after the page loads (e.g. free time slots for a chosen date, confirming a booking). They also read through `src/lib/data/`.
+- Types shared across features go in `src/types/`. Props types stay next to their component.
+
 ## Checks
 
 - `pnpm format` / `pnpm format:check`: Prettier
