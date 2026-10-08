@@ -8,10 +8,12 @@ import ButtonLink from "@/components/ButtonLink";
 import EmptyState from "@/components/EmptyState";
 import Icon from "@/components/Icon/Icon";
 import PageSkeleton from "@/components/PageSkeleton";
+import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
+import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
 import BusinessForm from "./components/BusinessForm";
-import DeleteBusinessButton from "./components/DeleteBusinessButton";
+import DeleteBusiness from "./components/DeleteBusiness";
 
 const Wrapper = styled.div.attrs({ className: "business-settings" })`
   display: flex;
@@ -67,7 +69,10 @@ export default function BusinessSettings({ id }: { id: string }) {
   const hydrated = useHydrated();
   const router = useRouter();
   const { businesses, updateBusiness, deleteBusiness } = useBusinesses();
+  const { appointments } = useAppointments();
   const [deleting, setDeleting] = useState(false);
+  // Read once per visit: "pending" means starting after the page opened.
+  const [now] = useState(() => Date.now());
   const business = businesses.find((item) => item.id === id);
 
   // Keep the skeleton up while leaving after a delete, instead of flashing "not found".
@@ -104,8 +109,9 @@ export default function BusinessSettings({ id }: { id: string }) {
         business={business}
         onSave={updateBusiness}
         deleteAction={
-          <DeleteBusinessButton
+          <DeleteBusiness
             businessName={business.name}
+            pendingAppointments={countPendingAppointments(appointments, business.id, now)}
             onDelete={() => {
               setDeleting(true);
               deleteBusiness(business.id);

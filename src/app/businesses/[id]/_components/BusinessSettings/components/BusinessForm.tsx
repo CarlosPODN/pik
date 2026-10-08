@@ -52,11 +52,9 @@ const Form = styled.form.attrs({ className: "business-form" })`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-// Full-width row under the phone, with the delete button at the right.
+// Full-width row under the phone for the delete action.
 const DangerRow = styled.div.attrs({ className: "business-form__danger" })`
   grid-column: 1 / -1;
-  display: flex;
-  justify-content: flex-end;
 `;
 
 // Full-width footer: the saved message (when shown) and the buttons.
@@ -97,7 +95,7 @@ export default function BusinessForm({
 }: {
   business: Business;
   onSave: (id: string, changes: Pick<Business, "name" | "category" | "phone">) => void;
-  // Rendered in its own row under the phone, aligned right.
+  // Rendered in its own full-width row under the phone.
   deleteAction: ReactNode;
 }) {
   const formRef = useRef<HTMLFormElement>(null);

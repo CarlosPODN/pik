@@ -2,6 +2,7 @@
 // whole pesos (MXN).
 export interface Appointment {
   id: string;
+  businessId: string;
   businessName: string;
   serviceName: string;
   staffName: string;
