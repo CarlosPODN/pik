@@ -21,30 +21,21 @@ const Legend = styled.legend.attrs({ className: "hours-editor__legend" })`
 const Days = styled.ul.attrs({ className: "hours-editor__days" })`
   display: flex;
   flex-direction: column;
+  gap: ${({ theme }) => theme.space.sm};
   list-style: none;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.sm};
 `;
 
-// Phones: the day toggle, then its times below. From md: toggle and times on one line.
+// Like the "Eliminar negocio" row: day on the left, its times on the right. On phones the
+// times wrap under the day and fill the width.
 const Day = styled.li.attrs<{ $open: boolean }>(({ $open }) => ({
   className: clsx("hours-editor__day", { "hours-editor__day--closed": !$open }),
 }))<{ $open: boolean }>`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: ${({ theme }) => theme.space.sm};
-  padding: ${({ theme }) => `${theme.space.md} ${theme.space.sm}`};
-
-  & + & {
-    border-top: 1px solid ${({ theme }) => theme.colors.border};
-  }
-
-  ${({ theme }) => theme.media.md} {
-    padding: ${({ theme }) => theme.space.md};
-    grid-template-columns: 160px minmax(0, 1fr);
-    gap: ${({ theme }) => theme.space.lg};
-  }
+  justify-content: space-between;
+  column-gap: ${({ theme }) => theme.space.lg};
+  row-gap: ${({ theme }) => theme.space.xs};
 `;
 
 const Toggle = styled.label.attrs({ className: "hours-editor__toggle" })`
@@ -52,6 +43,7 @@ const Toggle = styled.label.attrs({ className: "hours-editor__toggle" })`
   align-items: center;
   gap: ${({ theme }) => theme.space.sm};
   min-height: 44px; /* comfortable touch target */
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
 `;
@@ -66,20 +58,31 @@ const Checkbox = styled.input.attrs({ type: "checkbox", className: "hours-editor
 const Times = styled.div.attrs({ className: "hours-editor__times" })`
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: ${({ theme }) => theme.space.xs};
+  flex-basis: 100%;
+
+  ${({ theme }) => theme.media.md} {
+    flex-basis: auto;
+  }
 `;
 
 const TimeRow = styled.div.attrs({ className: "hours-editor__time-row" })`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.space.sm};
-  max-width: 340px;
+  width: 100%;
+
+  ${({ theme }) => theme.media.md} {
+    width: auto;
+  }
 `;
 
 const TimeInput = styled.input.attrs({ type: "time", className: "hours-editor__time" })<{
   $invalid: boolean;
 }>`
   ${controlStyles}
+  flex: 1;
   min-width: 0;
   padding-inline: ${({ theme }) => theme.space.sm}; /* room for "09:00 a.m." on small phones */
 
@@ -90,14 +93,22 @@ const TimeInput = styled.input.attrs({ type: "time", className: "hours-editor__t
   }
 
   ${({ theme }) => theme.media.md} {
+    flex: none;
+    width: 148px;
+
     &::-webkit-calendar-picker-indicator {
       display: block;
     }
   }
 `;
 
-const Separator = styled.span.attrs({ className: "hours-editor__separator" })`
-  color: ${({ theme }) => theme.colors.muted};
+// Short line joining the opening and closing time.
+const Connector = styled.span.attrs({ className: "hours-editor__connector" })`
+  flex-shrink: 0;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: ${({ theme }) => theme.colors.muted};
 `;
 
 const WeekError = styled(FieldError).attrs({ className: "hours-editor__error" })`
@@ -151,7 +162,7 @@ export default function HoursEditor({
                       onChange={(event) => update({ from: event.target.value })}
                       $invalid={Boolean(dayError)}
                     />
-                    <Separator>a</Separator>
+                    <Connector aria-hidden="true" />
                     <TimeInput
                       aria-label={`${label}, cierra`}
                       value={dayHours.to}
