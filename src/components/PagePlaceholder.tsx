@@ -2,19 +2,10 @@
 
 import styled from "styled-components";
 
-const Wrapper = styled.main.attrs({ className: "page-placeholder" })`
+const Wrapper = styled.div.attrs({ className: "page-placeholder" })`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
-  padding: ${({ theme }) => theme.layout.pagePadding.base};
-
-  ${({ theme }) => theme.media.md} {
-    padding: ${({ theme }) => theme.layout.pagePadding.md};
-  }
-
-  ${({ theme }) => theme.media.lg} {
-    padding: ${({ theme }) => theme.layout.pagePadding.lg};
-  }
 `;
 
 const Title = styled.h1.attrs({ className: "page-placeholder__title" })`
