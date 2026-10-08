@@ -36,10 +36,8 @@ const Subtitle = styled.p.attrs({ className: "landing-actions__subtitle" })`
 // Entry point to the app: pick how you use PIK, then see that flow and start it.
 export default function LandingActions() {
   const baseId = useId();
-  const { role, startSession } = useSession();
-  // The tab the person clicked; until then, the role they picked before, or clients.
-  const [pickedId, setPickedId] = useState<Audience["id"] | null>(null);
-  const selectedId = pickedId ?? role ?? "client";
+  const { startSession } = useSession();
+  const [selectedId, setSelectedId] = useState<Audience["id"]>("client");
   const selected = AUDIENCES.find((audience) => audience.id === selectedId) ?? AUDIENCES[0];
   const tabId = (id: Audience["id"]) => `${baseId}-tab-${id}`;
   const panelId = `${baseId}-panel`;
@@ -55,7 +53,7 @@ export default function LandingActions() {
       <AudienceSwitch
         audiences={AUDIENCES}
         selectedId={selected.id}
-        onSelect={setPickedId}
+        onSelect={setSelectedId}
         tabId={tabId}
         panelId={panelId}
       />
