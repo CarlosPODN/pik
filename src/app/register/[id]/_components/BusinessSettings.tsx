@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import BackLink from "@/components/buttons/BackLink/BackLink";
 import ButtonLink from "@/components/buttons/ButtonLink";
 import EmptyState from "@/components/feedback/EmptyState/EmptyState";
-import Icon from "@/components/Icon/Icon";
 import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
@@ -44,10 +43,7 @@ export default function BusinessSettings({ id }: { id: string }) {
 
   return (
     <BusinessSettingsWrapper className="business-settings">
-      <Link className="business-settings__back" href="/register">
-        <Icon name="arrow-left" />
-        Mis negocios
-      </Link>
+      <BackLink label="Mis negocios" />
       <h1 className="business-settings__title">{business.name}</h1>
       {/* key: a different business starts the form from its own values */}
       <BusinessForm
