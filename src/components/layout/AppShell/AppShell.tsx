@@ -6,10 +6,34 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import TopBar from "./components/TopBar/TopBar";
 import { AppShellWrapper } from "./AppShell.styles";
 
-// Mobile: sticky top bar + off-canvas drawer. Desktop (lg): static sidebar.
-// The breakpoint switch is pure CSS, so the server-rendered HTML is correct on every screen size.
-// role is the session's role (null while logged out); it picks the sidebar's items and card.
-export default function AppShell({ role, children }: { role: Role | null; children: ReactNode }) {
+export interface AppShellProps {
+  /**
+   * The session's role, `null` while logged out. It picks the sidebar's nav items and whether
+   * the "Usas PIK como…" card shows.
+   */
+  role: Role | null;
+  /** The page, rendered in `<main>`. */
+  children: ReactNode;
+}
+
+/**
+ * The app frame around every page: **phones** get a sticky top bar and an off-canvas drawer;
+ * **desktop** (`lg`) gets a static sidebar. The breakpoint switch is pure CSS, so the
+ * server-rendered HTML is right on every screen size.
+ *
+ * ```tsx
+ * // app/_components/SessionAppShell.tsx
+ * <AppShell role={session?.role ?? null}>{children}</AppShell>
+ * ```
+ *
+ * **Drawer**: opening it moves focus to its close button and locks page scroll; Escape or the
+ * backdrop closes it, and focus returns to the menu button.
+ *
+ * **Navigation**: add entries in `navItems.ts`.
+ *
+ * **Styling**: BEM block `app-shell` (`app-shell__content` is the `<main>`).
+ */
+export default function AppShell({ role, children }: AppShellProps) {
   const drawerId = useId();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);

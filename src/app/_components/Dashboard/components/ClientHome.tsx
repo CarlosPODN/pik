@@ -9,7 +9,15 @@ import { useAppointments } from "@/hooks/useAppointments";
 import { ROLE_LABELS } from "@/lib/constants";
 import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
-// Client home: their booked appointments, soonest first.
+/**
+ * The **client** home: their booked appointments, soonest first, with a button to book another.
+ *
+ * ```tsx
+ * <ClientHome />
+ * ```
+ *
+ * **Data**: appointments come from localStorage (`useAppointments`).
+ */
 export default function ClientHome() {
   const { appointments } = useAppointments();
 

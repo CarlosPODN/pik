@@ -28,15 +28,33 @@ const ICONS = {
 
 export type IconName = keyof typeof ICONS;
 
-interface IconProps extends Omit<SVGProps<SVGSVGElement>, "children"> {
+/** Every other `<svg>` prop is passed through (`className`, `style`, …). */
+export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "children"> {
+  /** Which icon, by its kebab-case name: `"arrow-left"`, `"calendar"`, `"store"`, … */
   name: IconName;
+  /** Width and height in px. Default `20`. */
   size?: number;
-  // Accessible name, for icons that carry meaning on their own. Without it the icon is
-  // decorative and hidden from screen readers (the usual case: next to visible text).
+  /**
+   * Accessible name, for icons that carry meaning on their own (an icon-only button). Without
+   * it the icon is decorative and hidden from screen readers: the usual case, next to text.
+   */
   label?: string;
 }
 
-// Stroke icons drawn with currentColor, so they take the surrounding text color from the theme.
+/**
+ * Stroke icons drawn with `currentColor`, so they take the surrounding text color from the
+ * theme.
+ *
+ * ```tsx
+ * <Icon name="arrow-right" />
+ * <Icon name="close" label="Cerrar menú" />
+ * ```
+ *
+ * **Adding an icon**: create its file in `./icons` (only the shapes, drawn on a 20×20 grid) and
+ * register it in `ICONS` under a kebab-case name.
+ *
+ * **Styling**: BEM block `icon`, plus `icon--<name>` (e.g. `icon--store`).
+ */
 export default function Icon({ name, size = 20, label, className, ...props }: IconProps) {
   const Shapes = ICONS[name];
 

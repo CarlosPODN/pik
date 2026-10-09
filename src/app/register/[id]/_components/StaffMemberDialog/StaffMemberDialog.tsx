@@ -27,9 +27,37 @@ function validate(name: string, role: StaffRole | "", hasRoles: boolean): Errors
   return errors;
 }
 
-// Edits one staff member's name and role in a modal. Remount it (new key) on every open so it
-// starts from the saved values. The roles to pick from depend on the business category; a role
-// that doesn't fit the current category has to be picked again.
+export interface StaffMemberDialogProps {
+  /** The staff member to edit, with their saved values. */
+  member: StaffMember;
+  /** The saved business category, which sets the role options. */
+  category: BusinessCategory | null;
+  /** Whether the dialog is shown. */
+  open: boolean;
+  /** Closes the dialog: Cancelar, Escape, the backdrop, or after a save. */
+  onClose: () => void;
+  /** Saves the edited member. The dialog closes itself after. */
+  onSave: (member: StaffMember) => void;
+  /** Removes the member, after "¿Eliminar empleado?" is confirmed in place. */
+  onRemove: () => void;
+}
+
+/**
+ * Edits one staff member's name and role in a modal, with a row to remove them.
+ *
+ * ```tsx
+ * <StaffMemberDialog key={`${member.id}-${openCount}`} member={member} category={category}
+ *   open={open} onClose={close} onSave={save} onRemove={remove} />
+ * ```
+ *
+ * **Remount on every open** (new `key`) so it starts from the saved values.
+ *
+ * **Roles**: the options depend on the business category. A role that doesn't fit the current
+ * category has to be picked again; with no saved category, the select is disabled and the error
+ * says to pick one in Ajustes first.
+ *
+ * **Styling**: BEM block `staff-member-dialog`, inside a `Dialog`.
+ */
 export default function StaffMemberDialog({
   member,
   category,
@@ -37,15 +65,7 @@ export default function StaffMemberDialog({
   onClose,
   onSave,
   onRemove,
-}: {
-  member: StaffMember;
-  // The saved business category, which sets the role options.
-  category: BusinessCategory | null;
-  open: boolean;
-  onClose: () => void;
-  onSave: (member: StaffMember) => void;
-  onRemove: () => void;
-}) {
+}: StaffMemberDialogProps) {
   const [name, setName] = useState(member.name);
   const options = roleOptions(category);
   const [role, setRole] = useState<StaffRole | "">(

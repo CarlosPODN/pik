@@ -3,22 +3,47 @@
 import type { ReactNode } from "react";
 import { PageLayoutWrapper } from "./PageLayout.styles";
 
-// Page frame for list pages (the role homes, the business list): the title with its subtitle
-// and action, then the section (named for screen readers by sectionLabel, with no visible heading).
-// Wrap the accent words of the title in <span className="page-layout__accent">.
+export interface PageLayoutProps {
+  /**
+   * The page's `<h1>`. To color a word or two with the brand accent, wrap them in
+   * `<span className="page-layout__accent">`.
+   */
+  title: ReactNode;
+  /** Shown at the end of the header row from `md` (under the title on phones), e.g. a button. */
+  action: ReactNode;
+  /** Subtitle under the title. */
+  description: string;
+  /** Accessible name of the content section, which has no visible heading. */
+  sectionLabel: string;
+  /** The page content. */
+  children: ReactNode;
+}
+
+/**
+ * Page frame for **list pages** (the role homes, the business list): a header with the title,
+ * its subtitle and an action, then the content section.
+ *
+ * ```tsx
+ * <PageLayout
+ *   title="Registra tu negocio."
+ *   description="Aquí puedes agregar tus negocios y editar su información."
+ *   action={<AddBusinessButton size="sm" />}
+ *   sectionLabel="Tus negocios"
+ * >
+ *   <Panel heading="Tus negocios">…</Panel>
+ * </PageLayout>
+ * ```
+ *
+ * **Styling**: BEM block `page-layout`; `page-layout__accent` is the one class meant for use
+ * inside `title`.
+ */
 export default function PageLayout({
   title,
   action,
   description,
   sectionLabel,
   children,
-}: {
-  title: ReactNode;
-  action: ReactNode;
-  description: string;
-  sectionLabel: string;
-  children: ReactNode;
-}) {
+}: PageLayoutProps) {
   return (
     <PageLayoutWrapper className="page-layout">
       <header className="page-layout__header">

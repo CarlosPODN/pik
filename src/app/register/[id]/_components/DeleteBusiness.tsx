@@ -8,17 +8,32 @@ import DeleteRow from "./DeleteRow/DeleteRow";
 const pendingText = (count: number) =>
   count === 1 ? "1 cita pendiente" : `${count} citas pendientes`;
 
-// "Eliminar negocio" row with a trash button. With pending appointments the button stays
-// clickable but explains why it can't delete; otherwise it asks for confirmation first.
+export interface DeleteBusinessProps {
+  /** Shown in the dialogs and the trash button's accessible name. */
+  businessName: string;
+  /** Appointments still to come at this business. More than 0 blocks the delete. */
+  pendingAppointments: number;
+  /** Deletes the business. Called only after the person confirms. */
+  onDelete: () => void;
+}
+
+/**
+ * The "Eliminar negocio" row in a business's settings, with a trash button.
+ *
+ * ```tsx
+ * <DeleteBusiness businessName={business.name} pendingAppointments={pending}
+ *   onDelete={remove} />
+ * ```
+ *
+ * **Flow**: with no pending appointments, the button asks for confirmation in a dialog first.
+ * With pending ones, it stays clickable but opens a dialog explaining why it can't delete yet,
+ * and the row's hint says how many there are.
+ */
 export default function DeleteBusiness({
   businessName,
   pendingAppointments,
   onDelete,
-}: {
-  businessName: string;
-  pendingAppointments: number;
-  onDelete: () => void;
-}) {
+}: DeleteBusinessProps) {
   const [dialog, setDialog] = useState<"confirm" | "blocked" | null>(null);
   const close = () => setDialog(null);
   const blocked = pendingAppointments > 0;

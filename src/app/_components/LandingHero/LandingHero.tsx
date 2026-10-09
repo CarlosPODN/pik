@@ -11,7 +11,16 @@ const HIGHLIGHTS = [
   "Servicios, precios y staff a la vista",
 ];
 
-// Explains what PIK is: who it's for and what it solves.
+/**
+ * The landing's opening section: what PIK is, who it's for (salons, barbershops, spas) and what
+ * it solves, with three highlights. Holds the page's `<h1>`.
+ *
+ * ```tsx
+ * <LandingHero />
+ * ```
+ *
+ * **Styling**: BEM block `landing-hero`.
+ */
 export default function LandingHero() {
   return (
     <LandingHeroWrapper className="landing-hero" aria-labelledby="landing-hero-title">

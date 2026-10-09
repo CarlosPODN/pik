@@ -15,9 +15,28 @@ import DeleteBusiness from "./DeleteBusiness";
 import StaffCard from "./StaffCard/StaffCard";
 import { BusinessSettingsWrapper } from "./BusinessSettings.styles";
 
-// Settings for one business. The page reads the id on the server; the business itself lives in
-// localStorage, so this waits for it before deciding it doesn't exist.
-export default function BusinessSettings({ id }: { id: string }) {
+export interface BusinessSettingsProps {
+  /** The business's id, read from the URL by the page on the server. */
+  id: string;
+}
+
+/**
+ * The settings page for one business: a back link, its name, the settings form, the staff card
+ * and the delete action.
+ *
+ * ```tsx
+ * // app/register/[id]/page.tsx (Server Component)
+ * const { id } = await params;
+ * return <BusinessSettings id={id} />;
+ * ```
+ *
+ * **Loading**: the business lives in localStorage, so this shows the gray skeleton until it's
+ * read, then the form or "No encontramos este negocio". After a delete it keeps the skeleton up
+ * while leaving, instead of flashing "not found".
+ *
+ * **Styling**: BEM block `business-settings`.
+ */
+export default function BusinessSettings({ id }: BusinessSettingsProps) {
   const hydrated = useHydrated();
   const router = useRouter();
   const { businesses, updateBusiness, deleteBusiness } = useBusinesses();

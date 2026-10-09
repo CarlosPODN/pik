@@ -6,7 +6,21 @@ import AudienceSwitch from "./components/AudienceSwitch/AudienceSwitch";
 import FlowPanel from "./components/FlowPanel/FlowPanel";
 import { LandingActionsWrapper } from "./LandingActions.styles";
 
-// Entry point to the app: pick how you use PIK, then see that flow and start it.
+/**
+ * The landing's entry point to the app: pick how you use PIK (client or business), see that
+ * flow, and start it. Clients are selected first.
+ *
+ * ```tsx
+ * <LandingPage>
+ *   <LandingHero />
+ *   <LandingActions />
+ * </LandingPage>
+ * ```
+ *
+ * **Content**: the audiences, their steps and buttons live in `audiences.ts`.
+ *
+ * **Styling**: BEM block `landing-actions`.
+ */
 export default function LandingActions() {
   const baseId = useId();
   const [selectedId, setSelectedId] = useState<Audience["id"]>("client");

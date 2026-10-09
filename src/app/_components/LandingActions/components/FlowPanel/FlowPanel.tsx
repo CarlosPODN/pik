@@ -6,16 +6,29 @@ import { startSession } from "@/lib/sessionActions";
 import type { Audience } from "../../audiences";
 import { FlowPanelWrapper } from "./FlowPanel.styles";
 
-// The selected audience's flow: what it's for, its steps and the button that starts it.
-export default function FlowPanel({
-  audience,
-  id,
-  labelledBy,
-}: {
+export interface FlowPanelProps {
+  /** The selected audience, whose flow to show. */
   audience: Audience;
+  /** The panel's element id, which the tabs point at. */
   id: string;
+  /** The selected tab's element id, the panel's accessible name. */
   labelledBy: string;
-}) {
+}
+
+/**
+ * The selected audience's flow, as the tab panel under `AudienceSwitch`: what it's for, its
+ * numbered steps, and the button that starts it.
+ *
+ * ```tsx
+ * <FlowPanel audience={selected} id={panelId} labelledBy={tabId(selected.id)} />
+ * ```
+ *
+ * **Starting**: the button submits a form to the `startSession` server action, which saves the
+ * audience as the session's role and opens that role's page (`ROLE_HOME`).
+ *
+ * **Styling**: BEM block `flow-panel`.
+ */
+export default function FlowPanel({ audience, id, labelledBy }: FlowPanelProps) {
   return (
     <FlowPanelWrapper className="flow-panel" role="tabpanel" id={id} aria-labelledby={labelledBy}>
       <div className="flow-panel__header">
