@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useSession } from "@/hooks/useSession";
-import { ROLE_LABELS } from "@/lib/session";
+import { ROLE_LABELS } from "@/lib/constants";
 import { SessionCardWrapper } from "./SessionCard.styles";
 
 // Shows which side of PIK the person picked and lets them go back and pick again.

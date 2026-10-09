@@ -6,7 +6,7 @@ import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
 import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
-import { ROLE_LABELS } from "@/lib/session";
+import { ROLE_LABELS } from "@/lib/constants";
 import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
 // Client home: their booked appointments, soonest first.

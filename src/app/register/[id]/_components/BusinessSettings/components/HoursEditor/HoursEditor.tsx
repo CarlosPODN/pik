@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { WEEKDAYS } from "@/lib/businesses";
+import { WEEKDAYS } from "@/lib/constants";
 import type { DayHours, Weekday, WeeklyHours } from "@/types/business";
 import { HoursEditorWrapper } from "./HoursEditor.styles";
 

@@ -1,5 +1,5 @@
 // Formatting for UI text, in Spanish (Mexico) and Mexican pesos.
-const LOCALE = "es-MX";
+import { LOCALE } from "./constants";
 
 const priceFormat = new Intl.NumberFormat(LOCALE, {
   style: "currency",

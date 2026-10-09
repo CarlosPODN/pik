@@ -8,7 +8,7 @@ import Icon from "@/components/Icon/Icon";
 import SelectField from "@/components/fields/SelectField";
 import TextField from "@/components/fields/TextField";
 import { useLeaveGuard } from "@/hooks/useLeaveGuard";
-import { BUSINESS_CATEGORIES } from "@/lib/businesses";
+import { BUSINESS_CATEGORIES } from "@/lib/constants";
 import type { Business, DayHours, Weekday } from "@/types/business";
 import {
   dayErrorKey,

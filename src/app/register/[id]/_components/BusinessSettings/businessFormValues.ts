@@ -1,4 +1,4 @@
-import { WEEKDAYS } from "@/lib/businesses";
+import { WEEKDAYS } from "@/lib/constants";
 import { formatPhone } from "@/lib/format";
 import type { Business, BusinessCategory, Weekday, WeeklyHours } from "@/types/business";
 
