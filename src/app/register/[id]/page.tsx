@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import BusinessSettings from "./_components/BusinessSettings/BusinessSettings";
 
 export const metadata: Metadata = {
   title: "Configuración del negocio · PIK",
 };
 
-// The id is only known at request time, so it's read inside Suspense: the page shell
-// prerenders and the settings stream in. The business itself lives in localStorage, so the
-// client component loads it.
-export default function BusinessSettingsPage({ params }: PageProps<"/register/[id]">) {
-  return (
-    <Suspense fallback={<PageSkeleton tone="neutral" />}>
-      {params.then(({ id }) => (
-        <BusinessSettings id={id} />
-      ))}
-    </Suspense>
-  );
+// The id is only known at request time, so awaiting it suspends; loading.tsx is the Suspense
+// boundary that lets the page shell prerender while the settings stream in. The business
+// itself lives in localStorage, so the client component loads it.
+export default async function BusinessSettingsPage({ params }: PageProps<"/register/[id]">) {
+  const { id } = await params;
+
+  return <BusinessSettings id={id} />;
 }
