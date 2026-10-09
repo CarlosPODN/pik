@@ -11,15 +11,30 @@ import {
 import type { Appointment } from "@/types/appointment";
 import { AppointmentCardWrapper } from "./AppointmentCard.styles";
 
-// One appointment: when, with whom and how much. Clients see where it is; businesses see who
-// booked it.
-export default function AppointmentCard({
-  appointment,
-  perspective,
-}: {
+export interface AppointmentCardProps {
+  /** The appointment to show. */
   appointment: Appointment;
+  /**
+   * Who's looking: `"client"` shows the business it's at; `"business"` shows the client who
+   * booked it.
+   */
   perspective: "client" | "business";
-}) {
+}
+
+/**
+ * One appointment as a card: the date badge, the service, where or who, the staff member, the
+ * time and duration, and the price.
+ *
+ * ```tsx
+ * <AppointmentCard appointment={appointment} perspective="client" />
+ * ```
+ *
+ * **Formatting**: dates, times, durations and prices come from `src/lib/format.ts` (Spanish,
+ * Mexico; Mexican pesos).
+ *
+ * **Styling**: BEM block `appointment-card`.
+ */
+export default function AppointmentCard({ appointment, perspective }: AppointmentCardProps) {
   const startsAt = new Date(appointment.startsAt);
 
   return (

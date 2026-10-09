@@ -5,19 +5,32 @@ import { WEEKDAYS } from "@/lib/constants";
 import type { DayHours, Weekday, WeeklyHours } from "@/types/business";
 import { HoursEditorWrapper } from "./HoursEditor.styles";
 
-// One row per weekday: a checkbox for open/closed and, when open, its opening and closing time.
-export default function HoursEditor({
-  hours,
-  onChange,
-  error,
-  dayErrors,
-}: {
+export interface HoursEditorProps {
+  /** The week's hours, Monday to Sunday. */
   hours: WeeklyHours;
+  /** Called with a day and its new hours when its checkbox or a time changes. */
   onChange: (day: Weekday, value: DayHours) => void;
-  // For the week as a whole (no day open).
+  /** Error for the week as a whole, e.g. no day open. The first checkbox carries it for focus. */
   error?: string;
+  /** Errors for single days, e.g. closing before opening. */
   dayErrors: Partial<Record<Weekday, string>>;
-}) {
+}
+
+/**
+ * The weekly opening hours, as a `<fieldset>` with one row per weekday: a checkbox for open or
+ * closed and, when open, its opening and closing time.
+ *
+ * ```tsx
+ * <HoursEditor hours={values.hours} onChange={updateDay} error={errors.hours}
+ *   dayErrors={dayErrors} />
+ * ```
+ *
+ * **Layout**: on phones the times sit on their own line under the day; from `md`, on the same
+ * row. Closed days show "Cerrado".
+ *
+ * **Styling**: BEM block `hours-editor`, modifier `hours-editor__day--closed`.
+ */
+export default function HoursEditor({ hours, onChange, error, dayErrors }: HoursEditorProps) {
   return (
     <HoursEditorWrapper
       className="hours-editor"

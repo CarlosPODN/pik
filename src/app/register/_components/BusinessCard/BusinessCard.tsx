@@ -5,7 +5,25 @@ import { categoryLabel } from "@/lib/businesses";
 import type { Business } from "@/types/business";
 import { BusinessCardWrapper } from "./BusinessCard.styles";
 
-export default function BusinessCard({ business }: { business: Business }) {
+export interface BusinessCardProps {
+  /** The business to show. */
+  business: Business;
+}
+
+/**
+ * One business in the `/register` list: its name, category and a "Sin editar" badge until it's
+ * first saved. The whole card links to its settings at `/register/[id]`.
+ *
+ * ```tsx
+ * <li key={business.id}>
+ *   <BusinessCard business={business} />
+ * </li>
+ * ```
+ *
+ * **Styling**: BEM block `business-card`, styled by `BusinessCardWrapper` (a styled Next.js
+ * `Link`).
+ */
+export default function BusinessCard({ business }: BusinessCardProps) {
   const category = categoryLabel(business.category);
 
   return (

@@ -5,16 +5,27 @@ import { endSession } from "@/lib/sessionActions";
 import type { Role } from "@/types/session";
 import { SessionCardWrapper } from "./SessionCard.styles";
 
-// Shows which side of PIK the person picked and lets them go back and pick again: the form
-// clears the session cookie on the server, which then sends them to the landing.
-// Renders nothing while logged out.
-export default function SessionCard({
-  role,
-  onNavigate,
-}: {
+export interface SessionCardProps {
+  /** The session's role; `null` while logged out, when the card renders nothing. */
   role: Role | null;
+  /** Runs when "Cambiar de perfil" is clicked, so the drawer can close. */
   onNavigate: () => void;
-}) {
+}
+
+/**
+ * The sidebar card that says which side of PIK the person picked ("Usas PIK como
+ * **Profesional**") with a "Cambiar de perfil" button to pick again.
+ *
+ * ```tsx
+ * <SessionCard role={role} onNavigate={closeDrawer} />
+ * ```
+ *
+ * **Changing profile**: the button submits a form to the `endSession` server action, which
+ * clears the session cookie and redirects to the landing.
+ *
+ * **Styling**: BEM block `session-card`.
+ */
+export default function SessionCard({ role, onNavigate }: SessionCardProps) {
   if (!role) return null;
 
   return (

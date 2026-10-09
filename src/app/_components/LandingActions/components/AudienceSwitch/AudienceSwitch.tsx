@@ -5,21 +5,39 @@ import { useRef, type KeyboardEvent } from "react";
 import type { Audience } from "../../audiences";
 import { AudienceSwitchWrapper } from "./AudienceSwitch.styles";
 
-// Tabs that switch between the client and business views (WAI-ARIA tabs pattern: arrow keys,
-// Home and End move between tabs, and only the selected tab is in the tab order).
+export interface AudienceSwitchProps {
+  /** The tabs, in order (from `AUDIENCES`). */
+  audiences: Audience[];
+  /** The selected tab's audience. */
+  selectedId: Audience["id"];
+  /** Called with the audience to select, on click or arrow keys. */
+  onSelect: (id: Audience["id"]) => void;
+  /** Builds each tab's element id, which the panel uses for `aria-labelledby`. */
+  tabId: (id: Audience["id"]) => string;
+  /** The panel's element id, for each tab's `aria-controls`. */
+  panelId: string;
+}
+
+/**
+ * Tabs that switch the landing between the client and business views.
+ *
+ * ```tsx
+ * <AudienceSwitch audiences={AUDIENCES} selectedId={selected.id} onSelect={setSelectedId}
+ *   tabId={tabId} panelId={panelId} />
+ * ```
+ *
+ * **Accessibility**: the WAI-ARIA tabs pattern. Arrow keys, Home and End move between tabs (and
+ * select them), and only the selected tab is in the tab order.
+ *
+ * **Styling**: BEM block `audience-switch`, with `audience-switch__tab--selected`.
+ */
 export default function AudienceSwitch({
   audiences,
   selectedId,
   onSelect,
   tabId,
   panelId,
-}: {
-  audiences: Audience[];
-  selectedId: Audience["id"];
-  onSelect: (id: Audience["id"]) => void;
-  tabId: (id: Audience["id"]) => string;
-  panelId: string;
-}) {
+}: AudienceSwitchProps) {
   const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

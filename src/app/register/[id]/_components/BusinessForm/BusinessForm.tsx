@@ -24,22 +24,43 @@ import { BusinessFormWrapper } from "./BusinessForm.styles";
 
 type BusinessChanges = Pick<Business, "name" | "category" | "phone" | "location" | "hours">;
 
-// The business settings in two cards (general info; location and hours) with one save for
-// both. Validates on submit, then live as the person fixes each field. A successful save marks
-// the business as touched.
+export interface BusinessFormProps {
+  /** The saved business, the form's starting values. Remount (`key`) for another business. */
+  business: Business;
+  /** Saves the validated changes. Marks the business as touched. */
+  onSave: (id: string, changes: BusinessChanges) => void;
+  /** Rendered in its own full-width row under the phone (`DeleteBusiness`). */
+  deleteAction: ReactNode;
+  /** Rendered after the form's cards, above the save buttons (`StaffCard`); it saves on its own. */
+  staffSection: ReactNode;
+}
+
+/**
+ * The business settings form, in two cards (general info; location and hours) with one save
+ * for both.
+ *
+ * ```tsx
+ * <BusinessForm key={business.id} business={business} onSave={updateBusiness}
+ *   staffSection={<StaffCard … />} deleteAction={<DeleteBusiness … />} />
+ * ```
+ *
+ * **Validation**: on submit, then live as the person fixes each field; focus moves to the first
+ * invalid field. "Guardamos los cambios." shows after a save.
+ *
+ * **Unsaved changes**: `useLeaveGuard` holds in-app link clicks behind a "Tienes cambios sin
+ * guardar" dialog and arms the browser's reload/close warning.
+ *
+ * **Saving from outside**: the save buttons sit after `staffSection`, outside the `<form>`
+ * (forms can't nest), and submit it through `form={formId}`.
+ *
+ * **Styling**: BEM block `business-form`.
+ */
 export default function BusinessForm({
   business,
   onSave,
   deleteAction,
   staffSection,
-}: {
-  business: Business;
-  onSave: (id: string, changes: BusinessChanges) => void;
-  // Rendered in its own full-width row under the phone.
-  deleteAction: ReactNode;
-  // Rendered after the form's cards, above the save buttons; it saves on its own.
-  staffSection: ReactNode;
-}) {
+}: BusinessFormProps) {
   const formId = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<BusinessFormValues>(() => toFormValues(business));

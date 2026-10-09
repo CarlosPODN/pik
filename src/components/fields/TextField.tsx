@@ -3,11 +3,35 @@
 import { useId, type InputHTMLAttributes } from "react";
 import { FieldWrapper } from "./Field.styles";
 
-export default function TextField({
-  label,
-  error,
-  ...inputProps
-}: { label: string; error?: string } & Omit<InputHTMLAttributes<HTMLInputElement>, "id">) {
+/** Every `<input>` attribute except `id` (it's generated) is passed through. */
+export type TextFieldProps = {
+  /** Visible label, in Spanish. Linked to the input, so it's also its accessible name. */
+  label: string;
+  /** Error message under the input. When set, the input is marked `aria-invalid`. */
+  error?: string;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "id">;
+
+/**
+ * A labeled text input with its error message.
+ *
+ * ```tsx
+ * <TextField
+ *   label="Teléfono de contacto"
+ *   type="tel"
+ *   autoComplete="tel"
+ *   value={phone}
+ *   onChange={(event) => setPhone(event.target.value)}
+ *   error={errors.phone}
+ * />
+ * ```
+ *
+ * **Accessibility**: the label points at the input, and the error is linked with
+ * `aria-describedby`, so screen readers read it with the field.
+ *
+ * **Styling**: BEM block `field` (`field__label`, `field__control`, `field__error`), from
+ * `FieldWrapper` in `Field.styles.ts`, shared with `SelectField`.
+ */
+export default function TextField({ label, error, ...inputProps }: TextFieldProps) {
   const id = useId();
   const errorId = `${id}-error`;
 

@@ -11,8 +11,17 @@ import { useBusinesses } from "@/hooks/useBusinesses";
 import { ROLE_LABELS } from "@/lib/constants";
 import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
-// Business home: the upcoming appointments across all their businesses, soonest first. Managing
-// the businesses themselves happens at /register.
+/**
+ * The **business** home: upcoming appointments across all their businesses, soonest first,
+ * with a link to "Mis negocios". Managing the businesses themselves happens at `/register`.
+ *
+ * ```tsx
+ * <BusinessHome />
+ * ```
+ *
+ * **Data**: appointments and businesses come from localStorage (`useAppointments`,
+ * `useBusinesses`). "Upcoming" means starting after the page opened.
+ */
 export default function BusinessHome() {
   const { appointments } = useAppointments();
   const { businesses } = useBusinesses();

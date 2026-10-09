@@ -11,19 +11,34 @@ import type { Role } from "@/types/session";
 import { NAV_ITEMS } from "../../navItems";
 import { SidebarWrapper } from "./Sidebar.styles";
 
-export default function Sidebar({
-  id,
-  role,
-  open,
-  onClose,
-  closeButtonRef,
-}: {
+export interface SidebarProps {
+  /** The panel's id, which the top bar's menu button points at (`aria-controls`). */
   id: string;
+  /** The session's role, `null` while logged out. Picks the nav items and the session card. */
   role: Role | null;
+  /** Whether the drawer is open on phones. Ignored on desktop, where it's always shown. */
   open: boolean;
+  /** Closes the drawer: the close button, the backdrop, and any link or logo click. */
   onClose: () => void;
+  /** Ref to the close button, which `AppShell` focuses when the drawer opens. */
   closeButtonRef: Ref<HTMLButtonElement>;
-}) {
+}
+
+/**
+ * The navigation panel: logo, nav links, and the session card at the bottom. A drawer over a
+ * backdrop on phones, a static column on desktop (`lg`).
+ *
+ * ```tsx
+ * <Sidebar id={drawerId} role={role} open={drawerOpen} onClose={closeDrawer}
+ *   closeButtonRef={closeButtonRef} />
+ * ```
+ *
+ * **Nav items**: logged out, only items without a `role` show (Inicio); once a role is picked,
+ * its items show too. Items live in `navItems.ts`.
+ *
+ * **Styling**: BEM block `sidebar`, modifier `sidebar--open`.
+ */
+export default function Sidebar({ id, role, open, onClose, closeButtonRef }: SidebarProps) {
   // Logged out, only the items without a role show (Inicio); after picking a role, its items too.
   const navItems = NAV_ITEMS.filter((item) => !item.role || item.role === role);
 

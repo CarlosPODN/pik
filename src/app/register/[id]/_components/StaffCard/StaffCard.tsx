@@ -10,19 +10,35 @@ import type { BusinessCategory, StaffMember } from "@/types/business";
 import StaffMemberDialog from "../StaffMemberDialog/StaffMemberDialog";
 import { StaffCardWrapper } from "./StaffCard.styles";
 
-// The business's staff. "Agregar empleado" adds a placeholder ("Empleado 2") and opens it in a
-// modal to edit its name and role; tapping a row opens the same modal. Changes save right away.
-// While the newest member is still unedited, the add button explains that instead of adding.
-export default function StaffCard({
-  businessId,
-  category,
-  staff,
-}: {
+export interface StaffCardProps {
+  /** The business whose staff this is. */
   businessId: string;
-  // The saved business category, which sets the role options.
+  /** The saved business category, which sets the role options. */
   category: BusinessCategory | null;
+  /** The staff members, in the order they were added. */
   staff: StaffMember[];
-}) {
+}
+
+/**
+ * The business's staff, as a card in the settings: one row per person with their role and a
+ * "Sin editar" badge until edited.
+ *
+ * ```tsx
+ * <StaffCard businessId={business.id} category={business.category} staff={business.staff} />
+ * ```
+ *
+ * **Editing**: "Agregar empleado" adds a placeholder ("Empleado 2") and opens it in
+ * `StaffMemberDialog` to edit its name and role; tapping a row opens the same dialog. Changes
+ * save right away, separately from the settings form.
+ *
+ * **One at a time**: while the newest member is still unedited, the add button opens a dialog
+ * explaining that instead of adding.
+ *
+ * **Placement**: it renders outside the settings `<form>`, because forms can't nest.
+ *
+ * **Styling**: BEM block `staff-card`; `StaffCardWrapper` wraps `FormCard`.
+ */
+export default function StaffCard({ businessId, category, staff }: StaffCardProps) {
   const { addStaffMember, updateStaffMember, removeStaffMember } = useBusinesses();
   // Kept after closing, so the modal closes in place (and focus returns) before it changes.
   const [editingId, setEditingId] = useState<string | null>(null);
