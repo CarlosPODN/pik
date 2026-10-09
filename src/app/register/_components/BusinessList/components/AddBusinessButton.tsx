@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Button from "@/components/Button";
-import ButtonLink from "@/components/ButtonLink";
-import type { ButtonSize } from "@/components/buttonStyles";
-import Dialog from "@/components/Dialog";
+import Button from "@/components/buttons/Button/Button";
+import ButtonLink from "@/components/buttons/ButtonLink";
+import type { ButtonSize } from "@/components/buttons/Button/Button";
+import Dialog from "@/components/modals/Dialog/Dialog";
 import Icon from "@/components/Icon/Icon";
 import { useBusinesses } from "@/hooks/useBusinesses";
 
@@ -27,7 +27,7 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
 
   return (
     <>
-      <Button $size={size} onClick={add}>
+      <Button size={size} onClick={add}>
         <Icon name="plus" />
         Agregar negocio
       </Button>
@@ -37,11 +37,11 @@ export default function AddBusinessButton({ size = "md" }: { size?: ButtonSize }
         title="Primero edita tu último negocio"
         actions={
           <>
-            <Button $variant="secondary" $size="sm" onClick={() => setBlocked(false)}>
+            <Button variant="secondary" size="sm" onClick={() => setBlocked(false)}>
               Cerrar
             </Button>
             {untouched && (
-              <ButtonLink href={`/register/${untouched.id}`} $size="sm">
+              <ButtonLink href={`/register/${untouched.id}`} size="sm">
                 Editar ahora
               </ButtonLink>
             )}

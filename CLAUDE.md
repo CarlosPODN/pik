@@ -28,17 +28,24 @@ src/
 │   │   ├── page.tsx
 │   │   └── _components/    Components used only by this route (private folder, ignored by the router)
 │   └── api/                Route Handlers that return mock data
-├── components/             Shared UI used by more than one route (icons, buttons, inputs, stepper, AppShell)
+├── components/             Shared UI used by more than one route, grouped by kind:
+│   ├── buttons/            Button/ (Button + Button.styles), ButtonLink (renders ButtonWrapper)
+│   ├── fields/             Form controls: TextField, SelectField (both use the shared Field.styles.ts)
+│   ├── modals/             Dialog
+│   ├── layout/             AppShell, PageLayout, CardGrid, PagePlaceholder
+│   ├── feedback/           Empty, loading and status states: EmptyState, PageSkeleton
+│   └── Icon/               Icon and its icons/
 ├── hooks/                  Shared client hooks
 ├── lib/
 │   └── data/               Data access: the only code that reads src/mocks
 ├── mocks/                  Mock data as typed TypeScript modules
-├── types/                  Domain types (Business, Service, StaffMember, Appointment, ...)
+├── types/                  Domain types (Business, StaffMember, Appointment, Session, ...)
 └── styles/                 Theme and global styles
 ```
 
-- `src/app/` holds routing files only. A component used by a single route goes in that route's `_components/` folder (e.g. `app/register/_components/ServicesStep.tsx`). Folders starting with `_` are private: Next.js never turns them into routes.
-- Move a component up to `src/components/` as soon as a second route needs it. Never import from another route's `_components/`.
+- `src/app/` holds routing files only. A component used by a single route goes in that route's `_components/` folder (e.g. `app/register/_components/BusinessList/BusinessList.tsx`). Folders starting with `_` are private: Next.js never turns them into routes.
+- Move a component up to `src/components/<group>/` as soon as a second route needs it, in the group that matches what it is (a new kind of component gets a new group). Never import from another route's `_components/`.
+- App-wide providers (styled-components registry, `ThemeProvider`, global styles) live in `src/app/_components/Providers.tsx`, used only by the root layout.
 - A component with its own sub-components gets a folder, as described under Styling (`AppShell/AppShell.tsx` + `AppShell/components/`).
 - Pages and layouts are Server Components. They load data through `src/lib/data/` and pass it as props to client components.
 - Mock data lives in `src/mocks/` and is typed with `src/types/`. Only `src/lib/data/` imports from `src/mocks/`, so replacing the mocks with a real API later changes one folder.
@@ -103,27 +110,57 @@ When the task is done, push the branch and open a pull request into `main`.
 
 ## Styling
 
-- Colors, fonts and radii live in the theme at `src/styles/theme.ts`, provided app-wide by `ThemeProvider` in `src/components/Providers.tsx`.
+- Colors, fonts and radii live in the theme at `src/styles/theme.ts`, provided app-wide by `ThemeProvider` in `src/app/_components/Providers.tsx`.
 - Always read colors from the theme in styled components (`${({ theme }) => theme.colors.primary}`). Don't hardcode hex values in components.
 - Prefer the semantic `theme.colors.*` roles. Use `theme.palette.*` (the raw PIK brand colors) only when no role fits, and add a new role to the theme if the need repeats.
 - Text on `success` (mint) or `attention` (flama) must use `onSuccess` / `onAttention`. White on those colors fails contrast. Exception, by request: the "Sin editar" tags use white text on flama.
 - styled-components only works in Client Components: files that define styled components need `"use client"`. Keep pages and layouts as Server Components where possible and render styled client components from them.
 - Design mobile-first: base styles target phones, and wider layouts are added with `theme.media.md` / `theme.media.lg` (`min-width` queries). Do responsive switches in CSS, not with JS media-query hooks, so server-rendered HTML is right on every screen size.
 - Use `theme.space`, `theme.radii`, `theme.shadows` and `theme.layout` for spacing, corners, shadows and shell sizes instead of raw values.
-- The app shell (top bar, sidebar/drawer, nav) lives in `src/components/AppShell/`; add navigation entries in `navItems.ts`.
+- The app shell (top bar, sidebar/drawer, nav) lives in `src/components/layout/AppShell/`; add navigation entries in `navItems.ts`.
 - The shell's content area is the page frame for every route: it renders the `<main>` landmark, the page padding (`theme.layout.pagePadding`) and the overflow rules. The window scrolls vertically; horizontal overflow is clipped with `overflow-x: clip`. Pages render only their content: no `<main>`, no outer padding, no `overflow` or `100vw`/`100vh` sizing. Give scrollable widgets (tables, carousels) their own `overflow-x: auto`, and use `min-width: 0` on flex/grid children that hold long content.
 - Icons: always render them through `<Icon name="calendar" />` from `src/components/Icon/Icon.tsx`. Never draw an inline `<svg>` in a component. To add an icon, create `src/components/Icon/icons/<Name>.tsx` with only its shapes (20×20 grid, strokes, no `<svg>` wrapper) and register it in the `ICONS` list in `Icon.tsx` under a kebab-case name. Icons are decorative (hidden from screen readers) unless you pass a Spanish `label`.
-- A component with its own sub-components gets a folder: the entry component and its config/data at the folder root (`AppShell/AppShell.tsx`, `AppShell/navItems.ts`), and the sub-components only it uses in a nested `components/` folder (`AppShell/components/Sidebar.tsx`). Import the entry file from outside; don't import from another component's `components/` folder. If a sub-component is needed elsewhere, move it up to `src/components/`.
+- A component with its own sub-components gets a folder: the entry component and its config/data at the folder root (`AppShell/AppShell.tsx`, `AppShell/navItems.ts`), and the sub-components only it uses in a nested `components/` folder (`AppShell/components/Sidebar/Sidebar.tsx`). Import the entry file from outside; don't import from another component's `components/` folder. If a sub-component is needed elsewhere, move it up to `src/components/`.
 
-### Class names (BEM)
+### One styled wrapper per component (BEM)
 
-Every styled component and every styled element also gets a BEM class name, written out as a plain string. styled-components still scopes the styles; the BEM classes make the DOM readable in DevTools and give tests stable selectors.
+Each component has at most one styled component: `<ComponentName>Wrapper`, on the component's root element (`ButtonWrapper`, `SidebarWrapper`, `BusinessCardWrapper`). It lives in a `<ComponentName>.styles.ts` file, with `"use client"`, and the component imports it; the component file keeps only markup and logic. A component with a styles file gets its own folder holding both (`DeleteRow/DeleteRow.tsx` + `DeleteRow/DeleteRow.styles.ts`); a component without styles of its own stays a single file (`DeleteBusiness.tsx`). Import it by its full path (`@/components/buttons/Button/Button`). Everything inside it is plain HTML with BEM class names, styled from the wrapper with nested selectors. Group the element rules under the block's class and write them with `&__element` / `&__element--modifier`, as in Sass. Inside a styled component a bare `&` is the generated class (`.sc-x1y2`), so `&__label` only produces `.delete-row__label` from inside `.delete-row { }`; the rules end up as `.sc-x1y2 .delete-row__label`. Don't declare styled components for inner parts, and don't extend other components with `styled(Component)`; give them a BEM class instead.
 
-- Block: the component, in kebab-case (`sidebar`, `nav-item`, `page-placeholder`). One block per component file.
-- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`).
-- Modifier: a state or variant, joined with `--` and driven by props (`sidebar--open`, `nav-item--active`).
-- Static classes go in `.attrs` as a plain string: `styled.nav.attrs({ className: "sidebar__nav" })`. For plain elements, pass `className="nav-item__label"`.
-- Modifiers use `clsx`: `styled.aside.attrs<{ $open: boolean }>(({ $open }) => ({ className: clsx("sidebar", { "sidebar--open": $open }) }))`. Also use `clsx` to merge a `className` prop passed in from outside.
-- Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
-- Style with styled-components only. Never target BEM classes in CSS, and never use them to style another component; they are names, not styling hooks.
+```tsx
+// DeleteRow.styles.ts
+export const DeleteRowWrapper = styled.div`
+  display: flex;
+
+  .delete-row {
+    &__label {
+      font-weight: 600;
+    }
+
+    &__action--confirm {
+      background: ${({ theme }) => theme.colors.danger};
+    }
+  }
+`;
+
+// DeleteRow.tsx
+import { DeleteRowWrapper } from "./DeleteRow.styles";
+
+export default function DeleteRow(...) {
+  return (
+    <DeleteRowWrapper className="delete-row">
+      <p className="delete-row__label">{label}</p>
+      <button className={clsx("delete-row__action", { "delete-row__action--confirm": armed })} />
+    </DeleteRowWrapper>
+  );
+}
+```
+
+- Block: the component, in kebab-case (`sidebar`, `nav-item`, `delete-row`), set on the wrapper. One block per component file.
+- Element: a part of the block, joined with `__` (`sidebar__nav`, `nav-item__label`), as a plain `className`.
+- Modifier: a state or variant, joined with `--` (`sidebar--open`, `nav-item--active`). Build it with `clsx` and style it from the wrapper: `&.sidebar--open .sidebar__panel { ... }` (at the wrapper's top level) for a modifier on the block, `&__action--confirm { ... }` (inside `.delete-row { }`) for one on an element. Don't pass `$` props to drive styles.
+- Shared components take plain props for their variants (`<Button variant="secondary" size="sm">`) and turn them into modifier classes. They accept a `className`, merged with `clsx`, so a parent can name and position them.
+- To style a child component in a specific place, give it a BEM element class of the parent (`<ButtonLink className="flow-panel__cta">`) and style that class in the parent's wrapper. Never style another component's own classes.
+- Components that share a look share the wrapper instead of a `css` helper: `TextField` and `SelectField` both use `FieldWrapper` from `Field.styles.ts`, and `ButtonLink` renders `ButtonWrapper` as a Next.js link with styled-components' `as` prop (`<ButtonWrapper as={Link}>`). Use a `css` fragment only when a look is reused outside its block, like `controlStyles` for the opening-hours time inputs.
+- Always write the full class name (`"sidebar--open"`, not a string built from parts), so every class can be found with a search. The one exception is a modifier that mirrors a typed value, like `` `icon--${name}` `` in `Icon`, where `name` is an `IconName`.
 - Don't nest elements in names (`sidebar__nav__item` is wrong). A reusable part becomes its own block (`nav-item`).
+- A wrapper that must not affect layout (because its children belong to a parent's flex or grid) uses `display: contents`, like `SidebarWrapper`.

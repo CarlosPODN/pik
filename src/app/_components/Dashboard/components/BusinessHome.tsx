@@ -1,15 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ButtonLink from "@/components/ButtonLink";
-import CardGrid from "@/components/CardGrid";
-import EmptyState from "@/components/EmptyState";
+import ButtonLink from "@/components/buttons/ButtonLink";
+import CardGrid from "@/components/layout/CardGrid/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageLayout, { TitleAccent } from "@/components/PageLayout";
+import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { ROLE_LABELS } from "@/lib/session";
-import AppointmentCard from "./AppointmentCard";
+import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
 // Business home: the upcoming appointments across all their businesses, soonest first. Managing
 // the businesses themselves happens at /register.
@@ -30,11 +30,12 @@ export default function BusinessHome() {
     <PageLayout
       title={
         <>
-          Te damos la bienvenida, <TitleAccent>{ROLE_LABELS.business}.</TitleAccent>
+          Te damos la bienvenida,{" "}
+          <span className="page-layout__accent">{ROLE_LABELS.business}.</span>
         </>
       }
       action={
-        <ButtonLink href="/register" $size="sm">
+        <ButtonLink href="/register" size="sm">
           Mis negocios
           <Icon name="arrow-right" />
         </ButtonLink>

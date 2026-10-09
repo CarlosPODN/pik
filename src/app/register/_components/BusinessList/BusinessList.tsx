@@ -1,13 +1,13 @@
 "use client";
 
-import CardGrid from "@/components/CardGrid";
-import EmptyState from "@/components/EmptyState";
-import PageLayout, { TitleAccent } from "@/components/PageLayout";
-import PageSkeleton from "@/components/PageSkeleton";
+import CardGrid from "@/components/layout/CardGrid/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
+import PageLayout from "@/components/layout/PageLayout/PageLayout";
+import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { useHydrated } from "@/hooks/useHydrated";
 import AddBusinessButton from "./components/AddBusinessButton";
-import BusinessCard from "./components/BusinessCard";
+import BusinessCard from "./components/BusinessCard/BusinessCard";
 
 // The businesses the person manages, each linking to its settings at /register/[id]. Waits for
 // localStorage so it never flashes the empty state before the list.
@@ -21,7 +21,7 @@ export default function BusinessList() {
     <PageLayout
       title={
         <>
-          Registra tu <TitleAccent>negocio.</TitleAccent>
+          Registra tu <span className="page-layout__accent">negocio.</span>
         </>
       }
       action={<AddBusinessButton size="sm" />}

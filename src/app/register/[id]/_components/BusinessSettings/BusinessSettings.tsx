@@ -3,55 +3,18 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import styled from "styled-components";
-import ButtonLink from "@/components/ButtonLink";
-import EmptyState from "@/components/EmptyState";
+import ButtonLink from "@/components/buttons/ButtonLink";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageSkeleton from "@/components/PageSkeleton";
+import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
-import BusinessForm from "./components/BusinessForm";
+import BusinessForm from "./components/BusinessForm/BusinessForm";
 import DeleteBusiness from "./components/DeleteBusiness";
-import StaffCard from "./components/StaffCard";
-
-const Wrapper = styled.div.attrs({ className: "business-settings" })`
-  display: flex;
-  flex-direction: column;
-`;
-
-const BackLink = styled(Link).attrs({ className: "business-settings__back" })`
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: ${({ theme }) => theme.space.xs};
-  min-height: 44px; /* comfortable touch target */
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: 0.875rem;
-  font-weight: 600;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.foreground};
-  }
-
-  &:focus-visible {
-    outline: none;
-    border-radius: ${({ theme }) => theme.radii.sm};
-    box-shadow: ${({ theme }) => theme.shadows.focusRing};
-  }
-`;
-
-const Title = styled.h1.attrs({ className: "business-settings__title" })`
-  margin-bottom: ${({ theme }) => theme.space.md};
-  font-size: 1.75rem;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-
-  ${({ theme }) => theme.media.md} {
-    font-size: 2.25rem;
-  }
-`;
+import StaffCard from "./components/StaffCard/StaffCard";
+import { BusinessSettingsWrapper } from "./BusinessSettings.styles";
 
 // Settings for one business. Waits for localStorage before deciding the business doesn't exist.
 export default function BusinessSettings({ id }: { id: string }) {
@@ -79,12 +42,12 @@ export default function BusinessSettings({ id }: { id: string }) {
   }
 
   return (
-    <Wrapper>
-      <BackLink href="/register">
+    <BusinessSettingsWrapper className="business-settings">
+      <Link className="business-settings__back" href="/register">
         <Icon name="arrow-left" />
         Mis negocios
-      </BackLink>
-      <Title>{business.name}</Title>
+      </Link>
+      <h1 className="business-settings__title">{business.name}</h1>
       {/* key: a different business starts the form from its own values */}
       <BusinessForm
         key={business.id}
@@ -105,6 +68,6 @@ export default function BusinessSettings({ id }: { id: string }) {
           />
         }
       />
-    </Wrapper>
+    </BusinessSettingsWrapper>
   );
 }

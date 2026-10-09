@@ -1,13 +1,13 @@
 "use client";
 
-import ButtonLink from "@/components/ButtonLink";
-import CardGrid from "@/components/CardGrid";
-import EmptyState from "@/components/EmptyState";
+import ButtonLink from "@/components/buttons/ButtonLink";
+import CardGrid from "@/components/layout/CardGrid/CardGrid";
+import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
-import PageLayout, { TitleAccent } from "@/components/PageLayout";
+import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { ROLE_LABELS } from "@/lib/session";
-import AppointmentCard from "./AppointmentCard";
+import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
 // Client home: their booked appointments, soonest first.
 export default function ClientHome() {
@@ -17,11 +17,11 @@ export default function ClientHome() {
     <PageLayout
       title={
         <>
-          Te damos la bienvenida, <TitleAccent>{ROLE_LABELS.client}.</TitleAccent>
+          Te damos la bienvenida, <span className="page-layout__accent">{ROLE_LABELS.client}.</span>
         </>
       }
       action={
-        <ButtonLink href="/book" $size="sm">
+        <ButtonLink href="/book" size="sm">
           Agendar cita
           <Icon name="arrow-right" />
         </ButtonLink>

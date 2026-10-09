@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import PageSkeleton from "@/components/PageSkeleton";
+import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import BusinessSettings from "./_components/BusinessSettings/BusinessSettings";
 
 export const metadata: Metadata = {
