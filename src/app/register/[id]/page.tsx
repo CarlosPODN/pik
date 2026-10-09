@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 // client component loads it.
 export default function BusinessSettingsPage({ params }: PageProps<"/register/[id]">) {
   return (
-    <Suspense fallback={<PageSkeleton />}>
+    <Suspense fallback={<PageSkeleton tone="neutral" />}>
       {params.then(({ id }) => (
         <BusinessSettings id={id} />
       ))}

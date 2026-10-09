@@ -47,4 +47,18 @@ export const PageSkeletonWrapper = styled.div`
       height: 40px;
     }
   }
+
+  &.page-skeleton--neutral .page-skeleton__block {
+    background-color: ${({ theme }) => theme.colors.skeleton};
+    background-image: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.colors.skeleton} 25%,
+      ${({ theme }) => theme.colors.skeletonShine} 50%,
+      ${({ theme }) => theme.colors.skeleton} 75%
+    );
+
+    @media (prefers-reduced-motion: reduce) {
+      background-image: none;
+    }
+  }
 `;

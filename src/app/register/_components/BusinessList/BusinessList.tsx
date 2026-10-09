@@ -2,6 +2,7 @@
 
 import CardGrid from "@/components/layout/CardGrid/CardGrid";
 import EmptyState from "@/components/feedback/EmptyState/EmptyState";
+import Panel from "@/components/layout/Panel/Panel";
 import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
@@ -15,7 +16,7 @@ export default function BusinessList() {
   const hydrated = useHydrated();
   const { businesses } = useBusinesses();
 
-  if (!hydrated) return <PageSkeleton />;
+  if (!hydrated) return <PageSkeleton tone="neutral" />;
 
   return (
     <PageLayout
@@ -36,13 +37,15 @@ export default function BusinessList() {
           action={<AddBusinessButton />}
         />
       ) : (
-        <CardGrid>
-          {businesses.map((business) => (
-            <li key={business.id} className="business-list__item">
-              <BusinessCard business={business} />
-            </li>
-          ))}
-        </CardGrid>
+        <Panel heading="Tus negocios">
+          <CardGrid layout="rows">
+            {businesses.map((business) => (
+              <li key={business.id} className="business-list__item">
+                <BusinessCard business={business} />
+              </li>
+            ))}
+          </CardGrid>
+        </Panel>
       )}
     </PageLayout>
   );

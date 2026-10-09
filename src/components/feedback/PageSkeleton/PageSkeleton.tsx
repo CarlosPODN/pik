@@ -1,12 +1,16 @@
 "use client";
 
+import clsx from "clsx";
 import { PageSkeletonWrapper } from "./PageSkeleton.styles";
 
-// Placeholder while a page reads browser-saved data (localStorage) after hydration.
-export default function PageSkeleton() {
+export type SkeletonTone = "brand" | "neutral";
+
+// Placeholder while a page reads browser-saved data (localStorage) after hydration. "brand"
+// blocks are violet-tinted; "neutral" ones are gray, for plain white pages.
+export default function PageSkeleton({ tone = "brand" }: { tone?: SkeletonTone }) {
   return (
     <PageSkeletonWrapper
-      className="page-skeleton"
+      className={clsx("page-skeleton", { "page-skeleton--neutral": tone === "neutral" })}
       role="status"
       aria-busy="true"
       aria-label="Cargando…"

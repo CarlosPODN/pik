@@ -32,6 +32,9 @@ export const theme = {
     foreground: palette.carbon,
     muted: "#6B6B6B",
     border: "#E4E2F0",
+    // Neutral skeleton blocks for white pages, where the violet-tinted ones read as color.
+    skeleton: "#EEEEEE",
+    skeletonShine: "#F8F8F8",
   },
   fonts: {
     sans: "var(--font-geist-sans), system-ui, sans-serif",
@@ -61,6 +64,8 @@ export const theme = {
     drawerWidth: "min(320px, 85vw)",
     // Gap between the main sections of the home page (landing and dashboards).
     sectionGap: "18px",
+    // Height a Panel keeps whatever it holds: the empty state, or the first few cards.
+    panelMinHeight: "288px",
     // Padding around each page's content, per breakpoint.
     pagePadding: {
       base: "20px 16px 40px",
