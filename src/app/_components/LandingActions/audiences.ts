@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/Icon/Icon";
+import type { Role } from "@/types/session";
 
 export interface FlowStep {
   title: string;
@@ -6,7 +7,7 @@ export interface FlowStep {
 }
 
 export interface Audience {
-  id: "clients" | "businesses";
+  id: Role;
   tabLabel: string;
   icon: IconName;
   title: string;
@@ -20,7 +21,7 @@ export interface Audience {
 // most of PIK's users.
 export const AUDIENCES: Audience[] = [
   {
-    id: "clients",
+    id: "client",
     tabLabel: "PIK para clientes",
     icon: "calendar",
     title: "Agenda tu próxima cita",
@@ -37,16 +38,15 @@ export const AUDIENCES: Audience[] = [
     href: "/book",
   },
   {
-    id: "businesses",
-    tabLabel: "PIK para negocios",
+    id: "business",
+    tabLabel: "PIK para profesionales",
     icon: "store",
     title: "Registra tu negocio",
     description: "Da de alta tu salón, barbería o spa y empieza a recibir reservas.",
     steps: [
       { title: "Datos del negocio", description: "Nombre, categoría y teléfono." },
       { title: "Ubicación y horario", description: "Dónde estás y cuándo atiendes." },
-      { title: "Servicios", description: "Nombre, duración y precio de cada uno." },
-      { title: "Staff", description: "Quién atiende cada servicio." },
+      { title: "Staff", description: "Quién atiende y en qué puesto." },
       { title: "Confirma", description: "Revisa el resumen y publica tu negocio." },
     ],
     cta: "Comenzar registro",

@@ -1,23 +1,29 @@
 import clsx from "clsx";
 import type { SVGProps } from "react";
+import ArrowLeft from "./icons/ArrowLeft";
 import ArrowRight from "./icons/ArrowRight";
 import Calendar from "./icons/Calendar";
 import Check from "./icons/Check";
 import Close from "./icons/Close";
 import Home from "./icons/Home";
 import Menu from "./icons/Menu";
+import Plus from "./icons/Plus";
 import Store from "./icons/Store";
+import Trash from "./icons/Trash";
 
 // Every available icon. To add one: create its file in ./icons (the shapes only,
 // drawn on a 20×20 grid) and register it here under a kebab-case name.
 const ICONS = {
+  "arrow-left": ArrowLeft,
   "arrow-right": ArrowRight,
   calendar: Calendar,
   check: Check,
   close: Close,
   home: Home,
   menu: Menu,
+  plus: Plus,
   store: Store,
+  trash: Trash,
 } as const;
 
 export type IconName = keyof typeof ICONS;

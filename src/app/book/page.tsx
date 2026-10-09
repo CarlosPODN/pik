@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PagePlaceholder from "@/components/PagePlaceholder";
+import PagePlaceholder from "@/components/layout/PagePlaceholder/PagePlaceholder";
 
 export const metadata: Metadata = { title: "Agenda una cita · PIK" };
 

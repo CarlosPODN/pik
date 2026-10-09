@@ -23,6 +23,7 @@ export const theme = {
     attention: palette.flama,
     onAttention: palette.black, // white on flama is ~3.2:1, too low for body text
     info: palette.sky,
+    danger: "#C62828", // validation errors; flama is too light for small text on white
     highlight: palette.bloom,
     background: palette.white,
     surface: "#F6F5FF",
@@ -58,11 +59,13 @@ export const theme = {
     topBarHeight: "56px",
     sidebarWidth: "264px",
     drawerWidth: "min(320px, 85vw)",
+    // Gap between the main sections of the home page (landing and dashboards).
+    sectionGap: "18px",
     // Padding around each page's content, per breakpoint.
     pagePadding: {
       base: "20px 16px 40px",
       md: "24px",
-      lg: "36px 40px",
+      lg: "28px 40px",
     },
   },
   // Mobile-first: base styles target phones; these add wider layouts.
