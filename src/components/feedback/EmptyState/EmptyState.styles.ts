@@ -1,16 +1,16 @@
 "use client";
 
 import styled from "styled-components";
+import { PanelWrapper } from "@/components/layout/Panel/Panel.styles";
 
-export const EmptyStateWrapper = styled.div`
+// Same box as Panel, with the message centered in it.
+export const EmptyStateWrapper = styled(PanelWrapper)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: ${({ theme }) => theme.space.md};
   padding: ${({ theme }) => `${theme.space.xxl} ${theme.space.xl}`};
-  border: 1px dashed ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.surface};
   text-align: center;
 
   .empty-state {

@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import { PageLayoutWrapper } from "./PageLayout.styles";
 
-// Page frame for list pages (the role homes, the business list): the title with its action,
-// then a described section (named for screen readers by sectionLabel, with no visible heading).
+// Page frame for list pages (the role homes, the business list): the title with its subtitle
+// and action, then the section (named for screen readers by sectionLabel, with no visible heading).
 // Wrap the accent words of the title in <span className="page-layout__accent">.
 export default function PageLayout({
   title,
@@ -22,11 +22,13 @@ export default function PageLayout({
   return (
     <PageLayoutWrapper className="page-layout">
       <header className="page-layout__header">
-        <h1 className="page-layout__title">{title}</h1>
+        <div className="page-layout__heading">
+          <h1 className="page-layout__title">{title}</h1>
+          <p className="page-layout__description">{description}</p>
+        </div>
         {action}
       </header>
       <section className="page-layout__section" aria-label={sectionLabel}>
-        <p className="page-layout__description">{description}</p>
         {children}
       </section>
     </PageLayoutWrapper>

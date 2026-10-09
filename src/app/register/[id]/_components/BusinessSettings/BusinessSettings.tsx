@@ -28,7 +28,7 @@ export default function BusinessSettings({ id }: { id: string }) {
   const business = businesses.find((item) => item.id === id);
 
   // Keep the skeleton up while leaving after a delete, instead of flashing "not found".
-  if (!hydrated || deleting) return <PageSkeleton />;
+  if (!hydrated || deleting) return <PageSkeleton tone="neutral" />;
 
   if (!business) {
     return (

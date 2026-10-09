@@ -21,6 +21,13 @@ export const PageLayoutWrapper = styled.div`
       }
     }
 
+    /* The title with its subtitle underneath. */
+    &__heading {
+      display: flex;
+      flex-direction: column;
+      gap: ${({ theme }) => theme.space.sm};
+    }
+
     &__title {
       font-size: 1.75rem;
       line-height: 1.15;
