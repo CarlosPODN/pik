@@ -20,11 +20,7 @@ export default function RegisterPage() {
 
   return (
     <PageLayout
-      title={
-        <>
-          Registra tu <span className="page-layout__accent">negocio.</span>
-        </>
-      }
+      title="Registra tu negocio."
       action={<AddBusinessButton size="sm" />}
       description="Aquí puedes agregar tus negocios y editar su información."
       sectionLabel="Tus negocios"
