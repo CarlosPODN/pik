@@ -10,11 +10,7 @@ import { roleOptions } from "@/lib/businesses";
 import type { BusinessCategory, StaffMember } from "@/types/business";
 import DeleteRow from "../DeleteRow/DeleteRow";
 import { StaffMemberDialogWrapper } from "./StaffMemberDialog.styles";
-import {
-  staffMemberSchema,
-  type StaffMemberInput,
-  type StaffMemberOutput,
-} from "./staffMemberSchema";
+import { staffMemberSchema, type StaffMemberInput, type StaffMemberOutput } from "@/schemas/staff";
 
 export interface StaffMemberDialogProps {
   /** The staff member to edit, with their saved values. */

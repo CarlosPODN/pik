@@ -18,7 +18,7 @@ import {
   toFormValues,
   type BusinessFormInput,
   type BusinessFormOutput,
-} from "../businessFormSchema";
+} from "@/schemas/business";
 import FormCard from "../FormCard/FormCard";
 import HoursEditor from "../HoursEditor/HoursEditor";
 import { BusinessFormWrapper } from "./BusinessForm.styles";
