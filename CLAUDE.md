@@ -29,10 +29,10 @@ src/
 │   │   └── _components/    Components used only by this route (private folder, ignored by the router)
 │   └── api/                Route Handlers that return mock data
 ├── components/             Shared UI used by more than one route, grouped by kind:
-│   ├── buttons/            Button/ (Button + Button.styles), ButtonLink (renders ButtonWrapper)
+│   ├── buttons/            Button/ (Button + Button.styles), ButtonLink (renders ButtonWrapper), BackLink
 │   ├── fields/             Form controls: TextField, SelectField (both use the shared Field.styles.ts)
 │   ├── modals/             Dialog
-│   ├── layout/             AppShell, PageLayout, CardGrid, PagePlaceholder
+│   ├── layout/             AppShell, PageLayout, CardGrid, Panel, PagePlaceholder
 │   ├── feedback/           Empty, loading and status states: EmptyState, PageSkeleton
 │   └── Icon/               Icon and its icons/
 ├── hooks/                  Shared client hooks
