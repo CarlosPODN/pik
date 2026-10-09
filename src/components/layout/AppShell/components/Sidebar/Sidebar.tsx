@@ -7,22 +7,23 @@ import Logo from "../Logo/Logo";
 import NavItem from "../NavItem/NavItem";
 import SessionCard from "../SessionCard/SessionCard";
 import Icon from "@/components/Icon/Icon";
-import { useSession } from "@/hooks/useSession";
+import type { Role } from "@/types/session";
 import { NAV_ITEMS } from "../../navItems";
 import { SidebarWrapper } from "./Sidebar.styles";
 
 export default function Sidebar({
   id,
+  role,
   open,
   onClose,
   closeButtonRef,
 }: {
   id: string;
+  role: Role | null;
   open: boolean;
   onClose: () => void;
   closeButtonRef: Ref<HTMLButtonElement>;
 }) {
-  const { role } = useSession();
   // Logged out, only the items without a role show (Inicio); after picking a role, its items too.
   const navItems = NAV_ITEMS.filter((item) => !item.role || item.role === role);
 
@@ -46,7 +47,7 @@ export default function Sidebar({
         </nav>
 
         <footer className="sidebar__footer">
-          <SessionCard onNavigate={onClose} />
+          <SessionCard role={role} onNavigate={onClose} />
           <p className="sidebar__copyright">© 2026 PIK</p>
         </footer>
       </aside>

@@ -6,6 +6,16 @@ export const LOCALE = "es-MX";
 
 export const ROLES: readonly Role[] = ["client", "business"];
 
+// The cookie that holds the session (the picked role). See lib/session.ts.
+export const SESSION_COOKIE = "pik-session";
+
+// Where each role starts. Each role owns this route and everything under it: proxy.ts sends
+// anyone without that role back to "/".
+export const ROLE_HOME: Record<Role, string> = {
+  client: "/book",
+  business: "/register",
+};
+
 // How the app names the person in each role ("Te damos la bienvenida, Profesional.", "Usas PIK
 // como Cliente"). The business side is "Profesional", so it doesn't repeat "negocio", which names
 // the businesses themselves.

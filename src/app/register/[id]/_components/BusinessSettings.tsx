@@ -1,22 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import BackLink from "@/components/buttons/BackLink/BackLink";
 import ButtonLink from "@/components/buttons/ButtonLink";
 import EmptyState from "@/components/feedback/EmptyState/EmptyState";
-import Icon from "@/components/Icon/Icon";
 import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
-import BusinessForm from "./components/BusinessForm/BusinessForm";
-import DeleteBusiness from "./components/DeleteBusiness";
-import StaffCard from "./components/StaffCard/StaffCard";
+import BusinessForm from "./BusinessForm/BusinessForm";
+import DeleteBusiness from "./DeleteBusiness";
+import StaffCard from "./StaffCard/StaffCard";
 import { BusinessSettingsWrapper } from "./BusinessSettings.styles";
 
-// Settings for one business. Waits for localStorage before deciding the business doesn't exist.
+// Settings for one business. The page reads the id on the server; the business itself lives in
+// localStorage, so this waits for it before deciding it doesn't exist.
 export default function BusinessSettings({ id }: { id: string }) {
   const hydrated = useHydrated();
   const router = useRouter();
@@ -43,10 +43,7 @@ export default function BusinessSettings({ id }: { id: string }) {
 
   return (
     <BusinessSettingsWrapper className="business-settings">
-      <Link className="business-settings__back" href="/register">
-        <Icon name="arrow-left" />
-        Mis negocios
-      </Link>
+      <BackLink label="Mis negocios" />
       <h1 className="business-settings__title">{business.name}</h1>
       {/* key: a different business starts the form from its own values */}
       <BusinessForm

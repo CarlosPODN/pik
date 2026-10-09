@@ -7,12 +7,12 @@ import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { useHydrated } from "@/hooks/useHydrated";
-import AddBusinessButton from "./components/AddBusinessButton";
-import BusinessCard from "./components/BusinessCard/BusinessCard";
+import AddBusinessButton from "./_components/AddBusinessButton";
+import BusinessCard from "./_components/BusinessCard/BusinessCard";
 
 // The businesses the person manages, each linking to its settings at /register/[id]. Waits for
 // localStorage so it never flashes the empty state before the list.
-export default function BusinessList() {
+export default function RegisterPage() {
   const hydrated = useHydrated();
   const { businesses } = useBusinesses();
 
@@ -20,11 +20,7 @@ export default function BusinessList() {
 
   return (
     <PageLayout
-      title={
-        <>
-          Registra tu <span className="page-layout__accent">negocio.</span>
-        </>
-      }
+      title="Registra tu negocio."
       action={<AddBusinessButton size="sm" />}
       description="Aquí puedes agregar tus negocios y editar su información."
       sectionLabel="Tus negocios"
@@ -40,7 +36,7 @@ export default function BusinessList() {
         <Panel heading="Tus negocios">
           <CardGrid layout="rows">
             {businesses.map((business) => (
-              <li key={business.id} className="business-list__item">
+              <li key={business.id}>
                 <BusinessCard business={business} />
               </li>
             ))}
