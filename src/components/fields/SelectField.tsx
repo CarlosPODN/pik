@@ -1,9 +1,12 @@
 "use client";
 
-import { useId, type SelectHTMLAttributes } from "react";
+import { useId, type ComponentProps } from "react";
 import { FieldWrapper } from "./Field.styles";
 
-/** Every `<select>` attribute except `id` (it's generated) is passed through. */
+/**
+ * Every `<select>` prop except `id` (it's generated) is passed through, `ref` included, so React
+ * Hook Form's `register()` output can be spread in.
+ */
 export type SelectFieldProps = {
   /** Visible label, in Spanish. Linked to the select, so it's also its accessible name. */
   label: string;
@@ -13,7 +16,7 @@ export type SelectFieldProps = {
   placeholder: string;
   /** The choices, in order. `label` is the Spanish text; `value` is what's stored. */
   options: { value: string; label: string }[];
-} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "id">;
+} & Omit<ComponentProps<"select">, "id">;
 
 /**
  * A labeled select with a placeholder option and its error message.
@@ -23,13 +26,15 @@ export type SelectFieldProps = {
  *   label="Categoría"
  *   placeholder="Elige una categoría"
  *   options={BUSINESS_CATEGORIES}
- *   value={category}
- *   onChange={(event) => setCategory(event.target.value)}
- *   error={errors.category}
+ *   error={errors.category?.message}
+ *   {...register("category")}
  * />
  * ```
  *
- * **Empty value**: start with `value=""` to show the placeholder; it can't be picked again.
+ * **Empty value**: start with `""` (e.g. in `defaultValues`) to show the placeholder; it can't be
+ * picked again.
+ *
+ * **React Hook Form**: spread `register("field")` into it, like `TextField`.
  *
  * **Styling**: BEM block `field`, from `FieldWrapper` in `Field.styles.ts`, shared with
  * `TextField`.

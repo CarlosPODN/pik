@@ -40,6 +40,7 @@ src/
 │   └── data/               Data access: the only code that reads src/mocks
 ├── mocks/                  Mock data as typed TypeScript modules
 ├── types/                  Domain types (Business, StaffMember, Appointment, Session, ...)
+├── schemas/                zod schemas by domain (business.ts, staff.ts): validation rules and messages
 └── styles/                 Theme and global styles
 ```
 
@@ -59,6 +60,7 @@ src/
 - Navigation follows the role: a nav item with `role` in `navItems.ts` only shows for that role; items without one (Inicio) always show.
 - Routes follow the role too: every route except `/` belongs to one role, set by `ROLE_HOME` in `src/lib/constants.ts` (the role owns that path and everything under it). `src/proxy.ts` (Next.js's renamed middleware) redirects anyone logged out or in the other role to `/` before the route renders. When adding a role route, update `ROLE_HOME` and the proxy's `matcher` together.
 - Server state vs. client state: the session lives on the server (cookie) and is read by Server Components; client components handle interaction (forms, dialogs, the drawer, tabs) and the data still kept in the browser (businesses, appointments, see below).
+- Forms use React Hook Form, with the rules in a zod schema in `src/schemas/`, one file per domain (`business.ts`, `staff.ts`), not next to the form wired through `zodResolver`. Don't put rules in `register()` options. The schema's input is what the fields hold and its output is what gets saved (trimmed text, the phone's digits), so type the form `useForm<z.input<…>, unknown, z.output<…>>`. Each field shows its first failing rule, so list the "empty" check first; messages are Spanish. `TextField` and `SelectField` take `{...register("field")}` (ref included, so the first invalid field gets focus); a custom input like `HoursEditor` goes through `Controller` and forwards `field.ref`. The defaults (validate on submit, then on change) are the intended behavior. Unsaved changes come from `formState.isDirty` (feed it to `useLeaveGuard`); after saving, `reset()` to the saved values.
 
 ## Checks
 
