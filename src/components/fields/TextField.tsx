@@ -1,15 +1,18 @@
 "use client";
 
-import { useId, type InputHTMLAttributes } from "react";
+import { useId, type ComponentProps } from "react";
 import { FieldWrapper } from "./Field.styles";
 
-/** Every `<input>` attribute except `id` (it's generated) is passed through. */
+/**
+ * Every `<input>` prop except `id` (it's generated) is passed through, `ref` included, so React
+ * Hook Form's `register()` output can be spread in.
+ */
 export type TextFieldProps = {
   /** Visible label, in Spanish. Linked to the input, so it's also its accessible name. */
   label: string;
   /** Error message under the input. When set, the input is marked `aria-invalid`. */
   error?: string;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "id">;
+} & Omit<ComponentProps<"input">, "id">;
 
 /**
  * A labeled text input with its error message.
@@ -19,11 +22,13 @@ export type TextFieldProps = {
  *   label="Teléfono de contacto"
  *   type="tel"
  *   autoComplete="tel"
- *   value={phone}
- *   onChange={(event) => setPhone(event.target.value)}
- *   error={errors.phone}
+ *   error={errors.phone?.message}
+ *   {...register("phone")}
  * />
  * ```
+ *
+ * **React Hook Form**: spread `register("field")` into it. The ref reaches the input, so the
+ * form can focus it when it's the first invalid field.
  *
  * **Accessibility**: the label points at the input, and the error is linked with
  * `aria-describedby`, so screen readers read it with the field.

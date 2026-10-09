@@ -1,31 +1,20 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import Button from "@/components/buttons/Button/Button";
 import Dialog from "@/components/modals/Dialog/Dialog";
 import SelectField from "@/components/fields/SelectField";
 import TextField from "@/components/fields/TextField";
 import { roleOptions } from "@/lib/businesses";
-import type { BusinessCategory, StaffMember, StaffRole } from "@/types/business";
+import type { BusinessCategory, StaffMember } from "@/types/business";
 import DeleteRow from "../DeleteRow/DeleteRow";
 import { StaffMemberDialogWrapper } from "./StaffMemberDialog.styles";
-
-interface Errors {
-  name?: string;
-  role?: string;
-}
-
-function validate(name: string, role: StaffRole | "", hasRoles: boolean): Errors {
-  const errors: Errors = {};
-  if (!name.trim()) errors.name = "Escribe el nombre.";
-  else if (name.trim().length < 2) errors.name = "El nombre debe tener al menos 2 caracteres.";
-  if (!role) {
-    errors.role = hasRoles
-      ? "Elige su puesto."
-      : "Primero elige y guarda la categoría de tu negocio en Ajustes.";
-  }
-  return errors;
-}
+import {
+  staffMemberSchema,
+  type StaffMemberInput,
+  type StaffMemberOutput,
+} from "./staffMemberSchema";
 
 export interface StaffMemberDialogProps {
   /** The staff member to edit, with their saved values. */
@@ -52,6 +41,8 @@ export interface StaffMemberDialogProps {
  *
  * **Remount on every open** (new `key`) so it starts from the saved values.
  *
+ * **Validation**: React Hook Form, with the rules and messages in `staffMemberSchema` (zod).
+ *
  * **Roles**: the options depend on the business category. A role that doesn't fit the current
  * category has to be picked again; with no saved category, the select is disabled and the error
  * says to pick one in Ajustes first.
@@ -66,34 +57,30 @@ export default function StaffMemberDialog({
   onSave,
   onRemove,
 }: StaffMemberDialogProps) {
-  const [name, setName] = useState(member.name);
   const options = roleOptions(category);
-  const [role, setRole] = useState<StaffRole | "">(
-    options.some((option) => option.value === member.role) ? (member.role ?? "") : "",
-  );
-  const [submitted, setSubmitted] = useState(false);
-  const errors = submitted ? validate(name, role, options.length > 0) : {};
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<StaffMemberInput, unknown, StaffMemberOutput>({
+    resolver: zodResolver(staffMemberSchema(options.length > 0)),
+    defaultValues: {
+      name: member.name,
+      role: options.some((option) => option.value === member.role) ? (member.role ?? "") : "",
+    },
+  });
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmitted(true);
-    if (Object.keys(validate(name, role, options.length > 0)).length > 0) {
-      const form = event.currentTarget;
-      requestAnimationFrame(() =>
-        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(),
-      );
-      return;
-    }
-    onSave({ ...member, name: name.trim(), role: role as StaffRole });
+  const save = handleSubmit((values) => {
+    onSave({ ...member, ...values });
     onClose();
-  };
+  });
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
       title="Editar empleado"
-      onSubmit={submit}
+      onSubmit={save}
       actions={
         <>
           <Button variant="secondary" size="sm" onClick={onClose}>
@@ -108,21 +95,17 @@ export default function StaffMemberDialog({
       <StaffMemberDialogWrapper className="staff-member-dialog">
         <TextField
           label="Nombre"
-          name="staff-name"
           autoComplete="off"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          error={errors.name}
+          error={errors.name?.message}
+          {...register("name")}
         />
         <SelectField
           label="Puesto"
-          name="staff-role"
           placeholder={options.length > 0 ? "Elige un puesto" : "Sin categoría del negocio"}
           options={options}
           disabled={options.length === 0}
-          value={role}
-          onChange={(event) => setRole(event.target.value as StaffRole)}
-          error={errors.role}
+          error={errors.role?.message}
+          {...register("role")}
         />
         <DeleteRow
           label="Eliminar empleado"

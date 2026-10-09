@@ -1,11 +1,14 @@
 "use client";
 
 import clsx from "clsx";
+import type { Ref } from "react";
 import { WEEKDAYS } from "@/lib/constants";
 import type { DayHours, Weekday, WeeklyHours } from "@/types/business";
 import { HoursEditorWrapper } from "./HoursEditor.styles";
 
 export interface HoursEditorProps {
+  /** Goes to the first checkbox, so a form can focus the editor when the week has an error. */
+  ref?: Ref<HTMLInputElement>;
   /** The week's hours, Monday to Sunday. */
   hours: WeeklyHours;
   /** Called with a day and its new hours when its checkbox or a time changes. */
@@ -21,16 +24,26 @@ export interface HoursEditorProps {
  * closed and, when open, its opening and closing time.
  *
  * ```tsx
- * <HoursEditor hours={values.hours} onChange={updateDay} error={errors.hours}
- *   dayErrors={dayErrors} />
+ * <Controller
+ *   control={control}
+ *   name="hours"
+ *   render={({ field }) => (
+ *     <HoursEditor ref={field.ref} hours={field.value}
+ *       onChange={(day, dayHours) => field.onChange({ ...field.value, [day]: dayHours })}
+ *       error={errors.hours?.message} dayErrors={dayErrors} />
+ *   )}
+ * />
  * ```
+ *
+ * **React Hook Form**: it's a custom input, so it goes through `Controller`; pass `field.ref` as
+ * `ref` so the form can focus it.
  *
  * **Layout**: on phones the times sit on their own line under the day; from `md`, on the same
  * row. Closed days show "Cerrado".
  *
  * **Styling**: BEM block `hours-editor`, modifier `hours-editor__day--closed`.
  */
-export default function HoursEditor({ hours, onChange, error, dayErrors }: HoursEditorProps) {
+export default function HoursEditor({ ref, hours, onChange, error, dayErrors }: HoursEditorProps) {
   return (
     <HoursEditorWrapper
       className="hours-editor"
@@ -51,6 +64,7 @@ export default function HoursEditor({ hours, onChange, error, dayErrors }: Hours
             >
               <label className="hours-editor__toggle">
                 <input
+                  ref={index === 0 ? ref : undefined}
                   type="checkbox"
                   className="hours-editor__checkbox"
                   checked={dayHours.open}

@@ -1,6 +1,8 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useId, useState, type ReactNode } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/buttons/Button/Button";
 import Dialog from "@/components/modals/Dialog/Dialog";
 import ButtonLink from "@/components/buttons/ButtonLink";
@@ -8,16 +10,15 @@ import Icon from "@/components/Icon/Icon";
 import SelectField from "@/components/fields/SelectField";
 import TextField from "@/components/fields/TextField";
 import { useLeaveGuard } from "@/hooks/useLeaveGuard";
-import { BUSINESS_CATEGORIES } from "@/lib/constants";
-import type { Business, DayHours, Weekday } from "@/types/business";
+import { BUSINESS_CATEGORIES, WEEKDAYS } from "@/lib/constants";
+import type { Business, Weekday } from "@/types/business";
 import {
-  dayErrorKey,
-  hasUnsavedChanges,
+  businessFormSchema,
   toBusinessChanges,
   toFormValues,
-  validate,
-  type BusinessFormValues,
-} from "../businessFormValues";
+  type BusinessFormInput,
+  type BusinessFormOutput,
+} from "../businessFormSchema";
 import FormCard from "../FormCard/FormCard";
 import HoursEditor from "../HoursEditor/HoursEditor";
 import { BusinessFormWrapper } from "./BusinessForm.styles";
@@ -44,11 +45,13 @@ export interface BusinessFormProps {
  *   staffSection={<StaffCard … />} deleteAction={<DeleteBusiness … />} />
  * ```
  *
- * **Validation**: on submit, then live as the person fixes each field; focus moves to the first
- * invalid field. "Guardamos los cambios." shows after a save.
+ * **Validation**: React Hook Form runs the form and `businessFormSchema` (zod) holds the rules
+ * and messages. It validates on submit, then live as the person fixes each field, and focuses
+ * the first invalid one. "Guardamos los cambios." shows after a save, until the next edit.
  *
- * **Unsaved changes**: `useLeaveGuard` holds in-app link clicks behind a "Tienes cambios sin
- * guardar" dialog and arms the browser's reload/close warning.
+ * **Unsaved changes**: `formState.isDirty` feeds `useLeaveGuard`, which holds in-app link clicks
+ * behind a "Tienes cambios sin guardar" dialog and arms the browser's reload/close warning.
+ * After a save, the form resets to the saved values (trimmed, phone formatted).
  *
  * **Saving from outside**: the save buttons sit after `staffSection`, outside the `<form>`
  * (forms can't nest), and submit it through `form={formId}`.
@@ -62,47 +65,38 @@ export default function BusinessForm({
   staffSection,
 }: BusinessFormProps) {
   const formId = useId();
-  const formRef = useRef<HTMLFormElement>(null);
-  const [values, setValues] = useState<BusinessFormValues>(() => toFormValues(business));
-  const [submitted, setSubmitted] = useState(false);
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty },
+  } = useForm<BusinessFormInput, unknown, BusinessFormOutput>({
+    resolver: zodResolver(businessFormSchema),
+    defaultValues: toFormValues(business),
+  });
   const [saved, setSaved] = useState(false);
-  const errors = submitted ? validate(values) : {};
-  const leaveGuard = useLeaveGuard(hasUnsavedChanges(values, business));
+  const leaveGuard = useLeaveGuard(isDirty);
 
-  const update = (changes: Partial<BusinessFormValues>) => {
-    setValues((current) => ({ ...current, ...changes }));
-    setSaved(false);
-  };
-
-  const updateDay = (day: Weekday, dayHours: DayHours) =>
-    update({ hours: { ...values.hours, [day]: dayHours } });
+  const save = handleSubmit((values) => {
+    const changes = toBusinessChanges(values);
+    onSave(business.id, changes);
+    // The saved values become the new baseline, shown as saved (trimmed, phone formatted).
+    reset(toFormValues({ ...business, ...changes }));
+    setSaved(true);
+  });
 
   const dayErrors = Object.fromEntries(
-    Object.keys(values.hours).map((day) => [day, errors[dayErrorKey(day as Weekday)]]),
+    WEEKDAYS.map(({ value }) => [value, errors.hours?.[value]?.message]),
   ) as Partial<Record<Weekday, string>>;
-
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-    setSubmitted(true);
-    if (Object.keys(validate(values)).length > 0) {
-      // Move focus to the first invalid field once the errors render.
-      requestAnimationFrame(() =>
-        formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(),
-      );
-      return;
-    }
-    onSave(business.id, toBusinessChanges(values));
-    setSaved(true);
-  };
 
   return (
     <BusinessFormWrapper className="business-form">
       <form
         className="business-form__form"
         id={formId}
-        ref={formRef}
         noValidate
-        onSubmit={submit}
+        onSubmit={save}
         aria-label="Información del negocio"
       >
         <FormCard
@@ -111,33 +105,25 @@ export default function BusinessForm({
         >
           <TextField
             label="Nombre del negocio"
-            name="name"
             autoComplete="organization"
-            value={values.name}
-            onChange={(event) => update({ name: event.target.value })}
-            error={errors.name}
+            error={errors.name?.message}
+            {...register("name")}
           />
           <SelectField
             label="Categoría"
-            name="category"
             placeholder="Elige una categoría"
             options={BUSINESS_CATEGORIES}
-            value={values.category}
-            onChange={(event) =>
-              update({ category: event.target.value as BusinessFormValues["category"] })
-            }
-            error={errors.category}
+            error={errors.category?.message}
+            {...register("category")}
           />
           <TextField
             label="Teléfono de contacto"
-            name="phone"
             type="tel"
             inputMode="tel"
             autoComplete="tel"
             placeholder="55 1234 5678"
-            value={values.phone}
-            onChange={(event) => update({ phone: event.target.value })}
-            error={errors.phone}
+            error={errors.phone?.message}
+            {...register("phone")}
           />
           <div className="business-form__danger">{deleteAction}</div>
         </FormCard>
@@ -148,26 +134,29 @@ export default function BusinessForm({
         >
           <TextField
             label="Dirección"
-            name="address"
             autoComplete="street-address"
             placeholder="Calle, número y colonia"
-            value={values.address}
-            onChange={(event) => update({ address: event.target.value })}
-            error={errors.address}
+            error={errors.address?.message}
+            {...register("address")}
           />
           <TextField
             label="Ciudad"
-            name="city"
             autoComplete="address-level2"
-            value={values.city}
-            onChange={(event) => update({ city: event.target.value })}
-            error={errors.city}
+            error={errors.city?.message}
+            {...register("city")}
           />
-          <HoursEditor
-            hours={values.hours}
-            onChange={updateDay}
-            error={errors.hours}
-            dayErrors={dayErrors}
+          <Controller
+            control={control}
+            name="hours"
+            render={({ field }) => (
+              <HoursEditor
+                ref={field.ref}
+                hours={field.value}
+                onChange={(day, dayHours) => field.onChange({ ...field.value, [day]: dayHours })}
+                error={errors.hours?.message}
+                dayErrors={dayErrors}
+              />
+            )}
           />
         </FormCard>
       </form>
@@ -176,7 +165,7 @@ export default function BusinessForm({
 
       <div className="business-form__footer">
         <div role="status" className="business-form__status">
-          {saved && (
+          {saved && !isDirty && (
             <p className="business-form__success">
               <Icon name="check" />
               Guardamos los cambios.
