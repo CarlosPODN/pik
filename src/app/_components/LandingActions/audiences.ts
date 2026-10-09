@@ -14,7 +14,6 @@ export interface Audience {
   description: string;
   steps: FlowStep[];
   cta: string;
-  href: string;
 }
 
 // The two ways to use PIK, each with the flow it walks through. Clients come first: they're
@@ -35,7 +34,6 @@ export const AUDIENCES: Audience[] = [
       { title: "Confirma tu cita", description: "Revisa el resumen y listo." },
     ],
     cta: "Agendar cita",
-    href: "/book",
   },
   {
     id: "business",
@@ -50,6 +48,5 @@ export const AUDIENCES: Audience[] = [
       { title: "Confirma", description: "Revisa el resumen y publica tu negocio." },
     ],
     cta: "Comenzar registro",
-    href: "/register",
   },
 ];

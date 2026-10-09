@@ -1,17 +1,20 @@
-import Home from "./_components/Home";
+import { getSession } from "@/lib/session";
+import Dashboard from "./_components/Dashboard/Dashboard";
 import LandingActions from "./_components/LandingActions/LandingActions";
 import LandingHero from "./_components/LandingHero/LandingHero";
 import LandingPage from "./_components/LandingPage/LandingPage";
 
-export default function HomePage() {
+// The landing while logged out, the role's dashboard after. Reading the session cookie is
+// request-time data; app/loading.tsx is the Suspense boundary.
+export default async function HomePage() {
+  const session = await getSession();
+
+  if (session) return <Dashboard role={session.role} />;
+
   return (
-    <Home
-      landing={
-        <LandingPage>
-          <LandingHero />
-          <LandingActions />
-        </LandingPage>
-      }
-    />
+    <LandingPage>
+      <LandingHero />
+      <LandingActions />
+    </LandingPage>
   );
 }

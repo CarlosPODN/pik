@@ -129,7 +129,11 @@ export const FlowPanelWrapper = styled.div`
       line-height: 1.3;
     }
 
+    /* The start form: its button fills the width on phones and sizes to its label from md. */
     &__cta {
+      display: flex;
+      flex-direction: column;
+
       ${({ theme }) => theme.media.md} {
         align-self: flex-start;
       }

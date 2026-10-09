@@ -1,13 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import type { Role } from "@/types/session";
 import Sidebar from "./components/Sidebar/Sidebar";
 import TopBar from "./components/TopBar/TopBar";
 import { AppShellWrapper } from "./AppShell.styles";
 
 // Mobile: sticky top bar + off-canvas drawer. Desktop (lg): static sidebar.
 // The breakpoint switch is pure CSS, so the server-rendered HTML is correct on every screen size.
-export default function AppShell({ children }: { children: ReactNode }) {
+// role is the session's role (null while logged out); it picks the sidebar's items and card.
+export default function AppShell({ role, children }: { role: Role | null; children: ReactNode }) {
   const drawerId = useId();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -46,6 +48,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       />
       <Sidebar
         id={drawerId}
+        role={role}
         open={drawerOpen}
         onClose={closeDrawer}
         closeButtonRef={closeButtonRef}
