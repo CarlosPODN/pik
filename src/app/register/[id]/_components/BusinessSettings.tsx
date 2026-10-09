@@ -11,12 +11,13 @@ import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
-import BusinessForm from "./components/BusinessForm/BusinessForm";
-import DeleteBusiness from "./components/DeleteBusiness";
-import StaffCard from "./components/StaffCard/StaffCard";
+import BusinessForm from "./BusinessForm/BusinessForm";
+import DeleteBusiness from "./DeleteBusiness";
+import StaffCard from "./StaffCard/StaffCard";
 import { BusinessSettingsWrapper } from "./BusinessSettings.styles";
 
-// Settings for one business. Waits for localStorage before deciding the business doesn't exist.
+// Settings for one business. The page reads the id on the server; the business itself lives in
+// localStorage, so this waits for it before deciding it doesn't exist.
 export default function BusinessSettings({ id }: { id: string }) {
   const hydrated = useHydrated();
   const router = useRouter();

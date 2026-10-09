@@ -17,7 +17,7 @@ import {
   toFormValues,
   validate,
   type BusinessFormValues,
-} from "../../businessFormValues";
+} from "../businessFormValues";
 import FormCard from "../FormCard/FormCard";
 import HoursEditor from "../HoursEditor/HoursEditor";
 import { BusinessFormWrapper } from "./BusinessForm.styles";
