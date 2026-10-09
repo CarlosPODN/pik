@@ -16,7 +16,7 @@ export default function BusinessList() {
   const hydrated = useHydrated();
   const { businesses } = useBusinesses();
 
-  if (!hydrated) return <PageSkeleton tone="neutral" />;
+  if (!hydrated) return <PageSkeleton />;
 
   return (
     <PageLayout
