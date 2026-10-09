@@ -34,6 +34,7 @@ src/
 │   ├── modals/             Dialog
 │   ├── layout/             AppShell, PageLayout, CardGrid, PagePlaceholder
 │   ├── feedback/           Empty, loading and status states: EmptyState, PageSkeleton
+│   ├── guards/             Route access: RequireRole
 │   └── Icon/               Icon and its icons/
 ├── hooks/                  Shared client hooks
 ├── lib/
@@ -57,6 +58,7 @@ src/
 - Businesses (`pik:businesses`, `useBusinesses()`, `src/lib/businesses.ts`) are listed and added at `/register` as placeholders ("Negocio 2") and edited at `/register/[id]`: name, category and phone, plus location (address, city) and weekly opening hours, all saved together. Businesses saved before a field existed get its default when read (`normalizeBusiness`), so add new fields the same way. Staff is edited on the same page but saves right away from its own modal (add "Empleado N", then edit name and role), and doesn't affect the business's `touched`. Staff members have their own `touched` with the same rule: while the newest one is unedited, "Agregar empleado" opens a dialog instead of adding (`findUntouched` works for both); a staff member's role is picked from the roles for the saved business category (`roleOptions`), stored as a key (`StaffRole`); the staff card sits outside the page `<form>` because forms can't nest, so the save buttons submit through `form={formId}`. With unsaved changes in the settings form, `useLeaveGuard` (`src/hooks/useLeaveGuard.ts`) holds any in-app link click behind a "Tienes cambios sin guardar" dialog and arms the browser's reload/close warning; reuse it for other forms. Saving the settings once sets `touched`; while the newest business is untouched, "Agregar negocio" opens a dialog instead of adding another. The "Eliminar negocio" row in the settings deletes a business after a confirmation dialog, unless it has pending appointments (`businessId` matches and `startsAt` is in the future), which opens a dialog explaining why instead; placeholder numbers never repeat after a delete.
 - Dynamic routes: with Cache Components, a param that's only known at request time must be read inside `<Suspense>` (see `app/register/[id]/page.tsx`), and so must `usePathname()` in the layout (see `NavItem`), or prerendering fails.
 - Navigation follows the role: a nav item with `role` in `navItems.ts` only shows for that role; items without one (Inicio) always show.
+- Routes follow the role too: every route except `/` belongs to one role, and its segment `layout.tsx` wraps it in `RequireRole` (`src/components/guards/`), which sends anyone logged out or in the other role back to `/`. Give a new route a layout like `app/register/layout.tsx`, with the same role as its nav item.
 
 ## Checks
 
