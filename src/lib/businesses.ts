@@ -4,35 +4,11 @@ import type {
   DayHours,
   StaffMember,
   StaffRole,
-  Weekday,
   WeeklyHours,
 } from "@/types/business";
+import { BUSINESS_CATEGORIES, ROLES_BY_CATEGORY, STAFF_ROLES, WEEKDAYS } from "./constants";
 import { createId } from "./id";
 import { createLocalStore } from "./localStore";
-
-export const BUSINESS_CATEGORIES: { value: BusinessCategory; label: string }[] = [
-  { value: "salon", label: "Salón de belleza" },
-  { value: "barbershop", label: "Barbería" },
-  { value: "spa", label: "Spa" },
-];
-
-export const STAFF_ROLES: Record<StaffRole, string> = {
-  stylist: "Estilista",
-  colorist: "Colorista",
-  manicurist: "Manicurista",
-  makeupArtist: "Maquillista",
-  barber: "Barbero",
-  massageTherapist: "Masajista",
-  esthetician: "Esteticista",
-  receptionist: "Recepción",
-};
-
-// The roles a staff member can have in each kind of business.
-const ROLES_BY_CATEGORY: Record<BusinessCategory, StaffRole[]> = {
-  salon: ["stylist", "colorist", "manicurist", "makeupArtist", "receptionist"],
-  barbershop: ["barber", "receptionist"],
-  spa: ["massageTherapist", "esthetician", "manicurist", "receptionist"],
-};
 
 export function roleOptions(category: BusinessCategory | null) {
   return (category ? ROLES_BY_CATEGORY[category] : []).map((role) => ({
@@ -46,16 +22,6 @@ export const roleLabel = (role: StaffRole | null) => (role ? STAFF_ROLES[role] :
 export function categoryLabel(category: BusinessCategory | null) {
   return BUSINESS_CATEGORIES.find((option) => option.value === category)?.label ?? null;
 }
-
-export const WEEKDAYS: { value: Weekday; label: string }[] = [
-  { value: "monday", label: "Lunes" },
-  { value: "tuesday", label: "Martes" },
-  { value: "wednesday", label: "Miércoles" },
-  { value: "thursday", label: "Jueves" },
-  { value: "friday", label: "Viernes" },
-  { value: "saturday", label: "Sábado" },
-  { value: "sunday", label: "Domingo" },
-];
 
 // Starting hours for a new business: weekdays 9 to 7, Saturday morning, Sunday closed.
 export function defaultHours(): WeeklyHours {

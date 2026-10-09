@@ -8,7 +8,7 @@ import Icon from "@/components/Icon/Icon";
 import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
-import { ROLE_LABELS } from "@/lib/session";
+import { ROLE_LABELS } from "@/lib/constants";
 import AppointmentCard from "./AppointmentCard/AppointmentCard";
 
 // Business home: the upcoming appointments across all their businesses, soonest first. Managing
