@@ -4,8 +4,7 @@ import LandingActions from "./_components/LandingActions/LandingActions";
 import LandingHero from "./_components/LandingHero/LandingHero";
 import LandingPage from "./_components/LandingPage/LandingPage";
 
-// The landing while logged out, the role's dashboard after. Reading the session cookie is
-// request-time data; app/loading.tsx is the Suspense boundary.
+// The landing while logged out, the role's dashboard after, from the session cookie.
 export default async function HomePage() {
   const session = await getSession();
 

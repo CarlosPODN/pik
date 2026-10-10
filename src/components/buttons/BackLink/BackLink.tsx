@@ -31,10 +31,6 @@ export interface BackLinkProps {
  * | `/register/abc` | `/register` |
  * | `/register`     | `/`         |
  *
- * **Suspense**: with Cache Components, `usePathname()` suspends on routes whose params are only
- * known at request time (like `/register/[id]`). Render it inside a Suspense boundary there; the
- * route's `loading.tsx` counts. Static routes need nothing.
- *
  * **Styling**: BEM block `back-link`, styled by `BackLinkWrapper` (a styled Next.js `Link`).
  * It uses `align-self: flex-start`, so in a column flex parent it keeps its own width.
  */
