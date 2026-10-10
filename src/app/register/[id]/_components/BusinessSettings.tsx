@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import BackLink from "@/components/buttons/BackLink/BackLink";
 import ButtonLink from "@/components/buttons/ButtonLink";
-import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
+import Panel from "@/components/layout/Panel/Panel";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { countPendingAppointments } from "@/lib/appointments";
@@ -58,11 +58,14 @@ export default function BusinessSettings({ id }: BusinessSettingsProps) {
 
   if (!business) {
     return (
-      <EmptyState
-        icon="store"
-        title="No encontramos este negocio"
-        description="Puede que se haya borrado o que el enlace esté incompleto."
-        action={<ButtonLink href="/register">Volver a mis negocios</ButtonLink>}
+      <Panel
+        isEmpty
+        emptyState={{
+          icon: "store",
+          title: "No encontramos este negocio",
+          description: "Puede que se haya borrado o que el enlace esté incompleto.",
+          action: <ButtonLink href="/register">Volver a mis negocios</ButtonLink>,
+        }}
       />
     );
   }

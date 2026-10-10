@@ -16,20 +16,24 @@ export interface EmptyStateProps {
 }
 
 /**
- * Message for a list or section with **nothing to show yet**, with an optional next step.
+ * Message for a list or page with **nothing to show**, with an optional next step: an icon
+ * badge, a title, a description and the action, centered.
  *
  * ```tsx
- * <EmptyState
- *   icon="store"
- *   title="Aún no tienes negocios"
- *   description="Agrega tu primer negocio para empezar a recibir reservas."
- *   action={<AddBusinessButton />}
- * />
+ * <Panel heading="Tus negocios" isEmpty={businesses.length === 0} emptyState={{
+ *   icon: "store",
+ *   title: "Aún no tienes negocios",
+ *   description: "Agrega tu primer negocio para empezar a recibir reservas.",
+ * }}>
+ *   …
+ * </Panel>
  * ```
  *
- * **Styling**: BEM block `empty-state`. `EmptyStateWrapper` extends `PanelWrapper`, so it has
- * the same box and minimum height as a `Panel`: a list and its empty state look like one
- * container. The content is centered in it.
+ * **Where**: `Panel` renders it from its `emptyState` prop, inside its box; pages don't render
+ * it themselves.
+ *
+ * **Styling**: BEM block `empty-state`. It has no box of its own; it grows to fill the space
+ * it's in and centers its content there.
  */
 export default function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (

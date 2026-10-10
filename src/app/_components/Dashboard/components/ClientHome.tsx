@@ -2,9 +2,9 @@
 
 import ButtonLink from "@/components/buttons/ButtonLink";
 import CardGrid from "@/components/layout/CardGrid/CardGrid";
-import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
 import PageLayout from "@/components/layout/PageLayout/PageLayout";
+import Panel from "@/components/layout/Panel/Panel";
 import { useAppointments } from "@/hooks/useAppointments";
 import { ROLE_LABELS } from "@/lib/constants";
 import AppointmentCard from "./AppointmentCard/AppointmentCard";
@@ -37,22 +37,24 @@ export default function ClientHome() {
       description="Aquí puedes ver tus citas agendadas y reservar una nueva cuando quieras."
       sectionLabel="Tus citas"
     >
-      {appointments.length === 0 ? (
-        <EmptyState
-          icon="calendar"
-          title="Aún no tienes citas"
-          description="Cuando agendes una cita, aparecerá aquí con su fecha, hora y precio."
-          action={<ButtonLink href="/book">Agendar mi primera cita</ButtonLink>}
-        />
-      ) : (
+      <Panel
+        heading="Tus citas"
+        isEmpty={appointments.length === 0}
+        emptyState={{
+          icon: "calendar",
+          title: "Aún no tienes citas",
+          description: "Cuando agendes una cita, aparecerá aquí con su fecha, hora y precio.",
+          action: <ButtonLink href="/book">Agendar mi primera cita</ButtonLink>,
+        }}
+      >
         <CardGrid>
           {appointments.map((appointment) => (
-            <li key={appointment.id} className="client-home__item">
+            <li key={appointment.id}>
               <AppointmentCard appointment={appointment} perspective="client" />
             </li>
           ))}
         </CardGrid>
-      )}
+      </Panel>
     </PageLayout>
   );
 }
