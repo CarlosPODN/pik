@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId, useState, type ReactNode } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import Button from "@/components/buttons/Button/Button";
 import Dialog from "@/components/modals/Dialog/Dialog";
 import ButtonLink from "@/components/buttons/ButtonLink";
@@ -14,16 +14,21 @@ import { BUSINESS_CATEGORIES, WEEKDAYS } from "@/lib/constants";
 import type { Business, Weekday } from "@/types/business";
 import {
   businessFormSchema,
+  isCategory,
   toBusinessChanges,
   toFormValues,
   type BusinessFormInput,
   type BusinessFormOutput,
 } from "@/schemas/business";
 import FormCard from "../FormCard/FormCard";
+import StaffCard from "../StaffCard/StaffCard";
 import HoursEditor from "../HoursEditor/HoursEditor";
 import { BusinessFormWrapper } from "./BusinessForm.styles";
 
-type BusinessChanges = Pick<Business, "name" | "category" | "phone" | "location" | "hours">;
+type BusinessChanges = Pick<
+  Business,
+  "name" | "category" | "phone" | "location" | "hours" | "staff"
+>;
 
 export interface BusinessFormProps {
   /** The saved business, the form's starting values. Remount (`key`) for another business. */
@@ -32,17 +37,15 @@ export interface BusinessFormProps {
   onSave: (id: string, changes: BusinessChanges) => void;
   /** Rendered in its own full-width row under the phone (`DeleteBusiness`). */
   deleteAction: ReactNode;
-  /** Rendered after the form's cards, above the save buttons (`StaffCard`); it saves on its own. */
-  staffSection: ReactNode;
 }
 
 /**
- * The business settings form, in two cards (general info; location and hours) with one save
- * for both.
+ * The business settings form: general info, location and hours, and the staff, with one save
+ * for all of it.
  *
  * ```tsx
  * <BusinessForm key={business.id} business={business} onSave={updateBusiness}
- *   staffSection={<StaffCard … />} deleteAction={<DeleteBusiness … />} />
+ *   deleteAction={<DeleteBusiness … />} />
  * ```
  *
  * **Validation**: React Hook Form runs the form and `businessFormSchema` (zod) holds the rules
@@ -53,17 +56,16 @@ export interface BusinessFormProps {
  * behind a "Tienes cambios sin guardar" dialog and arms the browser's reload/close warning.
  * After a save, the form resets to the saved values (trimmed, phone formatted).
  *
- * **Saving from outside**: the save buttons sit after `staffSection`, outside the `<form>`
- * (forms can't nest), and submit it through `form={formId}`.
+ * **Staff**: `staff` is a field of this form. `StaffCard` edits it in place (adding, editing in
+ * a dialog, removing) and nothing is stored until "Guardar cambios". Roles come from the
+ * category picked in the form, saved or not, and each must fit it to save.
+ *
+ * **Saving from outside**: `StaffCard` and the save buttons sit outside the `<form>` (the staff
+ * dialog has its own form, and forms can't nest); the buttons submit through `form={formId}`.
  *
  * **Styling**: BEM block `business-form`.
  */
-export default function BusinessForm({
-  business,
-  onSave,
-  deleteAction,
-  staffSection,
-}: BusinessFormProps) {
+export default function BusinessForm({ business, onSave, deleteAction }: BusinessFormProps) {
   const formId = useId();
   const {
     register,
@@ -75,8 +77,15 @@ export default function BusinessForm({
     resolver: zodResolver(businessFormSchema),
     defaultValues: toFormValues(business),
   });
-  const [saved, setSaved] = useState(false);
+  const pickedCategory = useWatch({ control, name: "category" });
   const leaveGuard = useLeaveGuard(isDirty);
+
+  const [saved, setSaved] = useState(false);
+
+  const category = isCategory(pickedCategory) ? pickedCategory : null;
+  const dayErrors = Object.fromEntries(
+    WEEKDAYS.map(({ value }) => [value, errors.hours?.[value]?.message]),
+  ) as Partial<Record<Weekday, string>>;
 
   const save = handleSubmit((values) => {
     const changes = toBusinessChanges(values);
@@ -85,10 +94,6 @@ export default function BusinessForm({
     reset(toFormValues({ ...business, ...changes }));
     setSaved(true);
   });
-
-  const dayErrors = Object.fromEntries(
-    WEEKDAYS.map(({ value }) => [value, errors.hours?.[value]?.message]),
-  ) as Partial<Record<Weekday, string>>;
 
   return (
     <BusinessFormWrapper className="business-form">
@@ -161,7 +166,7 @@ export default function BusinessForm({
         </FormCard>
       </form>
 
-      {staffSection}
+      <StaffCard control={control} category={category} />
 
       <div className="business-form__footer">
         <div role="status" className="business-form__status">

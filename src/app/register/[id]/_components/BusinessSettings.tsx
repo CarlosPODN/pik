@@ -12,7 +12,6 @@ import { countPendingAppointments } from "@/lib/appointments";
 import { useHydrated } from "@/hooks/useHydrated";
 import BusinessForm from "./BusinessForm/BusinessForm";
 import DeleteBusiness from "./DeleteBusiness";
-import StaffCard from "./StaffCard/StaffCard";
 import { BusinessSettingsWrapper } from "./BusinessSettings.styles";
 
 export interface BusinessSettingsProps {
@@ -21,8 +20,8 @@ export interface BusinessSettingsProps {
 }
 
 /**
- * The settings page for one business: a back link, its name, the settings form, the staff card
- * and the delete action.
+ * The settings page for one business: a back link, its name, and the settings form (staff
+ * included) with the delete action.
  *
  * ```tsx
  * // app/register/[id]/page.tsx (Server Component)
@@ -41,10 +40,18 @@ export default function BusinessSettings({ id }: BusinessSettingsProps) {
   const router = useRouter();
   const { businesses, updateBusiness, deleteBusiness } = useBusinesses();
   const { appointments } = useAppointments();
+
   const [deleting, setDeleting] = useState(false);
   // Read once per visit: "pending" means starting after the page opened.
   const [now] = useState(() => Date.now());
+
   const business = businesses.find((item) => item.id === id);
+
+  const remove = (businessId: string) => {
+    setDeleting(true);
+    deleteBusiness(businessId);
+    router.replace("/register");
+  };
 
   // Keep the skeleton up while leaving after a delete, instead of flashing "not found".
   if (!hydrated || deleting) return <PageSkeleton tone="neutral" />;
@@ -69,18 +76,11 @@ export default function BusinessSettings({ id }: BusinessSettingsProps) {
         key={business.id}
         business={business}
         onSave={updateBusiness}
-        staffSection={
-          <StaffCard businessId={business.id} category={business.category} staff={business.staff} />
-        }
         deleteAction={
           <DeleteBusiness
             businessName={business.name}
             pendingAppointments={countPendingAppointments(appointments, business.id, now)}
-            onDelete={() => {
-              setDeleting(true);
-              deleteBusiness(business.id);
-              router.replace("/register");
-            }}
+            onDelete={() => remove(business.id)}
           />
         }
       />

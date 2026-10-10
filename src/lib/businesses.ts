@@ -9,6 +9,7 @@ import type {
 import { BUSINESS_CATEGORIES, ROLES_BY_CATEGORY, STAFF_ROLES, WEEKDAYS } from "./constants";
 import { createId } from "./id";
 import { createLocalStore } from "./localStore";
+import type { StaffMemberValue } from "@/schemas/staff";
 
 export function roleOptions(category: BusinessCategory | null) {
   return (category ? ROLES_BY_CATEGORY[category] : []).map((role) => ({
@@ -17,7 +18,15 @@ export function roleOptions(category: BusinessCategory | null) {
   }));
 }
 
-export const roleLabel = (role: StaffRole | null) => (role ? STAFF_ROLES[role] : null);
+/**
+ * A role's Spanish name (`"stylist"` → `"Estilista"`), or `null` for `""` (no role picked yet)
+ * or anything unknown.
+ *
+ * ```tsx
+ * {roleLabel(member.role) ?? "Sin puesto"}
+ * ```
+ */
+export const roleLabel = (role: string) => STAFF_ROLES[role as StaffRole] ?? null;
 
 export function categoryLabel(category: BusinessCategory | null) {
   return BUSINESS_CATEGORIES.find((option) => option.value === category)?.label ?? null;
@@ -81,19 +90,15 @@ function parseRole(value: unknown): StaffRole | null {
   return entry ? (entry[0] as StaffRole) : null;
 }
 
-// Checks a stored staff member. Ones saved before `touched` existed count as edited once they
-// have a role.
+// Checks a stored staff member. Saved members always have a role; one without (an unedited
+// placeholder stored before staff was saved with the form) is dropped.
 function normalizeStaffMember(value: unknown): StaffMember | null {
   if (!isRecord(value) || typeof value.id !== "string" || typeof value.name !== "string") {
     return null;
   }
   const role = parseRole(value.role);
-  return {
-    id: value.id,
-    name: value.name,
-    role,
-    touched: typeof value.touched === "boolean" ? value.touched : role !== null,
-  };
+  if (!role) return null;
+  return { id: value.id, name: value.name, role, touched: true };
 }
 
 // Checks a stored business and fills fields added after it was saved (location, hours), so
@@ -168,10 +173,10 @@ export function addBusiness(): Business {
   return business;
 }
 
-// Saves edited settings. Any save marks the business as touched.
+// Saves edited settings, staff included. Any save marks the business as touched.
 export function updateBusiness(
   id: string,
-  changes: Pick<Business, "name" | "category" | "phone" | "location" | "hours">,
+  changes: Pick<Business, "name" | "category" | "phone" | "location" | "hours" | "staff">,
 ) {
   businessesStore.write(
     readBusinesses().map((business) =>
@@ -184,36 +189,26 @@ export function deleteBusiness(id: string) {
   businessesStore.write(readBusinesses().filter((business) => business.id !== id));
 }
 
-// Staff changes save right away and don't affect `touched`: staff is optional for a business.
-function updateStaff(businessId: string, update: (staff: StaffMember[]) => StaffMember[]) {
-  businessesStore.write(
-    readBusinesses().map((business) =>
-      business.id === businessId ? { ...business, staff: update(business.staff) } : business,
-    ),
-  );
-}
-
-// Adds a placeholder staff member ("Empleado 2") to the business and returns it.
-export function addStaffMember(businessId: string): StaffMember {
-  const business = readBusinesses().find((item) => item.id === businessId);
-  const names = business?.staff.map((member) => member.name) ?? [];
-  const member: StaffMember = {
+/**
+ * A new placeholder staff member to add to the settings form's `staff`: named "Empleado N"
+ * (never repeating a number in use), with no role (`""`) and not yet edited.
+ *
+ * ```ts
+ * const member = newStaffMember(staff);
+ * setStaff([...staff, member]);
+ * ```
+ *
+ * **Not stored by itself**: staff saves with the rest of the business on "Guardar cambios",
+ * and the form won't save until the placeholder is edited.
+ */
+export function newStaffMember(staff: StaffMemberValue[]): StaffMemberValue {
+  return {
     id: createId(),
-    name: `Empleado ${nextPlaceholderNumber(names, "Empleado")}`,
-    role: null,
+    name: `Empleado ${nextPlaceholderNumber(
+      staff.map((member) => member.name),
+      "Empleado",
+    )}`,
+    role: "",
     touched: false,
   };
-  updateStaff(businessId, (staff) => [...staff, member]);
-  return member;
-}
-
-// Saves edited values. Any save marks the staff member as touched.
-export function updateStaffMember(businessId: string, member: StaffMember) {
-  updateStaff(businessId, (staff) =>
-    staff.map((current) => (current.id === member.id ? { ...member, touched: true } : current)),
-  );
-}
-
-export function removeStaffMember(businessId: string, memberId: string) {
-  updateStaff(businessId, (staff) => staff.filter((member) => member.id !== memberId));
 }

@@ -35,7 +35,7 @@ export function buttonClassName({ variant = "primary", size = "md" }: ButtonOpti
  * A pill button for actions that **don't navigate** (use `ButtonLink` for those).
  *
  * ```tsx
- * <Button onClick={addStaffMember}>Agregar empleado</Button>
+ * <Button onClick={add}>Agregar empleado</Button>
  * <Button type="submit" form={formId}>Guardar cambios</Button>
  * <Button variant="danger" size="sm" onClick={confirm}>Eliminar</Button>
  * ```
