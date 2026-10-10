@@ -14,13 +14,8 @@ export interface SessionAppShellProps {
  *
  * ```tsx
  * // app/layout.tsx
- * <Suspense fallback={<AppShell role={null}><PageSkeleton /></AppShell>}>
- *   <SessionAppShell>{children}</SessionAppShell>
- * </Suspense>
+ * <SessionAppShell>{children}</SessionAppShell>
  * ```
- *
- * **Suspense**: reading the cookie is request-time data, so render it inside a Suspense
- * boundary; the logged-out shell is the fallback.
  */
 export default async function SessionAppShell({ children }: SessionAppShellProps) {
   const session = await getSession();

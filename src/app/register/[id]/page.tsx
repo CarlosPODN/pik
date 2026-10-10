@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "Configuración del negocio · PIK",
 };
 
-// The id is only known at request time, so awaiting it suspends; loading.tsx is the Suspense
-// boundary that lets the page shell prerender while the settings stream in.
+// Reads the business id from the URL and hands it to the client component, which loads the
+// business from localStorage.
 export default async function BusinessSettingsPage({ params }: PageProps<"/register/[id]">) {
   const { id } = await params;
 
