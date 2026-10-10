@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Suspense } from "react";
-import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
-import AppShell from "@/components/layout/AppShell/AppShell";
 import Providers from "./_components/Providers";
 import SessionAppShell from "./_components/SessionAppShell";
 
@@ -26,17 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <Providers>
-          {/* The shell depends on the session cookie, which is only known at request time. The
-              fallback is the logged-out shell, so the page shell still prerenders. */}
-          <Suspense
-            fallback={
-              <AppShell role={null}>
-                <PageSkeleton />
-              </AppShell>
-            }
-          >
-            <SessionAppShell>{children}</SessionAppShell>
-          </Suspense>
+          <SessionAppShell>{children}</SessionAppShell>
         </Providers>
       </body>
     </html>
