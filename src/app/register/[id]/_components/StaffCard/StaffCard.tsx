@@ -1,22 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useController, type Control } from "react-hook-form";
 import Button from "@/components/buttons/Button/Button";
 import Dialog from "@/components/modals/Dialog/Dialog";
 import Icon from "@/components/Icon/Icon";
-import { useBusinesses } from "@/hooks/useBusinesses";
-import { findUntouched, roleLabel } from "@/lib/businesses";
-import type { BusinessCategory, StaffMember } from "@/types/business";
+import { findUntouched, newStaffMember, roleLabel } from "@/lib/businesses";
+import type { BusinessFormInput, BusinessFormOutput } from "@/schemas/business";
+import type { StaffMemberValue } from "@/schemas/staff";
+import type { BusinessCategory } from "@/types/business";
 import StaffMemberDialog from "../StaffMemberDialog/StaffMemberDialog";
 import { StaffCardWrapper } from "./StaffCard.styles";
 
 export interface StaffCardProps {
-  /** The business whose staff this is. */
-  businessId: string;
-  /** The saved business category, which sets the role options. */
+  /** The settings form's `control`: the card reads and edits its `staff` field. */
+  control: Control<BusinessFormInput, unknown, BusinessFormOutput>;
+  /** The category picked in the settings form (saved or not), which sets the role options. */
   category: BusinessCategory | null;
-  /** The staff members, in the order they were added. */
-  staff: StaffMember[];
 }
 
 /**
@@ -24,12 +24,15 @@ export interface StaffCardProps {
  * "Sin editar" badge until edited.
  *
  * ```tsx
- * <StaffCard businessId={business.id} category={business.category} staff={business.staff} />
+ * <StaffCard control={control} category={pickedCategory} />
  * ```
  *
- * **Editing**: "Agregar empleado" adds a placeholder ("Empleado 2") and opens it in
- * `StaffMemberDialog` to edit its name and role; tapping a row opens the same dialog. Changes
- * save right away, separately from the settings form.
+ * **Part of the settings form**: it edits the form's `staff` field. "Agregar empleado" adds a
+ * placeholder ("Empleado 2") and opens it in `StaffMemberDialog` to edit its name and role;
+ * tapping a row opens the same dialog. Nothing is stored until "Guardar cambios".
+ *
+ * **Errors**: the form won't save while someone added is still unedited ("Sin editar") or has a
+ * role that doesn't fit the picked category; the error shows under their row.
  *
  * **One at a time**: while the newest member is still unedited, the add button opens a dialog
  * explaining that instead of adding.
@@ -38,15 +41,21 @@ export interface StaffCardProps {
  *
  * **Styling**: BEM block `staff-card`; `StaffCardWrapper` wraps `FormCard`.
  */
-export default function StaffCard({ businessId, category, staff }: StaffCardProps) {
-  const { addStaffMember, updateStaffMember, removeStaffMember } = useBusinesses();
+export default function StaffCard({ control, category }: StaffCardProps) {
+  const {
+    field: { value, onChange: setStaff },
+    formState: { errors },
+  } = useController({ control, name: "staff" });
+
   // Kept after closing, so the modal closes in place (and focus returns) before it changes.
   const [editingId, setEditingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  // Bumped on every open, so the modal always starts from the saved values (the role options
+  // Bumped on every open, so the modal always starts from the current values (the role options
   // may have changed since it was last open, e.g. after a category change).
   const [openCount, setOpenCount] = useState(0);
   const [blocked, setBlocked] = useState(false);
+
+  const staff = value;
   const editing = staff.find((member) => member.id === editingId);
   const untouched = findUntouched(staff);
 
@@ -61,14 +70,32 @@ export default function StaffCard({ businessId, category, staff }: StaffCardProp
       setBlocked(true);
       return;
     }
-    edit(addStaffMember(businessId).id);
+    const member = newStaffMember(staff);
+    setStaff([...staff, member]);
+    edit(member.id);
+  };
+
+  const editUntouched = (id: string) => {
+    setBlocked(false);
+    edit(id);
+  };
+
+  // The dialog's save: the edited member replaces the old one, marked as edited.
+  const saveMember = (member: StaffMemberValue) =>
+    setStaff(
+      staff.map((current) => (current.id === member.id ? { ...member, touched: true } : current)),
+    );
+
+  const removeMember = (id: string) => {
+    setOpen(false);
+    setStaff(staff.filter((member) => member.id !== id));
   };
 
   return (
     <StaffCardWrapper
       className="staff-card"
       heading="Staff"
-      intro="Las personas que atienden en tu negocio. Los cambios se guardan al momento."
+      intro="Las personas que atienden en tu negocio."
       action={
         <Button className="staff-card__add" size="sm" onClick={add} aria-label="Agregar empleado">
           <Icon name="plus" />
@@ -80,28 +107,39 @@ export default function StaffCard({ businessId, category, staff }: StaffCardProp
         <p className="staff-card__empty">Aún no agregas a nadie de tu staff.</p>
       ) : (
         <ul className="staff-card__list">
-          {staff.map((member) => (
-            <li key={member.id} className="staff-card__item">
-              <button
-                type="button"
-                className="staff-card__row"
-                onClick={() => edit(member.id)}
-                aria-label={`Editar a ${member.name}`}
-              >
-                <span className="staff-card__person">
-                  <span className="staff-card__name-row">
-                    <span className="staff-card__name">{member.name}</span>
-                    {!member.touched && <span className="staff-card__pending">Sin editar</span>}
+          {staff.map((member, index) => {
+            // An unedited placeholder, or a role that doesn't fit the picked category.
+            const error = errors.staff?.[index]?.message ?? errors.staff?.[index]?.role?.message;
+            return (
+              <li key={member.id} className="staff-card__item">
+                <button
+                  type="button"
+                  className="staff-card__row"
+                  onClick={() => edit(member.id)}
+                  aria-label={`Editar a ${member.name}`}
+                >
+                  <span className="staff-card__person">
+                    <span className="staff-card__name-row">
+                      <span className="staff-card__name">{member.name}</span>
+                      {!member.touched && <span className="staff-card__pending">Sin editar</span>}
+                    </span>
+                    <span className="staff-card__role">
+                      {roleLabel(member.role) ?? "Sin puesto"}
+                    </span>
                   </span>
-                  <span className="staff-card__role">{roleLabel(member.role) ?? "Sin puesto"}</span>
-                </span>
-                <span className="staff-card__edit" aria-hidden="true">
-                  Editar
-                  <Icon name="arrow-right" />
-                </span>
-              </button>
-            </li>
-          ))}
+                  <span className="staff-card__edit" aria-hidden="true">
+                    Editar
+                    <Icon name="arrow-right" />
+                  </span>
+                </button>
+                {error && (
+                  <p className="staff-card__error" role="alert">
+                    {error}
+                  </p>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -117,21 +155,14 @@ export default function StaffCard({ businessId, category, staff }: StaffCardProp
               Cerrar
             </Button>
             {untouched && (
-              <Button
-                size="sm"
-                onClick={() => {
-                  setBlocked(false);
-                  edit(untouched.id);
-                }}
-              >
+              <Button size="sm" onClick={() => editUntouched(untouched.id)}>
                 Editar ahora
               </Button>
             )}
           </>
         }
       >
-        Antes de agregar a alguien más, completa y guarda los datos de{" "}
-        <strong>{untouched?.name}</strong>.
+        Antes de agregar a alguien más, completa los datos de <strong>{untouched?.name}</strong>.
       </Dialog>
 
       {editing && (
@@ -141,11 +172,8 @@ export default function StaffCard({ businessId, category, staff }: StaffCardProp
           category={category}
           open={open}
           onClose={() => setOpen(false)}
-          onSave={(member) => updateStaffMember(businessId, member)}
-          onRemove={() => {
-            setOpen(false);
-            removeStaffMember(businessId, editing.id);
-          }}
+          onSave={saveMember}
+          onRemove={() => removeMember(editing.id)}
         />
       )}
     </StaffCardWrapper>

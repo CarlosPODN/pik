@@ -2,13 +2,10 @@
 
 import {
   addBusiness,
-  addStaffMember,
   businessesStore,
   deleteBusiness,
   findUntouched,
-  removeStaffMember,
   updateBusiness,
-  updateStaffMember,
 } from "@/lib/businesses";
 import { useStoredValue } from "./useStoredValue";
 
@@ -21,8 +18,5 @@ export function useBusinesses() {
     addBusiness,
     updateBusiness,
     deleteBusiness,
-    addStaffMember,
-    updateStaffMember,
-    removeStaffMember,
   };
 }

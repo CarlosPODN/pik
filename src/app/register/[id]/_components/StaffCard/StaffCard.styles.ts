@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "styled-components";
+import { errorTextStyles } from "@/components/fields/Field.styles";
 import FormCard from "../FormCard/FormCard";
 
 // Wraps FormCard so the staff parts below (and the add button in the card's title row) can be
@@ -103,6 +104,12 @@ export const StaffCardWrapper = styled(FormCard)`
       color: ${({ theme }) => theme.colors.primary};
       font-size: 0.875rem;
       font-weight: 600;
+    }
+
+    /* Under a row: an unedited member, or a role that doesn't fit the picked category. */
+    &__error {
+      ${errorTextStyles}
+      padding: ${({ theme }) => `${theme.space.xs} ${theme.space.md} 0`};
     }
 
     &__empty {

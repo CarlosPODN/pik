@@ -27,13 +27,14 @@ export type StaffRole =
   | "esthetician"
   | "receptionist";
 
-// Like businesses, a new staff member starts as an unedited placeholder ("Empleado 2");
-// saving it once sets touched, which unlocks adding the next one.
+// A saved staff member. New ones start in the settings form as an unedited placeholder
+// ("Empleado 2", no role yet) and can only be saved once edited, so a saved one always has a
+// role; editing sets touched.
 export interface StaffMember {
   id: string;
   name: string;
-  // null until picked; the options depend on the business category.
-  role: StaffRole | null;
+  // From the roles for the business category.
+  role: StaffRole;
   touched: boolean;
 }
 
