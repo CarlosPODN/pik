@@ -47,7 +47,7 @@ export interface BusinessFormProps {
  *
  * **Validation**: React Hook Form runs the form and `businessFormSchema` (zod) holds the rules
  * and messages. It validates on submit, then live as the person fixes each field, and focuses
- * the first invalid one. "Guardamos los cambios." shows after a save, until the next edit.
+ * the first invalid one. "Los cambios han sido guardados." shows after a save, until the next edit.
  *
  * **Unsaved changes**: `formState.isDirty` feeds `useLeaveGuard`, which holds in-app link clicks
  * behind a "Tienes cambios sin guardar" dialog and arms the browser's reload/close warning.
@@ -168,7 +168,7 @@ export default function BusinessForm({
           {saved && !isDirty && (
             <p className="business-form__success">
               <Icon name="check" />
-              Guardamos los cambios.
+              Los cambios han sido guardados.
             </p>
           )}
         </div>
