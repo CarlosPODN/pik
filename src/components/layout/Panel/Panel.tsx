@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import type { ReactNode } from "react";
-import EmptyState, { type EmptyStateProps } from "@/components/feedback/EmptyState/EmptyState";
+import EmptyState, { type EmptyStateProps } from "./components/EmptyState/EmptyState";
 import { PanelWrapper } from "./Panel.styles";
 
 export interface PanelProps {

@@ -32,8 +32,8 @@ src/
 │   ├── buttons/            Button/ (Button + Button.styles), ButtonLink (renders ButtonWrapper), BackLink
 │   ├── fields/             Form controls: TextField, SelectField (both use the shared Field.styles.ts)
 │   ├── modals/             Dialog
-│   ├── layout/             AppShell, PageLayout, CardGrid, Panel, PagePlaceholder
-│   ├── feedback/           Empty, loading and status states: EmptyState (rendered by Panel), PageSkeleton
+│   ├── layout/             AppShell, PageLayout, CardGrid, Panel (with its EmptyState), PagePlaceholder
+│   ├── feedback/           Loading and status states: PageSkeleton
 │   └── Icon/               Icon and its icons/
 ├── hooks/                  Shared client hooks
 ├── lib/

@@ -29,8 +29,8 @@ export interface EmptyStateProps {
  * </Panel>
  * ```
  *
- * **Where**: `Panel` renders it from its `emptyState` prop, inside its box; pages don't render
- * it themselves.
+ * **Where**: only inside `Panel`, which renders it from its `emptyState` prop; pages pass the
+ * props to `Panel` instead of rendering it.
  *
  * **Styling**: BEM block `empty-state`. It has no box of its own; it grows to fill the space
  * it's in and centers its content there.
