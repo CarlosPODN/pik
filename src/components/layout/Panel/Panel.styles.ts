@@ -2,8 +2,8 @@
 
 import styled from "styled-components";
 
-// A tinted, bordered box for a list section. It keeps its height whether it holds an empty
-// state or the list itself, so the section doesn't jump when the first item is added.
+// A tinted, bordered box for a list section. It keeps its height whether it holds the empty
+// message or the list itself, so the section doesn't jump when the first item is added.
 export const PanelWrapper = styled.div`
   display: flex;
   flex-direction: column;

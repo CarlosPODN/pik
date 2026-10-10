@@ -1,7 +1,6 @@
 "use client";
 
 import CardGrid from "@/components/layout/CardGrid/CardGrid";
-import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Panel from "@/components/layout/Panel/Panel";
 import PageLayout from "@/components/layout/PageLayout/PageLayout";
 import PageSkeleton from "@/components/feedback/PageSkeleton/PageSkeleton";
@@ -25,24 +24,25 @@ export default function RegisterPage() {
       description="Aquí puedes agregar tus negocios y editar su información."
       sectionLabel="Tus negocios"
     >
-      {businesses.length === 0 ? (
-        <EmptyState
-          icon="store"
-          title="Aún no tienes negocios"
-          description="Agrega tu primer negocio y completa su información para empezar a recibir reservas."
-          action={<AddBusinessButton />}
-        />
-      ) : (
-        <Panel heading="Tus negocios">
-          <CardGrid layout="rows">
-            {businesses.map((business) => (
-              <li key={business.id}>
-                <BusinessCard business={business} />
-              </li>
-            ))}
-          </CardGrid>
-        </Panel>
-      )}
+      <Panel
+        heading="Tus negocios"
+        isEmpty={businesses.length === 0}
+        emptyState={{
+          icon: "store",
+          title: "Aún no tienes negocios",
+          description:
+            "Agrega tu primer negocio y completa su información para empezar a recibir reservas.",
+          action: <AddBusinessButton />,
+        }}
+      >
+        <CardGrid layout="rows">
+          {businesses.map((business) => (
+            <li key={business.id}>
+              <BusinessCard business={business} />
+            </li>
+          ))}
+        </CardGrid>
+      </Panel>
     </PageLayout>
   );
 }

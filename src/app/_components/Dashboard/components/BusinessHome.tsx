@@ -3,9 +3,9 @@
 import { useMemo, useState } from "react";
 import ButtonLink from "@/components/buttons/ButtonLink";
 import CardGrid from "@/components/layout/CardGrid/CardGrid";
-import EmptyState from "@/components/feedback/EmptyState/EmptyState";
 import Icon from "@/components/Icon/Icon";
 import PageLayout from "@/components/layout/PageLayout/PageLayout";
+import Panel from "@/components/layout/Panel/Panel";
 import { useAppointments } from "@/hooks/useAppointments";
 import { useBusinesses } from "@/hooks/useBusinesses";
 import { ROLE_LABELS } from "@/lib/constants";
@@ -52,22 +52,25 @@ export default function BusinessHome() {
       description="Aquí puedes ver las próximas citas en tus negocios."
       sectionLabel="Próximas citas"
     >
-      {upcoming.length === 0 ? (
-        <EmptyState
-          icon="calendar"
-          title="Aún no tienes citas"
-          description="Cuando tus clientes reserven en tus negocios, verás aquí cada cita con su fecha, hora y staff."
-          action={<ButtonLink href="/register">Ver mis negocios</ButtonLink>}
-        />
-      ) : (
+      <Panel
+        heading="Próximas citas"
+        isEmpty={upcoming.length === 0}
+        emptyState={{
+          icon: "calendar",
+          title: "Aún no tienes citas",
+          description:
+            "Cuando tus clientes reserven en tus negocios, verás aquí cada cita con su fecha, hora y staff.",
+          action: <ButtonLink href="/register">Ver mis negocios</ButtonLink>,
+        }}
+      >
         <CardGrid>
           {upcoming.map((appointment) => (
-            <li key={appointment.id} className="business-home__item">
+            <li key={appointment.id}>
               <AppointmentCard appointment={appointment} perspective="business" />
             </li>
           ))}
         </CardGrid>
-      )}
+      </Panel>
     </PageLayout>
   );
 }
